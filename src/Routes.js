@@ -1,0 +1,44 @@
+import Vue from 'vue';
+import Router from 'vue-router';
+
+import Layout from '@/components/Layout/Layout';
+import AnalyticsPage from '@/pages/Dashboard/Dashboard';
+import Login from '@/pages/Login/Login';
+import Register from '@/pages/Register/Register';
+
+import { isAuthenticated } from './mixins/auth';
+
+Vue.use(Router);
+
+export default new Router({
+  routes: [
+    {path: '/', redirect: '/app/main'},
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register,
+    },
+    {
+      path: '/app',
+      name: 'Layout',
+      component: Layout,
+      beforeEnter: (to, from, next) => {
+        let token = localStorage.getItem('token');
+        isAuthenticated(token) ? next() : next({path: '/login'});
+      },
+      children: [
+        // main pages
+        {
+          path: 'main',
+          name: 'AnalyticsPage',
+          component: AnalyticsPage,
+        },
+      ],
+    },
+  ],
+});
