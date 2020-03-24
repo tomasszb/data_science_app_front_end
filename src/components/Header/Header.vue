@@ -45,15 +45,9 @@
       <b-nav-item-dropdown id="v-step-2" class="settingsDropdown d-sm-down-none" no-caret right>
         <template slot="button-content">
           <span class="avatar rounded-circle thumb-sm float-left mr-2">
-            <img
-                    v-if="user.avatar || user.email === 'admin@flatlogic.com'"
-                    class="rounded-circle"
-                    :src="user.avatar || avatarImage"
-                    alt="..."
-            />
-            <span v-else>{{firstUserLetter}}</span>
+            <span>{{ firstUserLetter }}</span>
           </span>
-          <span class="small">{{user.name || user.email || 'Philip smith'}}</span>
+          <span class="small">{{ user }}</span>
           <span class="glyphicon glyphicon-chevron-down px-2" />
         </template>
         <b-dropdown-item><i class="la la-user" /> My Account</b-dropdown-item>
@@ -74,7 +68,7 @@ export default {
   data() {
     return {
       avatarImage,
-      user: JSON.parse(localStorage.getItem('user') || {})
+      user: localStorage.getItem('user')
     }
   },
   computed: {
@@ -84,7 +78,7 @@ export default {
       'navbarType',
       'navbarColorScheme'
     ]),
-    firstUserLetter() { return (this.user.name || this.user.email || "P")[0].toUpperCase(); },
+    firstUserLetter() { return this.user[0].toUpperCase(); },
     navbarTypeClass: function () {
       return "navbar-" + this.navbarType + "-type"
     }

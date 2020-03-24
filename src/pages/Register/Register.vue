@@ -69,12 +69,6 @@
           this.registerUser({creds: {email, password}, $toasted: this.$toasted});
         }
       },
-      googleLogin() {
-        this.loginUser({social: "google"});
-      },
-      microsoftLogin() {
-        this.loginUser({social: "microsoft"});
-      },
       checkPassword() {
         if (!this.isPasswordValid()) {
           if (!this.$refs.password.value) {

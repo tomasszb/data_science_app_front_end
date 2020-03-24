@@ -1,4 +1,3 @@
-import config from "../config";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import router from '../Routes';
@@ -24,15 +23,9 @@ export default {
     },
     actions: {
         loginUser({dispatch}, creds) {
-            // We check if app runs with backend mode
-            if (!config.isBackend) {
-              dispatch('receiveToken', 'token');
-            }
-
-            else {
               dispatch('requestLogin');
               if (creds.email.length > 0 && creds.password.length > 0) {
-                axios.post("/user/signin/local", creds).then(res => {
+                axios.post("/accounts/login/", creds).then(res => {
                   const token = res.data.token;
                   dispatch('receiveToken', token);
                 }).catch(err => {
@@ -42,22 +35,16 @@ export default {
               } else {
                 dispatch('loginError', 'Something was wrong. Try again');
               }
-            }
         },
         receiveToken({dispatch}, token) {
-          let user = {};
-          // We check if app runs with backend mode
-          if (config.isBackend) {
-            user = jwt.decode(token).user;
-            delete user.id;
-          } else {
-            user = {
-              email: config.auth.email
-            }
-          }
+          let decoded_token = {};
+          decoded_token = jwt.decode(token);
+          const user = decoded_token.email;
+          const expires = decoded_token.exp;
 
           localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('user', user);
+          localStorage.setItem('expires', expires);
           axios.defaults.headers.common['Authorization'] = "Bearer " + token;
           dispatch('receiveLogin');
         },
@@ -77,6 +64,6 @@ export default {
         },
         requestLogin({commit}) {
             commit('LOGIN_REQUEST');
-        }
+        },
     },
 };

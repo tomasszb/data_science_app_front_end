@@ -1,6 +1,6 @@
 const hostApi = process.env.NODE_ENV === "development" ? "http://localhost" : "https://flatlogic-node-backend.herokuapp.com";
 const portApi = process.env.NODE_ENV === "development" ? 8080 : "";
-const baseURLApi = `${hostApi}${portApi ? `:${portApi}` : ``}`;
+const baseURLApi = "http://127.0.0.1:8000/api/v1.0";
 
 export default {
   hostApi,
@@ -9,8 +9,8 @@ export default {
   remote: "https://flatlogic-node-backend.herokuapp.com",
   isBackend: process.env.VUE_APP_BACKEND,
   auth: {
-      email: 'admin@flatlogic.com',
-      password: 'password'
+    email: 'tomas.szb@gmail.com',
+    password: '192837Tomas'
   },
   app: {
     sidebarTransitionTime: 300, //ms
