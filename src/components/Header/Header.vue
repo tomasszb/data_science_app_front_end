@@ -57,6 +57,7 @@
       </b-nav-item-dropdown>
     </b-nav>
   </b-navbar>
+
 </template>
 
 <script>
@@ -90,6 +91,7 @@ export default {
       'changeSidebarActive',
     ]),
     ...mapActions('auth', ['logoutUser']),
+    ...mapActions('api', ['loadProjectData']),
     switchSidebarMethod() {
       if (!this.sidebarClose) {
         this.switchSidebar(true);
@@ -111,7 +113,10 @@ export default {
         paths.pop();
         this.changeSidebarActive(paths.join('/'));
       }
-    }
+    },
+  },
+  created() {
+      this.loadProjectData();
   }
 };
 </script>

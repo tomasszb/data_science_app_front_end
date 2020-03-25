@@ -45,7 +45,7 @@ export default {
           localStorage.setItem('token', token);
           localStorage.setItem('user', user);
           localStorage.setItem('expires', expires);
-          axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+          axios.defaults.headers.common['Authorization'] = "JWT " + token;
           dispatch('receiveLogin');
         },
         logoutUser() {
