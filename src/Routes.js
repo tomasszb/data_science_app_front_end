@@ -5,6 +5,7 @@ import Layout from '@/components/Layout/Layout';
 import AnalyticsPage from '@/pages/Dashboard/Dashboard';
 import Login from '@/pages/Login/Login';
 import Register from '@/pages/Register/Register';
+import DataConnectionProcess from '@/pages/DataConnectionProcess/DataConnectionProcess';
 
 import { isAuthenticated } from './mixins/auth';
 
@@ -37,6 +38,11 @@ export default new Router({
           path: 'main',
           name: 'AnalyticsPage',
           component: AnalyticsPage,
+        },
+        {
+          path: 'conn',
+          name: 'DataConnectionProcess',
+          component: DataConnectionProcess
         },
       ],
     },

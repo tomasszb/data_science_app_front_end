@@ -38,7 +38,7 @@ $gray-900: #29323a !default;
 $black:    #000 !default;
 $gray-light: $gray-100 !default;
 
-$blue:    #005792 !default;
+$blue:    #203b4a !default;
 $indigo:  #7f3ddb !default;
 $purple:  #9964e3 !default;
 $pink:    #e54e9a !default;
@@ -47,7 +47,7 @@ $orange:  #ff7d47 !default;
 $yellow:  #FDA700 !default;
 $green:   #68ca66 !default;
 $teal:    #21AE8C !default;
-$cyan:    #1A86D0 !default;
+$cyan:    #203b4a !default;
 $default: #E9ECEF !default;
 $inverse: #002B49 !default;
 
@@ -72,7 +72,7 @@ $theme-colors: (
 
 $link-color: $cyan;
 
-$text-color: $gray-700 !default;
+$text-color: $gray-800 !default;
 
 $font-weight-bold: 700 !default;
 $font-weight-semi-bold: 600 !default;
@@ -132,16 +132,32 @@ $input-btn-padding-x-sm: 0.8rem;
 
 $helper-width: 300px;
 
+//== Toolbar
+//
+
+$toolbar-height:  80px !default;
+$toolbar-padding-y: 0 !default;
+$toolbar-padding-x: 0 !default;
+
+// Custom toolbar links
+$toolbar-link-color: $text-color !default;
+$toolbar-link-hover-color: $gray-800 !default;
+$toolbar-link-hover-bg: transparent !default;
+$toolbar-link-active-color: $gray-700 !default;
+$toolbar-link-active-bg: $gray-300 !default;
+$toolbar-link-disabled-color: $gray-400 !default;
+$toolbar-link-disabled-bg: transparent !default;
+
 //== Navbar
 //
 
-$navbar-height:  60px !default;
+$navbar-height:  40px !default;
 $navbar-padding-y: 0 !default;
 $navbar-padding-x: 0 !default;
 
 // Custom navbar links
-$navbar-link-color: $text-color !default;
-$navbar-link-hover-color: $gray-800 !default;
+$navbar-link-color: $white!default;
+$navbar-link-hover-color: $gray-300!default;
 $navbar-link-hover-bg: transparent !default;
 $navbar-link-active-color: $gray-700 !default;
 $navbar-link-active-bg: $gray-300 !default;

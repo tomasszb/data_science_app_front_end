@@ -93,16 +93,15 @@
 }
 
 a.router-link-active {
-  color: var(--sidebar-item-active);
+  background-color: var(--sidebar-item-active);
+  color: var(--sidebar-icon-active);
 
-  .icon {
-    border-radius: 50%;
+  &:hover {
     background-color: var(--sidebar-item-active);
-
-    i {
-      color: var(--sidebar-icon-active);
-    }
+    opacity: 95%;
   }
+
+
 }
 
 .collapse,

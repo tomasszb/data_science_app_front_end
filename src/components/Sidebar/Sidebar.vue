@@ -18,12 +18,13 @@
             isHeader
         />
         <h5 class="navTitle">PROJECT Overview</h5>
-        <NavLink
+        <NavLink v-for="process in projectProcesses"
+                :key="'po-'+process.id"
                 :activeItem="activeItem"
-                header="Data Connection"
-                link="/app/dc_process"
-                iconName="flaticon-database-1"
-                index="main"
+                :header="process.name"
+                :link="'/app/'+process.link"
+                :iconName="process.side_icon"
+                index="conn"
                 isHeader
         />
       </ul>
@@ -35,6 +36,7 @@
 import { mapState, mapActions } from 'vuex';
 import isScreen from '@/core/screenHelper';
 import NavLink from './NavLink/NavLink';
+import dsw_config from "../../dsw_config";
 
 export default {
   name: 'Sidebar',
@@ -88,6 +90,27 @@ export default {
       sidebarOpened: state => !state.sidebarClose,
       activeItem: state => state.sidebarActiveElement,
     }),
+    projectData () {
+      return this.$store.state.api.projectData
+    },
+    dataObjects () {
+      return this.$store.state.api.dataObjects
+    },
+    projectProcesses () {
+      return this.$store.state.api.projectProcesses
+    },
+    projectPages () {
+      return this.$store.state.api.projectPages
+    },
+    projectNodes () {
+      return this.$store.state.api.projectNodes
+    },
+    projectElements () {
+      return this.$store.state.api.projectElements
+    },
+    projectObjectSettings () {
+      return dsw_config.projectObjectSettings
+    }
   },
 };
 </script>

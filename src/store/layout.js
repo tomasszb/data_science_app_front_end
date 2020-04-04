@@ -31,16 +31,6 @@ function updateRootCss(cssVar, value) {
   document.querySelector('.root.sing-dashboard').style.setProperty(cssVar, value);
 }
 
-export function updateTourPosition(tour) {
-  if (!tour) return;
-  let interval = setInterval(() => {
-    tour.scheduleUpdate();
-  });
-  setTimeout(() => {
-    clearInterval(interval)
-  }, config.app.sidebarTransitionTime + 100)
-}
-
 export default {
   namespaced: true,
   state: {
@@ -53,7 +43,6 @@ export default {
     sidebarType: SidebarTypes.SOLID,
     sidebarActiveElement: null,
     helperOpened: false,
-    tourInstance: null,
   },
   mutations: {
     toggleSidebar(state) {
@@ -65,7 +54,6 @@ export default {
       if (!nextState && (isScreen('lg') || isScreen('xl'))) {
         state.sidebarClose = true;
       }
-      updateTourPosition(state.tourInstance);
     },
     switchSidebar(state, value) {
       if (value) {
@@ -73,7 +61,6 @@ export default {
       } else {
         state.sidebarClose = !state.sidebarClose;
       }
-      updateTourPosition(state.tourInstance);
     },
     handleSwipe(state, e) {
       if ('ontouchstart' in window) {
@@ -104,12 +91,8 @@ export default {
     },
     toggleHelper(state, payload) {
       state.helperOpened = payload;
-      updateTourPosition(state.tourInstance);
 
     },
-    applyTourStep(state, payload) {
-      state.tourInstance = payload;
-    }
   },
   actions: {
     toggleSidebar({ commit }) {
@@ -140,8 +123,5 @@ export default {
     toggleHelper({commit}, payload) {
       commit('toggleHelper', payload)
     },
-    applyTourStep({commit}, payload) {
-      commit('applyTourStep', payload)
-    }
   },
 };

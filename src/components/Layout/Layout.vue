@@ -4,9 +4,9 @@
   <div class="wrap">
     <Header />
     <v-touch class="content" @swipe="handleSwipe" :swipe-options="{direction: 'horizontal'}">
-      <transition name="router-animation">
+
         <router-view />
-      </transition>
+
     </v-touch>
   </div>
 </div>
@@ -18,13 +18,13 @@ const { mapState, mapActions } = createNamespacedHelpers('layout');
 
 import Sidebar from '@/components/Sidebar/Sidebar';
 import Header from '@/components/Header/Header';
-
+import Toolbar from '@/components/Toolbar/Toolbar';
 
 
 
 export default {
   name: 'Layout',
-  components: { Sidebar, Header },
+  components: { Sidebar, Header, Toolbar },
   methods: {
     ...mapActions(['switchSidebar', 'handleSwipe', 'changeSidebarActive', 'toggleSidebar']),
     handleWindowResize() {

@@ -31,7 +31,17 @@ if (token) {
     axios.defaults.headers.common['Authorization'] = "JWT " + token;
 }
 
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue, {
+    BTooltip: {
+        delay: {
+            show: 800,
+            hide: 100,
+        },
+    },
+    BPopover: {
+        delay: 1000,
+    },
+});
 Vue.use(VueTouch);
 Vue.use(Trend);
 Vue.component('vue-code-highlight', VueCodeHighlight);
