@@ -5,7 +5,7 @@
 .app-toolbar.navbar {
   height: $toolbar-height;
   z-index: 1;
-  padding: 0 1.85rem 0;
+  padding: 8px 1.85rem 0;
   background: $white;
   box-shadow: var(--navbar-shadow);
   transition: $transition-base;
@@ -15,10 +15,9 @@
 
   .toolbox-dividor {
     float:left;
-    border-right: 2px solid $gray-300;
-    height: 80%;
-    margin-left: 4px;
-    margin-right: 4px;
+    border-right: 2px solid $gray-200;
+    height: 70%;
+    margin: -15px 4px 0px 4px;
   }
 
   .nav {

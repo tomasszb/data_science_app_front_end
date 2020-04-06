@@ -1,33 +1,55 @@
 <template>
-    <div>
+    <div class="conn-page">
         <Toolbar>
             <Toolbox
                     header="all connectors"
                     :childrenTools="[
-                     {
-                         action: 'conectAll',
+                     [
+                         {
+                         action: 'newAll',
+                         id: 'conn-tool-new-all',
                          bigIcon: true,
-                         tooltip: 'connect all connectors',
-                         iconClass: 'fa fa-chain',
-                     },
-                     {
-                         action: 'loadAll',
-                         bigIcon: true,
-                         tooltip: 'load data for all connectors',
-                         iconClass: 'fa fa-fast-forward',
-                     },
-                     {
-                         action: 'new',
-                         bigIcon: true,
+                         svg: true,
                          tooltip: 'setup a new connector',
-                         iconClass: 'fa fa-plus-square',
-                     },
-                     {
-                         action: 'export',
+                         fontIconClass: 'la la-plus-square',
+                         svgIconName: 'svg6 - browser-4',
+                         name: 'new conn',
+                        }
+                     ],
+                     [
+                         {
+                         action: 'exportAll',
+                         id: 'conn-tool-export-all',
+                         svg: true,
                          bigIcon: true,
                          tooltip: 'export all connectors',
-                         iconClass: 'fa fa-file-code-o',
-                     },
+                         fontIconClass: 'la la-file-code-o',
+                         svgIconName: 'svg3 - invoice',
+                         name: 'export all',
+                        }
+                     ],
+                     [
+                         {
+                         action: 'conectAll',
+                         id: 'conn-tool-connect-all',
+                         bigIcon: false,
+                         svg: false,
+                         tooltip: 'connect all connectors',
+                         fontIconClass: 'la la-chain',
+                         svgIconName: 'svg1 - server',
+                         name: 'connect all',
+                        },
+                        {
+                         action: 'loadAll',
+                         id: 'conn-tool-load-all',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'load data for all connectors',
+                         fontIconClass: 'la la-fast-forward',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'load all',
+                        }
+                     ]
                 ]"
             />
             <div class="toolbox-dividor"/>
@@ -35,46 +57,54 @@
                     header="connector controls"
                     :childrenTools="[
                      {
-                         action: 'connect',
+                         action: 'connectConn',
+                         id: 'conn-tool-connect',
                          bigIcon: true,
                          tooltip: 'connect',
-                         iconClass: 'fa fa-chain',
+                         iconClass: 'la la-chain',
+                         svgIconName: 'svg1 - server-1'
                      },
                      {
-                         action: 'runAll',
+                         action: 'runConn',
+                         id: 'conn-tool-run-conn',
                          bigIcon: true,
                          tooltip: 'run all queries',
-                         iconClass: 'fa fa-forward',
+                         iconClass: 'la la-forward',
                      },
                      {
-                         action: 'settings',
+                         action: 'settingsConn',
+                         id: 'conn-tool-settings-conn',
                          bigIcon: true,
                          tooltip: 'open settings',
-                         iconClass: 'fa fa-cog',
+                         iconClass: 'la la-cog',
                      },
                      {
-                         action: 'explore',
+                         action: 'exploreConn',
+                         id: 'conn-tool-explore-conn',
                          bigIcon: true,
                          tooltip: 'explore',
-                         iconClass: 'fa fa-sitemap',
+                         iconClass: 'la la-sitemap',
                      },
                      {
-                         action: 'duplicate',
+                         action: 'duplicateConn',
+                         id: 'conn-tool-duplicate-conn',
                          bigIcon: true,
                          tooltip: 'duplicate connector',
-                         iconClass: 'fa fa-copy',
+                         iconClass: 'la la-copy',
                      },
                      {
-                         action: 'export',
+                         action: 'exportConn',
+                         id: 'conn-tool-export-conn',
                          bigIcon: true,
                          tooltip: 'export',
-                         iconClass: 'fa fa-file-code-o',
+                         iconClass: 'la la-file-code-o',
                      },
                      {
-                         action: 'save',
+                         action: 'saveConn',
+                         id: 'conn-tool-save-conn',
                          bigIcon: true,
                          tooltip: 'save connector',
-                         iconClass: 'fa fa-save',
+                         iconClass: 'la la-save',
                      },
                 ]"
             />
@@ -83,78 +113,86 @@
                     header="query"
                     :childrenTools="[
                      {
-                         action: 'analyze',
+                         action: 'analyzeQuery',
+                         id: 'conn-tool-analyze-query',
                          bigIcon: true,
                          tooltip: 'analyze query',
-                         iconClass: 'fa fa-tachometer',
+                         iconClass: 'la la-tachometer',
                      },
                      {
                          action: 'runQuery',
+                         id: 'conn-tool-run-query',
                          bigIcon: true,
                          tooltip: 'run query',
-                         iconClass: 'fa fa-play',
+                         iconClass: 'la la-play',
                      },
                      {
-                         action: 'showCheckpoints',
+                         action: 'checkpointsQuery',
+                         id: 'conn-tool-checkpoint-query',
                          bigIcon: true,
                          tooltip: 'checkpoints',
-                         iconClass: 'fa fa-history',
+                         iconClass: 'la la-history',
                      },
                      {
-                         action: 'parameters',
+                         action: 'paramsQuery',
+                         id: 'conn-tool-params-query',
                          bigIcon: true,
                          tooltip: 'define query parameters',
-                         iconClass: 'fa fa-th-list',
+                         iconClass: 'la la-th-list',
                      },
                      {
-                         action: 'save',
+                         action: 'saveQuery',
+                         id: 'conn-tool-save-query',
                          bigIcon: true,
                          tooltip: 'save query',
-                         iconClass: 'fa fa-save',
+                         iconClass: 'la la-save',
                      },
                 ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
-                    header="query"
+                    header="editor"
                     :childrenTools="[
                      {
                          action: 'syntax',
+                         id: 'conn-tool-syntax',
                          bigIcon: true,
                          tooltip: 'select sql syntax',
-                         iconClass: 'fa fa-code',
+                         iconClass: 'la la-code',
                      },
                      {
-                         action: 'showHide',
+                         action: 'commentsShowHide',
+                         id: 'conn-tool-comments-show-hide',
                          bigIcon: true,
                          tooltip: 'show comments',
-                         iconClass: 'fa fa-comments',
+                         iconClass: 'la la-comments',
                      },
                      {
                          action: 'autocomplete',
+                         id: 'conn-tool-autocomplete',
                          bigIcon: true,
                          tooltip: 'autocomplete',
-                         iconClass: 'fa fa-language',
+                         iconClass: 'la la-language',
                      },
                 ]"
             />
         </Toolbar>
 
-        <b-row >
-            <b-col md="12" xs="12">
-                <b-tabs class="mb-lg" pills card vertical start>
-                    <b-tab  v-for="(page, i) in pageNodes"
-                            :key="'po-'+page.id"
-                            :title="page.name"
-                            :active="activePage == i"
-                            @click="activePage = i"
-                    >
-                    </b-tab>
-                </b-tabs>
-            </b-col>
-        </b-row>
-
-
+        <div class="conn-content">
+            <b-row class="y-100">
+                <b-col md="12" xs="12">
+                    <b-tabs class="mb-lg y-100" pills card vertical start>
+                        <b-tab  v-for="(page, i) in pageNodes"
+                                :key="'po-'+page.id"
+                                :title="page.name"
+                                :active="activePage == i"
+                                @click="activePage = i"
+                        >
+                        </b-tab>
+                    </b-tabs>
+                </b-col>
+            </b-row>
+        </div>
     </div>
 </template>
 
@@ -162,10 +200,11 @@
     import api_store from '../../store/api';
     import Toolbar from "../../components/Toolbar/Toolbar";
     import Toolbox from "../../components/Toolbox/Toolbox";
+    import AppIcon from "../../components/AppIcon/AppIcon";
 
     export default {
         name: 'DataConnectionProcess',
-        components: {Toolbar, Toolbox},
+        components: {Toolbar, Toolbox, AppIcon},
         data() {
             return {
                 activePage : 0,
@@ -193,3 +232,6 @@
         }
     };
 </script>
+
+<style src="./DataConnectionProcess.scss" lang="scss"></style>
+

@@ -1,0 +1,46 @@
+@import '../../styles/app';
+
+.big-icon {
+  float:left;
+  width:70px;
+  padding: 0px;
+
+  img {
+    float: left;
+    width: 50px;
+    height: 50px;
+    margin: 0px 10px 0px 10px;
+  }
+  p {
+    font-size: 11px;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.small-icon {
+  float:left;
+  height:33px;
+  padding: 0px;
+  margin: 0px;
+
+  img {
+    float: left;
+    width: 25px;
+    height: 25px;
+    margin: 0px;
+  }
+
+  i {
+    float: left;
+    font-size: 28px;
+    margin: 0px;
+  }
+
+  p {
+    float: left;
+    font-size: 11px;
+    text-align: left;
+    margin: 5px 0px 0px 3px;
+  }
+}

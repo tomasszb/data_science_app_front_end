@@ -3,18 +3,33 @@
 .toolbox {
   padding-left: 4px;
   padding-right: 4px;
-  height: 80%;
-
-  a {
-    float:left;
-    font-size: 25px;
-    color: $gray-700;
-  }
+  height: 100%;
+  float:left;
 
   p {
-    margin-top: 25px;
+    width: 100%;
     font-size: 14px;
-    color: $gray-700;
+    color: $gray-900;
     text-align: center;
+  }
+
+  .clear-both a {
+    clear:both;
+  }
+
+  .toolbox-icon-group {
+    height: 60px;
+    float: left;
+    margin: 5px 5px 8px 0px;
+
+    a {
+      float: left;
+      font-size: 25px;
+      color: $gray-900;
+
+      @include hover {
+        color: $gray-600;
+      }
+    }
   }
 }

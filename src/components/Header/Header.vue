@@ -3,31 +3,31 @@
     <b-nav>
       <b-nav-item id="v-step-0">
         <a class="d-md-down-none px-2" href="#" @click="toggleSidebarMethod">
-          <i class='la la-bars la-lg' />
+          <i class='la la-bars fa-lg' />
         </a>
         <a class="fs-lg d-lg-none" href="#" @click="switchSidebarMethod">
-          <i class="la la-bars la-lg" />
+          <i class="la la-bars fa-lg" />
         </a>
       </b-nav-item>
       <b-nav-item class="d-md-down-none">
         <a href="#" class="px-2">
-          <i class="la la-refresh la-lg" />
+          <i class="la la-mail-reply fa-lg"/>
         </a>
       </b-nav-item>
       <b-nav-item class="d-md-down-none">
         <a href="#" class="px-2">
-          <i class="la la-times la-lg" />
+          <i class="la la-mail-forward fa-lg" />
         </a>
       </b-nav-item>
     </b-nav>
     <a  class="navbarBrand d-md-none">
-      <i class="fa fa-circle text-primary mr-n-sm" />
-      <i class="fa fa-circle text-danger" />
+      <i class="la la-circle text-primary mr-n-sm" />
+      <i class="la la-circle text-danger" />
       &nbsp;
       sing
       &nbsp;
-      <i class="fa fa-circle text-danger mr-n-sm" />
-      <i class="fa fa-circle text-primary" />
+      <i class="la la-circle text-danger mr-n-sm" />
+      <i class="la la-circle text-primary" />
     </a>
     <b-nav class="ml-auto">
       <b-nav-item-dropdown id="v-step-2" class="settingsDropdown d-sm-down-none" no-caret right>

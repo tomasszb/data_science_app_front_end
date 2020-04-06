@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div>
-        <b-navbar class="app-toolbar d-print-none" :class="[navbarTypeClass, 'header-' + navbarColorScheme]">
+        <b-navbar class="app-toolbar d-print-none">
             <slot></slot>
         </b-navbar>
     </div>
