@@ -18,14 +18,14 @@
                      ],
                      [
                          {
-                         action: 'exportAll',
+                         action: 'saveAll',
                          id: 'conn-tool-export-all',
                          svg: true,
                          bigIcon: true,
                          tooltip: 'export all connectors',
                          fontIconClass: 'la la-file-code-o',
                          svgIconName: 'svg3 - invoice',
-                         name: 'export all',
+                         name: 'save all',
                         }
                      ],
                      [
@@ -56,124 +56,182 @@
             <Toolbox
                     header="connector controls"
                     :childrenTools="[
-                     {
-                         action: 'connectConn',
-                         id: 'conn-tool-connect',
-                         bigIcon: true,
-                         tooltip: 'connect',
-                         iconClass: 'la la-chain',
-                         svgIconName: 'svg1 - server-1'
-                     },
-                     {
-                         action: 'runConn',
-                         id: 'conn-tool-run-conn',
-                         bigIcon: true,
-                         tooltip: 'run all queries',
-                         iconClass: 'la la-forward',
-                     },
-                     {
+                     [
+                         {
                          action: 'settingsConn',
                          id: 'conn-tool-settings-conn',
+                         svg: true,
                          bigIcon: true,
                          tooltip: 'open settings',
-                         iconClass: 'la la-cog',
-                     },
-                     {
+                         fontIconClass: 'la la-cog',
+                         svgIconName: 'svg5 - settings',
+                         name: 'settings'
+                         },
+                     ],
+                     [
+                         {
                          action: 'exploreConn',
                          id: 'conn-tool-explore-conn',
+                         svg: true,
                          bigIcon: true,
                          tooltip: 'explore',
-                         iconClass: 'la la-sitemap',
-                     },
-                     {
+                         fontIconClass: 'la la-sitemap',
+                         svgIconName: 'svg7 - 009-loupe',
+                         name: 'explore'
+                        },
+                     ],
+                     [
+                         {
+                         action: 'connectConn',
+                         id: 'conn-tool-connect',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'connect',
+                         fontIconClass: 'la la-chain',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'connect'
+                         },
+                         {
+                         action: 'loadConn',
+                         id: 'conn-tool-run-conn',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'run all queries',
+                         fontIconClass: 'la la-play',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'load'
+                         },
+                     ],
+                     [
+                         {
                          action: 'duplicateConn',
                          id: 'conn-tool-duplicate-conn',
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'duplicate connector',
-                         iconClass: 'la la-copy',
-                     },
-                     {
-                         action: 'exportConn',
-                         id: 'conn-tool-export-conn',
-                         bigIcon: true,
-                         tooltip: 'export',
-                         iconClass: 'la la-file-code-o',
-                     },
-                     {
-                         action: 'saveConn',
-                         id: 'conn-tool-save-conn',
-                         bigIcon: true,
-                         tooltip: 'save connector',
-                         iconClass: 'la la-save',
-                     },
+                         fontIconClass: 'la la-copy',
+                         svgIconName: 'svg7 - 011-file-management',
+                         name: 'duplicate'
+                         },
+                         {
+                         action: 'deleteConn',
+                         id: 'conn-tool-delete-conn',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'delete connector',
+                         fontIconClass: 'la la-close',
+                         svgIconName: 'svg7 - 011-file-management',
+                         name: 'delete'
+                         },
+                     ]
                 ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
                     header="query"
                     :childrenTools="[
-                     {
+                     [
+                         {
                          action: 'analyzeQuery',
                          id: 'conn-tool-analyze-query',
+                         svg: true,
                          bigIcon: true,
                          tooltip: 'analyze query',
-                         iconClass: 'la la-tachometer',
-                     },
-                     {
-                         action: 'runQuery',
-                         id: 'conn-tool-run-query',
-                         bigIcon: true,
-                         tooltip: 'run query',
-                         iconClass: 'la la-play',
-                     },
-                     {
-                         action: 'checkpointsQuery',
-                         id: 'conn-tool-checkpoint-query',
-                         bigIcon: true,
-                         tooltip: 'checkpoints',
-                         iconClass: 'la la-history',
-                     },
-                     {
+                         fontIconClass: 'la la-tachometer',
+                         svgIconName: 'svg3 - microscope',
+                         name: 'analyze'
+                         },
+                     ],
+                     [
+                         {
                          action: 'paramsQuery',
                          id: 'conn-tool-params-query',
+                         svg: true,
                          bigIcon: true,
                          tooltip: 'define query parameters',
-                         iconClass: 'la la-th-list',
-                     },
-                     {
-                         action: 'saveQuery',
-                         id: 'conn-tool-save-query',
+                         fontIconClass: 'la la-th-list',
+                         svgIconName: 'svg7 - exchange',
+                         name: 'parameters'
+                         },
+                     ],
+                     [
+                         {
+                         action: 'checkpointsQuery',
+                         id: 'conn-tool-checkpoints-query',
+                         svg: true,
                          bigIcon: true,
-                         tooltip: 'save query',
-                         iconClass: 'la la-save',
-                     },
+                         tooltip: 'show checkpoints',
+                         fontIconClass: 'la la-th-list',
+                         svgIconName: 'svg4 - push-pin',
+                         name: 'checkpoints'
+                         },
+                     ],
+
+                     [
+                         {
+                         action: 'saveChekpointQuery',
+                         id: 'conn-tool-save-checkpoint-query',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'save checkpoint',
+                         fontIconClass: 'la la-save',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'save checkpoint'
+                         },
+                         {
+                         action: 'runQuery',
+                         id: 'conn-tool-run-query',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'run query',
+                         fontIconClass: 'la la-play',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'run'
+                         },
+                     ],
+
+
+
                 ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
                     header="editor"
                     :childrenTools="[
-                     {
+                     [
+                         {
                          action: 'syntax',
                          id: 'conn-tool-syntax',
+                         svg: true,
                          bigIcon: true,
                          tooltip: 'select sql syntax',
-                         iconClass: 'la la-code',
-                     },
-                     {
+                         fontIconClass: 'la la-code',
+                         svgIconName: 'svg6 - coding',
+                         name: 'syntax'
+                        },
+                     ],
+                     [
+                         {
                          action: 'commentsShowHide',
                          id: 'conn-tool-comments-show-hide',
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'show comments',
-                         iconClass: 'la la-comments',
-                     },
-                     {
+                         fontIconClass: 'la la-comments',
+                         svgIconName: 'svg6 - coding',
+                         name: 'comments'
+                        },
+                        {
                          action: 'autocomplete',
                          id: 'conn-tool-autocomplete',
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'autocomplete',
-                         iconClass: 'la la-language',
-                     },
+                         fontIconClass: 'la la-language',
+                         svgIconName: 'svg6 - coding',
+                         name: 'autocomplete'
+                        },
+                     ]
                 ]"
             />
         </Toolbar>
