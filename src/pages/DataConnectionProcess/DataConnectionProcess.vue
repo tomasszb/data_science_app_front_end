@@ -18,18 +18,6 @@
                      ],
                      [
                          {
-                         action: 'saveAll',
-                         id: 'conn-tool-export-all',
-                         svg: true,
-                         bigIcon: true,
-                         tooltip: 'export all connectors',
-                         fontIconClass: 'la la-file-code-o',
-                         svgIconName: 'svg3 - invoice',
-                         name: 'save all',
-                        }
-                     ],
-                     [
-                         {
                          action: 'conectAll',
                          id: 'conn-tool-connect-all',
                          bigIcon: false,
@@ -70,6 +58,18 @@
                      ],
                      [
                          {
+                         action: 'saveConn',
+                         id: 'conn-tool-export-all',
+                         svg: true,
+                         bigIcon: true,
+                         tooltip: 'export all connectors',
+                         fontIconClass: 'la la-file-code-o',
+                         svgIconName: 'svg7 - 017-data-storage',
+                         name: 'save',
+                        }
+                     ],
+                     [
+                         {
                          action: 'exploreConn',
                          id: 'conn-tool-explore-conn',
                          svg: true,
@@ -80,6 +80,7 @@
                          name: 'explore'
                         },
                      ],
+
                      [
                          {
                          action: 'connectConn',
