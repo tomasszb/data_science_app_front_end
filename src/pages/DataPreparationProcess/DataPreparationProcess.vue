@@ -4,60 +4,89 @@
         <Toolbar>
             <Toolbox
                     header="input data"
+
                     :childrenTools="[
-                     {
-                         action: 'refreshInputs',
-                         id: 'prep-tool-refresh-all',
-                         bigIcon: true,
-                         tooltip: 'refresh inputs',
-                         iconClass: 'la la-refresh',
-                     },
-                     {
-                         action: 'sampleInputs',
-                         id: 'prep-tool-sample-inputs',
-                         bigIcon: true,
-                         tooltip: 'use only a sample of input data',
-                         iconClass: 'fi flaticon-3d-data-analytics-bars-graphic',
-                     },
-                ]"
+                        [
+                             {
+                             action: 'sampleInputs',
+                             id: 'prep-tool-sample-inputs',
+                             bigIcon: true,
+                             svg: true,
+                             tooltip: 'define a sample of the input data',
+                             fontIconClass: 'fi flaticon-3d-data-analytics-bars-graphic',
+                             svgIconName: 'svg7 - pie-chart',
+                             name: 'sample'
+                            },
+                        ],
+                        [
+                            {
+                             action: 'sampleOnOff',
+                             id: 'prep-tool-sample-switch-inputs',
+                             bigIcon: false,
+                             svg: false,
+                             tooltip: 'sample the input data',
+                             fontIconClass: 'fi flaticon-data-circular-chart',
+                             svgIconName: 'mono - percentage-1',
+                             name: 'use sample'
+                            },
+                            {
+                             action: 'refreshInputs',
+                             id: 'prep-tool-refresh-all',
+                             bigIcon: false,
+                             svg: false,
+                             tooltip: 'rerun inputs',
+                             fontIconClass: 'la la-refresh',
+                             svgIconName: 'svg6 - browser-4',
+                             name: 'rerun inputs'
+                            }
+                        ]
+
+                    ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
-                    header="all nodes"
+                    header="all prep nodes"
                     :childrenTools="[
-                     {
-                         action: 'runAll',
-                         id: 'prep-tool-run-all',
-                         bigIcon: true,
-                         tooltip: 'connect all connectors',
-                         iconClass: 'la la-chain',
-                     },
-                     {
-                         action: 'unloadAll',
-                         id: 'prep-tool-unload-all',
-                         bigIcon: true,
-                         tooltip: 'load data for all connectors',
-                         iconClass: 'la la-fast-forward',
-                     },
-                     {
+                     [
+                         {
                          action: 'newAll',
                          id: 'prep-tool-new-all',
                          bigIcon: true,
+                         svg: true,
                          tooltip: 'setup a new connector',
-                         iconClass: 'la la-plus-square',
-                     },
-                     {
-                         action: 'exportAll',
-                         id: 'prep-tool-export-all',
-                         bigIcon: true,
-                         tooltip: 'export all connectors',
-                         iconClass: 'la la-file-code-o',
-                     },
+                         fontIconClass: 'la la-plus-square',
+                         svgIconName: 'svg6 - browser-4',
+                         name: 'new prep',
+                        }
+                     ],
+                     [
+                         {
+                         action: 'runAll',
+                         id: 'prep-tool-load-all',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'run all actions',
+                         fontIconClass: 'la la-fast-forward',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'run all',
+                        },
+                         {
+                         action: 'unloadAll',
+                         id: 'prep-tool-connect-all',
+                         bigIcon: false,
+                         svg: false,
+                         tooltip: 'unload data from all actions',
+                         fontIconClass: 'la la-minus-square',
+                         svgIconName: 'svg1 - server',
+                         name: 'unload all',
+                        },
+
+                     ]
                 ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
-                    header="node controls"
+                    header="prep node controls"
                     :childrenTools="[
                      {
                          action: 'runNode',
