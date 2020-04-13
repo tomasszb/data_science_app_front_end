@@ -80,97 +80,131 @@
                          svgIconName: 'svg1 - server',
                          name: 'unload all',
                         },
-
                      ]
                 ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
-                    header="prep node controls"
+                    header="data node controls"
                     :childrenTools="[
-                     {
+                     [
+                         {
+                         action: 'saveNode',
+                         id: 'prep-tool-export-node',
+                         svg: true,
+                         bigIcon: true,
+                         tooltip: 'save node',
+                         fontIconClass: 'la la-file-code-o',
+                         svgIconName: 'svg7 - 017-data-storage',
+                         name: 'save',
+                        }
+                     ],
+                     [
+                         {
                          action: 'runNode',
                          id: 'prep-tool-run-node',
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'run node',
-                         iconClass: 'la la-forward',
-                     },
-                     {
+                         fontIconClass: 'la la-play',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'run',
+                        },
+                         {
                          action: 'unloadNode',
                          id: 'prep-tool-unload-node',
-                         bigIcon: true,
-                         tooltip: 'unload node',
-                         iconClass: 'la la-cog',
-                     },
-                     {
+                         bigIcon: false,
+                         svg: false,
+                         tooltip: 'unload data',
+                         fontIconClass: 'la la-minus-square',
+                         svgIconName: 'svg1 - server',
+                         name: 'unload',
+                        },
+                     ],
+                     [
+                         {
                          action: 'duplicateNode',
                          id: 'prep-tool-duplicate-node',
-                         bigIcon: true,
-                         tooltip: 'duplicate node',
-                         iconClass: 'la la-sitemap',
-                     },
-                     {
-                         action: 'exportNode',
-                         id: 'prep-tool-export-node',
-                         bigIcon: true,
-                         tooltip: 'export node',
-                         iconClass: 'la la-file-code-o',
-                     },
-                     {
-                         action: 'saveNode',
-                         id: 'prep-tool-save-node',
-                         bigIcon: true,
-                         tooltip: 'save connector',
-                         iconClass: 'la la-save',
-                     },
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'duplicate connector',
+                         fontIconClass: 'la la-copy',
+                         svgIconName: 'svg7 - 011-file-management',
+                         name: 'duplicate'
+                         },
+                         {
+                         action: 'deleteNode',
+                         id: 'prep-tool-delete-node',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'delete connector',
+                         fontIconClass: 'la la-close',
+                         svgIconName: 'svg7 - 011-file-management',
+                         name: 'delete'
+                         }
+                     ]
                 ]"
             />
             <div class="toolbox-dividor"/>
             <Toolbox
                     header="action controls"
                     :childrenTools="[
-                     {
-                         action: 'runAction',
-                         id: 'prep-tool-run-action',
-                         bigIcon: true,
-                         tooltip: 'run node',
-                         iconClass: 'la la-play',
-                     },
-                     {
-                         action: 'unloadAction',
-                         id: 'prep-tool-unload-action',
-                         bigIcon: true,
-                         tooltip: 'unload node',
-                         iconClass: 'la la-cog',
-                     },
-                     {
+                     [
+                         {
                          action: 'settingsAction',
                          id: 'prep-tool-settings-action',
+                         svg: true,
                          bigIcon: true,
-                         tooltip: 'open settings',
-                         iconClass: 'la la-cog',
-                     },
-                     {
-                         action: 'duplicateAction',
-                         id: 'prep-tool-duplicate-action',
-                         bigIcon: true,
-                         tooltip: 'duplicate node',
-                         iconClass: 'la la-sitemap',
-                     },
-                     {
-                         action: 'exportAction',
-                         id: 'prep-tool-export-action',
-                         bigIcon: true,
-                         tooltip: 'export node',
-                         iconClass: 'la la-file-code-o',
-                     },
-                     {
-                         action: 'saveAction',
-                         id: 'prep-tool-save-action',
-                         bigIcon: true,
-                         tooltip: 'save connector',
-                         iconClass: 'la la-save',
-                     },
+                         tooltip: 'open action settings',
+                         fontIconClass: 'la la-cog',
+                         svgIconName: 'svg5 - settings',
+                         name: 'settings'
+                         },
+                     ],
+                     [
+                         {
+                         action: 'runNode',
+                         id: 'prep-tool-run-node',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'run node',
+                         fontIconClass: 'la la-play',
+                         svgIconName: 'svg1 - server-1',
+                         name: 'run',
+                        },
+                         {
+                         action: 'unloadNode',
+                         id: 'prep-tool-unload-node',
+                         bigIcon: false,
+                         svg: false,
+                         tooltip: 'unload data',
+                         fontIconClass: 'la la-minus-square',
+                         svgIconName: 'svg1 - server',
+                         name: 'unload',
+                        },
+                     ],
+                     [
+                         {
+                         action: 'duplicateNode',
+                         id: 'prep-tool-duplicate-node',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'duplicate connector',
+                         fontIconClass: 'la la-copy',
+                         svgIconName: 'svg7 - 011-file-management',
+                         name: 'duplicate'
+                         },
+                         {
+                         action: 'deleteNode',
+                         id: 'prep-tool-delete-node',
+                         svg: false,
+                         bigIcon: false,
+                         tooltip: 'delete connector',
+                         fontIconClass: 'la la-close',
+                         svgIconName: 'svg7 - 011-file-management',
+                         name: 'delete'
+                         }
+                     ]
                 ]"
             />
         </Toolbar>
@@ -194,7 +228,7 @@
 </template>
 
 <script>
-    import api_store from '../../store/api';
+    import api_store from '../../store/api/api';
     import Toolbar from "../../components/Toolbar/Toolbar";
     import AppIcon from "../../components/AppIcon/AppIcon";
     import Toolbox from "../../components/Toolbox/Toolbox";
@@ -220,7 +254,6 @@
             },
             pageNodes () {
                 let nodes = [];
-                window.console.log(this.processPages);
                 this.processPages.forEach(function (page) {
                     nodes = nodes.concat(api_store.state.projectNodes[page.id])
                 });

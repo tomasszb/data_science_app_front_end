@@ -6,10 +6,11 @@
                     :childrenTools="[
                      [
                          {
-                         action: 'newAll',
+                         action: 'directive',
                          id: 'conn-tool-new-all',
                          bigIcon: true,
                          svg: true,
+                         directive: 'new-connector',
                          tooltip: 'setup a new connector',
                          fontIconClass: 'la la-plus-square',
                          svgIconName: 'svg6 - browser-4',
@@ -46,9 +47,10 @@
                     :childrenTools="[
                      [
                          {
-                         action: 'settingsConn',
+                         action: 'directive',
                          id: 'conn-tool-settings-conn',
                          svg: true,
+                         directive: 'settings-connector',
                          bigIcon: true,
                          tooltip: 'open settings',
                          fontIconClass: 'la la-cog',
@@ -70,9 +72,10 @@
                      ],
                      [
                          {
-                         action: 'exploreConn',
+                         action: 'directive',
                          id: 'conn-tool-explore-conn',
                          svg: true,
+                         directive: 'connector-explorer',
                          bigIcon: true,
                          tooltip: 'explore',
                          fontIconClass: 'la la-sitemap',
@@ -190,9 +193,6 @@
                          name: 'run'
                          },
                      ],
-
-
-
                 ]"
             />
             <div class="toolbox-dividor"/>
@@ -252,26 +252,74 @@
                 </b-col>
             </b-row>
         </div>
+
+        <CreateObjectGroup
+                id="new-connector"
+                :showGroups="true"
+                filterGroup="SQLConnector"
+                title="New Connector Settings"
+                :objDefs="defConnectors"
+                selGroup="SQLConnector"
+        />
+        <CreateObjectGroup
+                id="settings-connector"
+                :showGroups="false"
+                filterGroup="SQLConnector"
+                title="Connector Settings"
+                :objDefs="defConnectors"
+                selGroup="SQLConnector"
+        />
+        <b-modal
+                id="connector-explorer"
+                title="Explore Database"
+                size="lg"
+                body-class="bg-white"
+                hide-footer>
+            <v-client-table :data="data" :columns="columns" :options="options" />
+        </b-modal>
+        {{defConnectors}}
     </div>
+
 </template>
 
 <script>
-    import api_store from '../../store/api';
+    import api_store from '../../store/api/api';
+    import Widget from '@/components/Widget/Widget';
     import Toolbar from "../../components/Toolbar/Toolbar";
     import Toolbox from "../../components/Toolbox/Toolbox";
     import AppIcon from "../../components/AppIcon/AppIcon";
+    import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
+    import { vueTableData } from './data';
 
     export default {
         name: 'DataConnectionProcess',
-        components: {Toolbar, Toolbox, AppIcon},
+        components: {Toolbar, Toolbox, AppIcon, Widget, CreateObjectGroup},
         data() {
             return {
                 activePage : 0,
+                data: vueTableData(),
+                columns: ['database', 'table', 'column'],
+                options: {
+                    filterByColumn: true,
+                    perPage: 20,
+                    perPageValues: [],
+                    pagination: { chunk: 20, dropdown: false },
+                    filterable: ['database', 'table', 'column'],
+                },
             }
         },
         computed: {
             processID() {
                 return '1'
+            },
+            defConnectors () {
+                let defs = api_store.state.dataObjectDefinitions;
+                if ('Connectors' in  defs) {
+                    return defs['Connectors'];
+                }
+                else {
+                    return {}
+                }
             },
             processPages () {
                 let pages = [];
@@ -282,7 +330,6 @@
             },
             pageNodes () {
                 let nodes = [];
-                window.console.log(this.processPages);
                 this.processPages.forEach(function (page) {
                     nodes = nodes.concat(api_store.state.projectNodes[page.id])
                 });

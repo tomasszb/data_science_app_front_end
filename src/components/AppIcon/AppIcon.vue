@@ -16,7 +16,7 @@
             svg: { type: Boolean, default: false },
             svgName: { type: String, default: '' },
             fontClass: { type: String, default: '' },
-            bigIcon: { type: String, default: '' },
+            bigIcon: { type: Boolean, default: false },
         },
         computed: {
             path() {

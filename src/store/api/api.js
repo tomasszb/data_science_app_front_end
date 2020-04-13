@@ -1,5 +1,5 @@
 import axios from "axios";
-import dsw_config from "../dsw_config";
+import dsw_config from "../../dsw_config";
 
 export default {
     namespaced: true,
@@ -10,6 +10,7 @@ export default {
         projectPages: {},
         projectNodes: {},
         projectElements: {},
+        dataObjectDefinitions: {},
         errorMessage: "",
     },
     mutations: {
@@ -19,6 +20,9 @@ export default {
         },
         LOAD_PROJECT_DATA(state, data) {
             state.projectData = data;
+        },
+        LOAD_OBJECT_DEFINITIONS(state, data) {
+            state.dataObjectDefinitions = data;
         },
         LOAD_OBJECTS(state, data) {
             state.dataObjects= {};
@@ -96,6 +100,14 @@ export default {
                 commit("LOAD_OBJECTS", data);
             }).catch(err => {
               dispatch("callError", err.response.data);
+            })
+        },
+        loadObjectDefinitions({commit, dispatch}) {
+            axios.get('/data_objects/definitions/').then(res => {
+                let data = res.data['Response'];
+                commit("LOAD_OBJECT_DEFINITIONS", data);
+            }).catch(err => {
+                dispatch("callError", err.response.data);
             })
         },
         callError({commit}, payload) {

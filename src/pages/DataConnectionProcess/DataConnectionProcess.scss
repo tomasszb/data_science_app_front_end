@@ -23,3 +23,60 @@
   height: 100%;
   flex-grow : 1;
 }
+
+
+#new-connector, #settings-connector  {
+  .modal-body {
+    padding: 0!important;
+    margin: 0!important;
+
+    .mb-lg {
+      margin: 0;
+    }
+  }
+}
+
+#new-connector {
+
+  .modal-content {
+    width: 90% !important;
+  }
+}
+
+#settings-connector {
+
+  .modal-content {
+    width: 75% !important;
+    margin-left: 15%;
+  }
+}
+
+
+.VueTables__table.table {
+  tr {
+    th {
+      background: white;
+      color: var(--light-color);
+      font-weight: 400;
+      border: none;
+      padding:5px 5px 6px 5px;
+    }
+    td {
+      padding:2px 5px 2px 10px;
+    }
+  }
+
+  .VueTables__limit {
+    display: none;
+  }
+
+  .VueTables__sortable {
+    .VueTables__sort-icon {
+      margin-top: 3px;
+
+      &:before {
+        color: var(--light-color);
+      }
+    }
+  }
+}

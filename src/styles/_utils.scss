@@ -294,11 +294,11 @@ $z-index-variants: (more: 1, less: -1, '10': 10, '-10': -10);
 }
 
 .hide {
-  display: none !important;
+  display: none; //tomas
 }
 
 .show {
-  display: block !important;
+  display: block; //tomas
 }
 
 .btn-group.show {
