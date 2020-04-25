@@ -76,7 +76,7 @@
                 'changeSidebarActive',
             ]),
             ...mapActions('auth', ['logoutUser']),
-            ...mapActions('api', ['loadProjectData', 'loadObjectDefinitions']),
+            ...mapActions('api', ['loadObjects', 'loadObjectDefinitions']),
             switchSidebarMethod() {
                 if (!this.sidebarClose) {
                     this.switchSidebar(true);
@@ -101,7 +101,7 @@
             },
         },
         created() {
-            this.loadProjectData();
+            this.loadObjects();
             this.loadObjectDefinitions();
             //window.console.log(this.$store.state.api.dataObjectDefinitions);
         }

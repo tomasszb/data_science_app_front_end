@@ -60,7 +60,7 @@ export default {
         },
         receiveLogin({commit}) {
             commit('LOGIN_SUCCESS');
-            router.push('/app/main');
+            router.push('/projects');
         },
         requestLogin({commit}) {
             commit('LOGIN_REQUEST');
