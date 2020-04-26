@@ -9,6 +9,7 @@ export default {
         projectData: emptyProject(),
         dataObjects: {},
         projectProcesses: [],
+        projectList: [],
         projectPages: {},
         projectNodes: {},
         projectElements: {},
@@ -22,6 +23,9 @@ export default {
         },
         LOAD_PROJECT_DATA(state, data) {
             state.projectData = data;
+        },
+        LOAD_PROJECT_LIST(state, data) {
+            state.projectList = data;
         },
         LOAD_OBJECT_DEFINITIONS(state, data) {
             state.dataObjectDefinitions = data;
@@ -102,14 +106,22 @@ export default {
         },
     },
     actions: {
-        loadProjectData({commit, dispatch}) {
-            axios.get('/project/1/0/').then(res => {
+        loadProjectData({commit, dispatch}, project) {
+            axios.get('/project/'+project.id+'/'+project.version+'/').then(res => {
                 let data = res.data['Response'];
                 commit("LOAD_PROJECT_DATA", data);
                 dispatch("loadObjects");
                 router.push('/app/main');
             }).catch(err => {
               dispatch("callError", err.response.data);
+            })
+        },
+        loadProjectList({commit, dispatch}) {
+            axios.get('/project/all/').then(res => {
+                let data = res.data['Response'];
+                commit("LOAD_PROJECT_LIST", data);
+            }).catch(err => {
+                dispatch("callError", err.response.data);
             })
         },
         loadObjects({commit}) {

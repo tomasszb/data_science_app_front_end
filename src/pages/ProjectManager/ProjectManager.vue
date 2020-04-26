@@ -13,7 +13,15 @@
         <br>
         <br>
         <p class="d-block text-left">Open recent</p>
-        <b-button class="text-left rounded-0" variant="light" @click="loadData()" block>Default</b-button>
+        <b-button
+                :key="'p-'+project.id"
+                v-for="project in projectList"
+                class="text-left rounded-0"
+                variant="light"
+                @click="loadProjectData(project)"
+                block>
+          {{project.name}}
+        </b-button>
       </Widget>
     </b-container>
   </div>
@@ -21,23 +29,22 @@
 
 <script>
 import Widget from '@/components/Widget/Widget';
-import { mapActions} from 'vuex';
+import { mapActions, mapState} from 'vuex';
 
 export default {
   name: 'ProjectManager',
   components: { Widget },
   computed: {
+    ...mapState('api', ['projectList']),
   },
   methods: {
-    ...mapActions('api', ['loadProjectData']),
-    loadData() {
-      window.console.log('here');
-      this.loadProjectData();
-      window.console.log('there');
-    },
+    ...mapActions('api', ['loadProjectData', 'loadProjectList']),
   },
   created() {
     //this.loadProjectData();
+  },
+  mounted() {
+    this.loadProjectList()
   }
 };
 </script>
