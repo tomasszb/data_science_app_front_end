@@ -13,14 +13,14 @@
                     card
                     vertical
                     start>
-                <b-tab v-for="(fields, objGroup) in objDefs"
-                       :title="objGroup"
-                       :key="objGroup"
-                       :active="objGroup == selGroup">
+                <b-tab v-for="objGroup in objDefs"
+                       :title="objGroup.name"
+                       :key="objGroup.name"
+                       :active="objGroup.name == selGroup">
                     <CreateObjectForm
                             class="new-object-form"
-                            :fields="fields"
-                            :objGroup="objGroup"
+                            :fields="objGroup.fields"
+                            :objGroup="objGroup.name"
                             :fieldChoices="fieldChoices"
                     />
                 </b-tab>
@@ -28,11 +28,10 @@
             <CreateObjectForm
                     v-else
                     class="existing-object-form"
-                    :fields="objDefs[filterGroup]"
-                    :objGroup="filterGroup"
+                    :fields="objDefs[filterGroup].fields"
+                    :objGroup="objDefs[filterGroup].name"
                     :fieldChoices="fieldChoices"
             />
-
         </b-modal>
     </div>
 </template>
@@ -47,20 +46,20 @@
             id: { type: String, default: '' },
             title: { type: String, default: '' },
             selGroup: { type: String, default: '' },
-            objDefs: { type: Object, default: {}},
-            filterGroup: { type: String, default: '' },
+            objDefs: { type: Array, default: []},
+            filterGroup: { type: Number, default: 0 },
             showGroups: { type: Boolean, default: true}
         },
         computed: {
             fieldChoices() {
                 let choices = {};
                 let objDefs = this.objDefs;
-                Object.keys(objDefs).forEach(function (obj_type) {
-                    choices[obj_type] = {};
-                    objDefs[obj_type].forEach(function (field) {
-                        choices[obj_type][field.column] = [];
+                objDefs.forEach(function (obj_type) {
+                    choices[obj_type.name] = {};
+                    obj_type.fields.forEach(function (field) {
+                        choices[obj_type.name][field.column] = [];
                         field.choices.forEach(function (choice) {
-                            choices[obj_type][field.column] = choices[obj_type][field.column].concat(choice.name)
+                            choices[obj_type.name][field.column] = choices[obj_type.name][field.column].concat(choice.name)
                         });
                     });
                 });

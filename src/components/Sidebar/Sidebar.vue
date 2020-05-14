@@ -22,8 +22,8 @@
                 :key="'po-'+process.id"
                 :activeItem="activeItem"
                 :header="process.name"
-                :link="'/app/'+process.link"
-                :iconName="process.side_icon"
+                :link="'/app/'+process.link+'/'+process.id"
+                :iconName="process.sideIcon"
                 index="conn"
                 isHeader
         />
@@ -90,26 +90,22 @@ export default {
       sidebarOpened: state => !state.sidebarClose,
       activeItem: state => state.sidebarActiveElement,
     }),
-    projectData () {
-      return this.$store.state.api.projectData
-    },
-    dataObjects () {
-      return this.$store.state.api.dataObjects
-    },
-    projectProcesses () {
-      return this.$store.state.api.projectProcesses
-    },
-    projectPages () {
-      return this.$store.state.api.projectPages
-    },
-    projectNodes () {
-      return this.$store.state.api.projectNodes
-    },
-    projectElements () {
-      return this.$store.state.api.projectElements
-    },
     projectObjectSettings () {
       return dsw_config.projectObjectSettings
+    },
+    projectObjects () {
+      return this.$store.state.api.projectObjects
+    },
+    projectProcesses () {
+      let processes = [];
+      for (let id in this.projectObjects) {
+        if (this.projectObjects[id].group==1) {
+          let processAPI = this.projectObjects[id];
+          let process = Object.assign({}, processAPI, this.projectObjectSettings[processAPI.type]);
+          processes.push(process);
+        }
+      };
+      return processes
     }
   },
 };

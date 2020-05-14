@@ -7,13 +7,10 @@ export default {
     namespaced: true,
     state: {
         projectData: emptyProject(),
-        dataObjects: {},
-        projectProcesses: [],
-        projectList: [],
-        projectPages: {},
-        projectNodes: {},
-        projectElements: {},
         dataObjectDefinitions: {},
+        dataObjects: {},
+        projectObjects: {},
+        projectList: [],
         errorMessage: "",
     },
     mutations: {
@@ -30,84 +27,26 @@ export default {
         LOAD_OBJECT_DEFINITIONS(state, data) {
             state.dataObjectDefinitions = data;
         },
-        LOAD_OBJECTS(state) {
-            state.dataObjects= {};
-            state.projectProcesses= [];
-            state.projectPages= {};
-            state.projectNodes= {};
-            state.projectElements= {};
-            state.dataObjects = state.projectData['project_data_objects'];
-            let processes = state.projectData['children'];
-            for (let i1 = 0; i1 < processes.length; i1++) {
-                let process = processes[i1];
-                let process_id = process['id'];
-                state.projectProcesses.push({
-                    'id': process_id,
-                    'name': process['name'],
-                    'type': process['type'],
-                    'group': process['group'],
-                    'parameters': process['parameters'],
-                    'side_icon': dsw_config.projectObjectSettings[process['type']]['sideIcon'],
-                    'link': dsw_config.projectObjectSettings[process['type']]['link'],
-                });
-                if ('children' in process) {
-                    let pages = process['children'];
-                    for (let i2 = 0; i2 < pages.length; i2++) {
-                        let page = pages[i2];
-                        let page_id = page['id'];
-                        if (!(process_id in state.projectPages))  {
-                            state.projectPages[process_id] = [];
-                        }
-                        state.projectPages[process_id].push({
-                            'id': page_id,
-                            'name': page['name'],
-                            'type': page['type'],
-                            'group': page['group'],
-                            'parameters': page['parameters']
-                        });
-                        if ('children' in page) {
-                            let nodes = page['children'];
-                            for (let i3 = 0; i3 < nodes.length; i3++) {
-                                let node = nodes[i3];
-                                let node_id = node['id'];
-                                if (!(page_id in state.projectNodes)) {
-                                    state.projectNodes[page_id] = [];
-                                }
-                                state.projectNodes[page_id].push({
-                                    'id': node_id,
-                                    'name': node['name'],
-                                    'type': node['type'],
-                                    'group': node['group'],
-                                    'parameters': node['parameters']
-                                });
-                                if ('children' in node) {
-                                    let elements = node['children'];
-                                    for (let i4 = 0; i4 < elements.length; i4++) {
-                                        let element = elements[i4];
-                                        let element_id = element['id'];
-                                        if (!(node_id in state.projectElements)) {
-                                            state.projectElements[node_id] = [];
-                                        }
-                                        state.projectElements[node_id].push({
-                                            'id': element_id,
-                                            'name': element['name'],
-                                            'type': element['type'],
-                                            'group': element['group'],
-                                            'parameters': element['parameters']
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
+        UPDATE_PROJECT_OBJECTS(state, data) {
+            for (let id in data) {
+                state.projectObjects[parseInt(id,10)] = data[id]
             }
+        },
+        LOAD_OBJECTS(state) {
+            state.projectObjects= {};
+            state.dataObjects = {};
+            state.projectData['project_objects'].forEach(function (i) {
+               state.projectObjects[i['id']]=i
+            });
+            state.projectData['project_data_objects'].forEach(function (i) {
+                state.dataObjects[i['id']]=i
+            });
+
         },
     },
     actions: {
         loadProjectData({commit, dispatch}, project) {
-            axios.get('/project/'+project.id+'/'+project.version+'/').then(res => {
+            axios.get('/project/'+project.id+'/'+project.version+'/objects/').then(res => {
                 let data = res.data['Response'];
                 commit("LOAD_PROJECT_DATA", data);
                 dispatch("loadObjects");
@@ -126,6 +65,9 @@ export default {
         },
         loadObjects({commit}) {
             commit("LOAD_OBJECTS");
+        },
+        updateProjectObjects({commit}, updatedProjectObjects) {
+            commit("UPDATE_PROJECT_OBJECTS", updatedProjectObjects);
         },
         loadObjectDefinitions({commit, dispatch}) {
             axios.get('/data_objects/definitions/').then(res => {

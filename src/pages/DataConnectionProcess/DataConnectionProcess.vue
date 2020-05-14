@@ -240,15 +240,47 @@
         <div class="conn-content">
             <b-row class="y-100">
                 <b-col md="12" xs="12">
-                    <b-tabs class="mb-lg y-100" pills card vertical start>
-                        <b-tab  v-for="(page, i) in pageNodes"
-                                :key="'po-'+page.id"
-                                :title="page.name"
-                                :active="activePage == i"
-                                @click="activePage = i"
-                        >
-                        </b-tab>
-                    </b-tabs>
+                    <div class="conn-node-bar y-100">
+                        <draggable v-model="node_list[activePage['id']]">
+                            <div
+                                    class="px-4 py-3 conn-node mb-sm list-element d-flex justify-content-between align-items-center "
+                                    :class="{'active-node':activeNode['id']==nodeId}"
+                                    v-for="(nodeId, nodeIndex) in node_list[activePage['id']]"
+                                    :key="nodeId">
+                                <div
+                                        v-if="nodeId!=editedNode"
+                                        class="conn-node-text"
+                                        @click="activateNode(nodeId, nodeIndex)"
+                                        @dblclick="editNode(nodeId)">
+                                    {{nodes[activePage['id']][nodeId].name}}
+                                </div>
+                                <input
+                                        v-if="nodeId==editedNode"
+                                        class="conn-node-text"
+                                        v-focus
+                                        type="text"
+                                        v-model="nodes[activePage['id']][nodeId].name"
+                                        @blur="unblurNode()"
+                                        @keyup.enter="unblurNode()">
+                                <i @click="deleteNode(nodeId, nodeIndex)" class="fa fa-times text-muted" />
+                            </div>
+                        </draggable>
+                        <div
+                                class="px-4 py-3 border conn-node-add mb-sm list-element d-flex align-items-center"
+                                @click="addNode()">
+                            <b-button variant="outline-success" class="mb-xs mr-xs">
+                                <i class="fa fa-plus" />
+                            </b-button>
+                        </div>
+                    </div>
+                    <div class="conn-node-screen">
+                        {{ activeProcess }}<br>
+                        {{ activePage }}<br>
+                        {{ activeNode }}<br>
+                        {{ activeElement }}<br>
+                        {{ nodes }}<br>
+                        {{ node_list }}<br>
+                    </div>
                 </b-col>
             </b-row>
         </div>
@@ -256,7 +288,7 @@
         <CreateObjectGroup
                 id="new-connector"
                 :showGroups="true"
-                filterGroup="SQLConnector"
+                :filterGroup=0
                 title="New Connector Settings"
                 :objDefs="defConnectors"
                 selGroup="SQLConnector"
@@ -264,7 +296,7 @@
         <CreateObjectGroup
                 id="settings-connector"
                 :showGroups="false"
-                filterGroup="SQLConnector"
+                :filterGroup=0
                 title="Connector Settings"
                 :objDefs="defConnectors"
                 selGroup="SQLConnector"
@@ -277,66 +309,213 @@
                 hide-footer>
             <v-client-table :data="data" :columns="columns" :options="options" />
         </b-modal>
-        {{defConnectors}}
+
     </div>
 
 </template>
 
 <script>
-    import api_store from '../../store/api/api';
-    import Widget from '@/components/Widget/Widget';
-    import Toolbar from "../../components/Toolbar/Toolbar";
-    import Toolbox from "../../components/Toolbox/Toolbox";
-    import AppIcon from "../../components/AppIcon/AppIcon";
-    import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
-    import { vueTableData } from './data';
+import draggable from 'vuedraggable';
+import api_store from '../../store/api/api';
+import Widget from '@/components/Widget/Widget';
+import Toolbar from "../../components/Toolbar/Toolbar";
+import Toolbox from "../../components/Toolbox/Toolbox";
+import AppIcon from "../../components/AppIcon/AppIcon";
+import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
+import { vueTableData } from './data';
+import {mapActions} from "vuex";
 
-    export default {
-        name: 'DataConnectionProcess',
-        components: {Toolbar, Toolbox, AppIcon, Widget, CreateObjectGroup},
-        data() {
-            return {
-                activePage : 0,
-                data: vueTableData(),
-                columns: ['database', 'table', 'column'],
-                options: {
-                    filterByColumn: true,
-                    perPage: 20,
-                    perPageValues: [],
-                    pagination: { chunk: 20, dropdown: false },
-                    filterable: ['database', 'table', 'column'],
-                },
+export default {
+    name: 'DataConnectionProcess',
+    components: {Toolbar, Toolbox, AppIcon, Widget, CreateObjectGroup, draggable},
+    data() {
+        return {
+            randomCounter: 0,
+            data: vueTableData(),
+            columns: ['database', 'table', 'column'],
+            options: {
+                filterByColumn: true,
+                perPage: 20,
+                perPageValues: [],
+                pagination: { chunk: 20, dropdown: false },
+                filterable: ['database', 'table', 'column'],
+            },
+            editedNode: null,
+
+            processes : {},
+            pages : {},
+            nodes : {},
+            elements : {},
+
+            process_list: [],
+            page_list : {},
+            node_list : {},
+            element_list : {},
+
+            activeProcess: {},
+            activePage: {},
+            activeNode: {},
+            activeElement: {},
+        }
+    },
+    methods: {
+        ...mapActions('api', ['updateProjectObjects']),
+        addNode() {
+            let randomID = '_' + this.randomCounter;
+            this.node_list[this.activePage['id']].push(randomID);
+            this.nodes[this.activePage['id']][randomID] = {'name':'New Connector '+this.randomCounter, 'id':randomID};
+            this.randomCounter+=1;
+        },
+        editNode(nodeId) {
+            this.editedNode = nodeId
+        },
+        unblurNode() {
+            this.editedNode = null
+        },
+        activateNode(nodeId, nodeIndex) {
+            this.activeNode = {'id': nodeId, 'index': nodeIndex}
+        },
+        deleteNode(nodeId, nodeIndex) {
+            this.node_list[this.activePage['id']].splice(nodeIndex, 1);
+            delete this.nodes[this.activePage['id']][nodeId];
+            if (this.activeNode['id'] == nodeId) {
+                this.activeNode = {'id': this.node_list[this.activePage['id']][0], 'index': 0};
+            }
+
+        },
+        updateProjectObjects() {
+
+        }
+    },
+    computed: {
+        processID() {
+            return this.$route.params.id
+        },
+        defConnectors () {
+            let defs = api_store.state.dataObjectDefinitions;
+            for (let item of defs) {
+                if (item.name=="Connectors") {
+                    return item.children
+                }
             }
         },
-        computed: {
-            processID() {
-                return '1'
-            },
-            defConnectors () {
-                let defs = api_store.state.dataObjectDefinitions;
-                if ('Connectors' in  defs) {
-                    return defs['Connectors'];
-                }
-                else {
-                    return {}
-                }
-            },
-            processPages () {
-                let pages = [];
-                if (this.processID in api_store.state.projectPages){
-                    pages = api_store.state.projectPages[this.processID]
-                }
-                return pages
-            },
-            pageNodes () {
-                let nodes = [];
-                this.processPages.forEach(function (page) {
-                    nodes = nodes.concat(api_store.state.projectNodes[page.id])
-                });
-                return nodes
-            },
+    },
+    directives: {
+        focus: {
+            inserted (el) {
+                el.focus()
+            }
         }
-    };
+    },
+    created() {
+        function assign(obj, keyPath, value) {
+            let lastKeyIndex = keyPath.length-1;
+            for (let i = 0; i < lastKeyIndex; ++ i) {
+                let key = keyPath[i];
+                if (!(key in obj)){
+                    obj[key] = {}
+                }
+                obj = obj[key];
+            }
+            obj[keyPath[lastKeyIndex]] = value;
+        }
+
+        let processes = {};
+        let pages = {};
+        let nodes = {};
+        let elements = {};
+
+        let process_list = [];
+        let page_list = {};
+        let node_list = {};
+        let element_list = {};
+
+        let projectObjects = this.$store.state.api.projectObjects;
+
+        for (let id in projectObjects) {
+            if (projectObjects.hasOwnProperty(id)) {
+                if (projectObjects[id]['group'] === 1) {
+                    processes[id] = projectObjects[id];
+                    process_list.push(id)
+                }
+            }
+        }
+
+        for (let id in projectObjects) {
+            if (projectObjects.hasOwnProperty(id)) {
+                if (projectObjects[id]['group']  === 2) {
+                    let page = projectObjects[id];
+                    if ('process_id' in page['parameters']) {
+                        let process_id = page['parameters']['process_id'];
+                        if (process_id===parseInt(this.$route.params.id, 10)) {
+                            assign(pages, [process_id, id], page);
+                            if (!(process_id in page_list)) {
+                                page_list[process_id] = []
+                            }
+                            page_list[process_id].push(page['id']);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        for (let id in projectObjects) {
+            if (projectObjects.hasOwnProperty(id)) {
+                if (projectObjects[id]['group'] === 3) {
+                    let node = projectObjects[id];
+                    if ('page_id' in node['parameters']) {
+                        let page_id = node['parameters']['page_id'];
+                        let page_list_all = [].concat.apply([], Object.values(page_list));
+                        if (page_list_all.includes(page_id)) {
+                            assign(nodes,[page_id, id], node);
+                            if (!(page_id in node_list)) {
+                                node_list[page_id] = []
+                            }
+                            node_list[page_id].push(node['id']);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        for (let id in projectObjects) {
+            if (projectObjects.hasOwnProperty(id)) {
+                if (projectObjects[id]['group'] === 4) {
+                    let element = projectObjects[id];
+                    if ('node_id' in element['parameters']) {
+                        let node_id = element['parameters']['node_id'];
+                        let node_list_all = [].concat.apply([], Object.values(node_list));
+                        if (node_list_all.includes(node_id)) {
+                            assign(elements,[node_id, id], element);
+                            if (!(node_id in element_list)) {
+                                element_list[node_id] = []
+                            }
+                            element_list[node_id].push(element['id']);
+                        }
+                    }
+                }
+            }
+        }
+
+        this.processes = processes;
+        this.pages = pages;
+        this.nodes = nodes;
+        this.elements = elements;
+
+        this.process_list = process_list;
+        this.page_list = page_list;
+        this.node_list = node_list;
+        this.element_list = element_list;
+
+        this.activeProcess = {'id': this.$route.params.id, 'index': 0};
+        this.activePage = {'id': this.page_list[this.activeProcess['id']][0], 'index': 0};
+        this.activeNode = {'id': this.node_list[this.activePage['id']][0], 'index': 0};
+        this.activeElement = {'id': this.element_list[this.activeNode['id']][0], 'index': 0};
+
+    }
+};
 </script>
 
 <style src="./DataConnectionProcess.scss" lang="scss"></style>

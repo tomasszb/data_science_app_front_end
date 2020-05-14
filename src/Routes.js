@@ -51,12 +51,12 @@ export default new Router({
                     component: AnalyticsPage,
                 },
                 {
-                    path: 'conn',
+                    path: 'conn/:id',
                     name: 'DataConnectionProcess',
                     component: DataConnectionProcess
                 },
                 {
-                    path: 'prep',
+                    path: 'prep/:id',
                     name: 'DataPreparationProcess',
                     component: DataPreparationProcess
                 },
