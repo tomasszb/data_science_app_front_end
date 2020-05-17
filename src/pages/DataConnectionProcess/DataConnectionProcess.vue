@@ -241,75 +241,85 @@
             <b-row class="y-100">
                 <b-col md="12" xs="12">
                     <div class="conn-node-bar y-100">
-                        <draggable v-model="node_list[activePage['id']]">
+                        <draggable v-model="nodeList[activePage]">
                             <div
                                     class="px-4 py-3 conn-node mb-sm list-element d-flex justify-content-between align-items-center "
-                                    :class="{'active-node':activeNode['id']==nodeId}"
-                                    v-for="(nodeId, nodeIndex) in node_list[activePage['id']]"
+                                    :class="{'active-node':activeNode==nodeId}"
+                                    v-for="nodeId in nodeList[activePage]"
                                     :key="nodeId">
                                 <div
                                         v-if="nodeId!=editedNode"
                                         class="conn-node-text"
-                                        @click="activateNode(nodeId, nodeIndex)"
+                                        @click="activateNode(nodeId)"
                                         @dblclick="editNode(nodeId)">
-                                    {{nodes[activePage['id']][nodeId].name}}
+                                    {{projectObjects[nodeId].name}}
                                 </div>
                                 <input
                                         v-if="nodeId==editedNode"
                                         class="conn-node-text"
                                         v-focus
                                         type="text"
-                                        v-model="nodes[activePage['id']][nodeId].name"
+                                        v-model="projectObjects[nodeId].name"
                                         @blur="unblurNode()"
                                         @keyup.enter="unblurNode()">
-                                <i @click="deleteNode(nodeId, nodeIndex)" class="fa fa-times text-muted" />
+                                <i @click="deleteNode(nodeId)" class="fa fa-times text-muted" />
                             </div>
                         </draggable>
-                        <div
-                                class="px-4 py-3 border conn-node-add mb-sm list-element d-flex align-items-center"
-                                @click="addNode()">
-                            <b-button variant="outline-success" class="mb-xs mr-xs">
+                        <div class="px-4 py-3 border conn-node-add mb-sm list-element d-flex align-items-center">
+                            <b-button variant="outline-success" v-b-modal="'new-connector'" class="mb-xs mr-xs">
                                 <i class="fa fa-plus" />
                             </b-button>
                         </div>
                     </div>
                     <div class="conn-node-screen">
+                        <h3>projectObjects</h3>
+                        {{ projectObjects}}<br>
+                        <h3>dataObjects</h3>
+                        {{ dataObjects}}<br>
+                        <h3>nodeList</h3>
+                        {{ nodeList}}<br>
+                        <h3>elementList</h3>
+                        {{ elementList }}<br>
+                        <h3>actives</h3>
                         {{ activeProcess }}<br>
                         {{ activePage }}<br>
                         {{ activeNode }}<br>
                         {{ activeElement }}<br>
-                        {{ nodes }}<br>
-                        {{ node_list }}<br>
+                        <h3>selectedElement</h3>
+                        {{selectedElement}}<br>
                     </div>
                 </b-col>
             </b-row>
         </div>
-
-        <CreateObjectGroup
-                id="new-connector"
-                :showGroups="true"
-                :filterGroup=0
-                title="New Connector Settings"
-                :objDefs="defConnectors"
-                selGroup="SQLConnector"
-        />
-        <CreateObjectGroup
-                id="settings-connector"
-                :showGroups="false"
-                :filterGroup=0
-                title="Connector Settings"
-                :objDefs="defConnectors"
-                selGroup="SQLConnector"
-        />
-        <b-modal
-                id="connector-explorer"
-                title="Explore Database"
-                size="lg"
-                body-class="bg-white"
-                hide-footer>
-            <v-client-table :data="data" :columns="columns" :options="options" />
-        </b-modal>
-
+        <div >
+            <CreateObjectGroup
+                    id="new-connector"
+                    :showGroups="true"
+                    :filterGroup="selectedElement['group']"
+                    title="New Connector Settings"
+                    :objDefs="defConnectors"
+                    selGroup="SQLConnector"
+                    @submit-data-object="newDataObject"
+            />
+            <CreateObjectGroup
+                    id="settings-connector"
+                    :showGroups="false"
+                    :filterGroup="selectedElement['group']"
+                    title="Connector Settings"
+                    :currentDataObject="selectedElement"
+                    :objDefs="defConnectors"
+                    selGroup="SQLConnector"
+                    @submit-data-object="updateDataObject"
+            />
+            <b-modal
+                    id="connector-explorer"
+                    title="Explore Database"
+                    size="lg"
+                    body-class="bg-white"
+                    hide-footer>
+                <v-client-table :data="data" :columns="columns" :options="options" />
+            </b-modal>
+        </div>
     </div>
 
 </template>
@@ -330,7 +340,6 @@ export default {
     components: {Toolbar, Toolbox, AppIcon, Widget, CreateObjectGroup, draggable},
     data() {
         return {
-            randomCounter: 0,
             data: vueTableData(),
             columns: ['database', 'table', 'column'],
             options: {
@@ -340,31 +349,70 @@ export default {
                 pagination: { chunk: 20, dropdown: false },
                 filterable: ['database', 'table', 'column'],
             },
+
             editedNode: null,
+            newPoCounter: 0,
+            newDoCounter: 0,
 
-            processes : {},
-            pages : {},
-            nodes : {},
-            elements : {},
+            projectObjects : {},
+            dataObjects: {},
 
-            process_list: [],
-            page_list : {},
-            node_list : {},
-            element_list : {},
+            processList: [],
+            pageList : {},
+            nodeList : {},
+            elementList : {},
 
             activeProcess: {},
             activePage: {},
             activeNode: {},
-            activeElement: {},
+            activeElement: {}
         }
     },
     methods: {
         ...mapActions('api', ['updateProjectObjects']),
-        addNode() {
-            let randomID = '_' + this.randomCounter;
-            this.node_list[this.activePage['id']].push(randomID);
-            this.nodes[this.activePage['id']][randomID] = {'name':'New Connector '+this.randomCounter, 'id':randomID};
-            this.randomCounter+=1;
+        newDataObject(DoSettings) {
+            let newDataObjectID = '_' + this.newDoCounter;
+            let newDataObject = {'id': newDataObjectID};
+            newDataObject = {...newDataObject, ...DoSettings};
+            this.dataObjects[newDataObjectID] = newDataObject;
+            this.dataObjects = JSON.parse(JSON.stringify(this.dataObjects));
+            this.newDoCounter+=1;
+            this.addDataConnectionNode(newDataObject);
+        },
+        updateDataObject(DoSettings) {
+            let DataObjectID = DoSettings.id;
+            this.dataObjects[DataObjectID] = DoSettings;
+            this.dataObjects = JSON.parse(JSON.stringify(this.dataObjects));
+        },
+        addDataConnectionNode(DoSettings) {
+            let newNodeID = '_' + this.newPoCounter;
+            this.nodeList[this.activePage].push(newNodeID);
+            let node = {name:'New Connector '+this.newPoCounter, id:newNodeID};
+            this.projectObjects[newNodeID] = node;
+            this.activeNode=newNodeID;
+            this.elementList[newNodeID] = [];
+            this.newPoCounter+=1;
+            this.projectObjects=JSON.parse(JSON.stringify(this.projectObjects));
+            this.addDataConnectionElement(newNodeID, DoSettings);
+        },
+        addDataConnectionElement(nodeID, DoSettings) {
+            let newElementID = '_' + this.newPoCounter;
+            let connectorID = DoSettings['id'];
+            this.elementList[nodeID].push(newElementID);
+            let element = {
+                name:DoSettings['name'],
+                id:newElementID,
+                group:4,
+                type:400,
+                parameters: {
+                    connector_id: connectorID,
+                    node_id: nodeID,
+                }
+            };
+            this.projectObjects[newElementID] = element;
+            this.activeElement=newElementID;
+            this.newPoCounter+=1;
+            this.projectObjects=JSON.parse(JSON.stringify(this.projectObjects));
         },
         editNode(nodeId) {
             this.editedNode = nodeId
@@ -372,14 +420,23 @@ export default {
         unblurNode() {
             this.editedNode = null
         },
-        activateNode(nodeId, nodeIndex) {
-            this.activeNode = {'id': nodeId, 'index': nodeIndex}
+        activateNode(nodeId) {
+            this.activeNode = nodeId;
+            this.activeElement = this.elementList[this.activeNode][0];
         },
-        deleteNode(nodeId, nodeIndex) {
-            this.node_list[this.activePage['id']].splice(nodeIndex, 1);
-            delete this.nodes[this.activePage['id']][nodeId];
-            if (this.activeNode['id'] == nodeId) {
-                this.activeNode = {'id': this.node_list[this.activePage['id']][0], 'index': 0};
+        deleteNode(nodeId) {
+            let nodeIndex = this.nodeList[this.activePage].indexOf(nodeId);
+            this.nodeList[this.activePage].splice(nodeIndex, 1);
+            for (var i = 0; i < this.elementList[nodeId].length; i++) {
+                let elementId = this.elementList[nodeId][i];
+                let element = this.projectObjects[elementId];
+                delete this.dataObjects[element['parameters']['connector_id']]
+                delete this.projectObjects[elementId];
+            }
+            delete this.elementList[nodeId];
+            delete this.projectObjects[nodeId];
+            if (this.activeNode == nodeId) {
+                this.activeNode = this.nodeList[this.activePage][0];
             }
 
         },
@@ -390,6 +447,9 @@ export default {
     computed: {
         processID() {
             return this.$route.params.id
+        },
+        selectedElement () {
+            return this.dataObjects[this.projectObjects[this.activeElement]['parameters']['connector_id']]
         },
         defConnectors () {
             let defs = api_store.state.dataObjectDefinitions;
@@ -420,23 +480,18 @@ export default {
             obj[keyPath[lastKeyIndex]] = value;
         }
 
-        let processes = {};
-        let pages = {};
-        let nodes = {};
-        let elements = {};
+        let processList = [];
+        let pageList = {};
+        let nodeList = {};
+        let elementList = {};
 
-        let process_list = [];
-        let page_list = {};
-        let node_list = {};
-        let element_list = {};
-
-        let projectObjects = this.$store.state.api.projectObjects;
+        let projectObjects = JSON.parse(JSON.stringify(this.$store.state.api.projectObjects));
+        let dataObjects = JSON.parse(JSON.stringify(this.$store.state.api.dataObjects));
 
         for (let id in projectObjects) {
             if (projectObjects.hasOwnProperty(id)) {
                 if (projectObjects[id]['group'] === 1) {
-                    processes[id] = projectObjects[id];
-                    process_list.push(id)
+                    processList.push(id)
                 }
             }
         }
@@ -444,15 +499,14 @@ export default {
         for (let id in projectObjects) {
             if (projectObjects.hasOwnProperty(id)) {
                 if (projectObjects[id]['group']  === 2) {
-                    let page = projectObjects[id];
+                    let page = JSON.parse(JSON.stringify(projectObjects[id]));
                     if ('process_id' in page['parameters']) {
                         let process_id = page['parameters']['process_id'];
                         if (process_id===parseInt(this.$route.params.id, 10)) {
-                            assign(pages, [process_id, id], page);
-                            if (!(process_id in page_list)) {
-                                page_list[process_id] = []
+                            if (!(process_id in pageList)) {
+                                pageList[process_id] = []
                             }
-                            page_list[process_id].push(page['id']);
+                            pageList[process_id].push(page['id']);
                         }
                     }
 
@@ -463,16 +517,15 @@ export default {
         for (let id in projectObjects) {
             if (projectObjects.hasOwnProperty(id)) {
                 if (projectObjects[id]['group'] === 3) {
-                    let node = projectObjects[id];
+                    let node = JSON.parse(JSON.stringify(projectObjects[id]));
                     if ('page_id' in node['parameters']) {
                         let page_id = node['parameters']['page_id'];
-                        let page_list_all = [].concat.apply([], Object.values(page_list));
-                        if (page_list_all.includes(page_id)) {
-                            assign(nodes,[page_id, id], node);
-                            if (!(page_id in node_list)) {
-                                node_list[page_id] = []
+                        let pageList_all = [].concat.apply([], Object.values(pageList));
+                        if (pageList_all.includes(page_id)) {
+                            if (!(page_id in nodeList)) {
+                                nodeList[page_id] = []
                             }
-                            node_list[page_id].push(node['id']);
+                            nodeList[page_id].push(node['id']);
                         }
                     }
 
@@ -483,36 +536,33 @@ export default {
         for (let id in projectObjects) {
             if (projectObjects.hasOwnProperty(id)) {
                 if (projectObjects[id]['group'] === 4) {
-                    let element = projectObjects[id];
+                    let element  = JSON.parse(JSON.stringify(projectObjects[id]));
                     if ('node_id' in element['parameters']) {
                         let node_id = element['parameters']['node_id'];
-                        let node_list_all = [].concat.apply([], Object.values(node_list));
-                        if (node_list_all.includes(node_id)) {
-                            assign(elements,[node_id, id], element);
-                            if (!(node_id in element_list)) {
-                                element_list[node_id] = []
+                        let nodeList_all = [].concat.apply([], Object.values(nodeList));
+                        if (nodeList_all.includes(node_id)) {
+                            if (!(node_id in elementList)) {
+                                elementList[node_id] = []
                             }
-                            element_list[node_id].push(element['id']);
+                            elementList[node_id].push(element['id']);
                         }
                     }
                 }
             }
         }
 
-        this.processes = processes;
-        this.pages = pages;
-        this.nodes = nodes;
-        this.elements = elements;
+        this.projectObjects = projectObjects;
+        this.dataObjects = dataObjects;
 
-        this.process_list = process_list;
-        this.page_list = page_list;
-        this.node_list = node_list;
-        this.element_list = element_list;
+        this.processList = processList;
+        this.pageList = pageList;
+        this.nodeList = nodeList;
+        this.elementList = elementList;
 
-        this.activeProcess = {'id': this.$route.params.id, 'index': 0};
-        this.activePage = {'id': this.page_list[this.activeProcess['id']][0], 'index': 0};
-        this.activeNode = {'id': this.node_list[this.activePage['id']][0], 'index': 0};
-        this.activeElement = {'id': this.element_list[this.activeNode['id']][0], 'index': 0};
+        this.activeProcess = this.$route.params.id;
+        this.activePage = this.pageList[this.activeProcess][0];
+        this.activeNode = this.nodeList[this.activePage][0];
+        this.activeElement = this.elementList[this.activeNode][0];
 
     }
 };

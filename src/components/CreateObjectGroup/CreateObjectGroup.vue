@@ -1,6 +1,7 @@
 <template>
     <div :class="{'new-object-modal': showGroups, 'existing-object-modal': !showGroups}">
         <b-modal
+                v-model="show"
                 :id="id"
                 :title="title"
                 size="lg"
@@ -22,16 +23,19 @@
                             :fields="objGroup.fields"
                             :objGroup="objGroup.name"
                             :fieldChoices="fieldChoices"
-                    />
+                            @close-modal="show=false"
+                            v-on="$listeners"/>
                 </b-tab>
             </b-tabs>
             <CreateObjectForm
                     v-else
                     class="existing-object-form"
+                    :currentDataObject="currentDataObject"
                     :fields="objDefs[filterGroup].fields"
                     :objGroup="objDefs[filterGroup].name"
                     :fieldChoices="fieldChoices"
-            />
+                    @close-modal="show=false"
+                    v-on="$listeners"/>
         </b-modal>
     </div>
 </template>
@@ -45,10 +49,16 @@
         props: {
             id: { type: String, default: '' },
             title: { type: String, default: '' },
+            currentDataObject: {type: Object, default: function () { return {} }},
             selGroup: { type: String, default: '' },
             objDefs: { type: Array, default: []},
             filterGroup: { type: Number, default: 0 },
             showGroups: { type: Boolean, default: true}
+        },
+        data() {
+            return {
+                show:false
+            }
         },
         computed: {
             fieldChoices() {
@@ -65,7 +75,8 @@
                 });
                 return choices
             },
-        }
+        },
+
     }
 </script>
 
