@@ -332,6 +332,7 @@ import Toolbar from "../../components/Toolbar/Toolbar";
 import Toolbox from "../../components/Toolbox/Toolbox";
 import AppIcon from "../../components/AppIcon/AppIcon";
 import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
+import { initProjectBranches } from '@/core/projectManager';
 import { vueTableData } from './data';
 import {mapActions} from "vuex";
 
@@ -468,102 +469,16 @@ export default {
         }
     },
     created() {
-        function assign(obj, keyPath, value) {
-            let lastKeyIndex = keyPath.length-1;
-            for (let i = 0; i < lastKeyIndex; ++ i) {
-                let key = keyPath[i];
-                if (!(key in obj)){
-                    obj[key] = {}
-                }
-                obj = obj[key];
-            }
-            obj[keyPath[lastKeyIndex]] = value;
-        }
-
-        let processList = [];
-        let pageList = {};
-        let nodeList = {};
-        let elementList = {};
-
-        let projectObjects = JSON.parse(JSON.stringify(this.$store.state.api.projectObjects));
-        let dataObjects = JSON.parse(JSON.stringify(this.$store.state.api.dataObjects));
-
-        for (let id in projectObjects) {
-            if (projectObjects.hasOwnProperty(id)) {
-                if (projectObjects[id]['group'] === 1) {
-                    processList.push(id)
-                }
-            }
-        }
-
-        for (let id in projectObjects) {
-            if (projectObjects.hasOwnProperty(id)) {
-                if (projectObjects[id]['group']  === 2) {
-                    let page = JSON.parse(JSON.stringify(projectObjects[id]));
-                    if ('process_id' in page['parameters']) {
-                        let process_id = page['parameters']['process_id'];
-                        if (process_id===parseInt(this.$route.params.id, 10)) {
-                            if (!(process_id in pageList)) {
-                                pageList[process_id] = []
-                            }
-                            pageList[process_id].push(page['id']);
-                        }
-                    }
-
-                }
-            }
-        }
-
-        for (let id in projectObjects) {
-            if (projectObjects.hasOwnProperty(id)) {
-                if (projectObjects[id]['group'] === 3) {
-                    let node = JSON.parse(JSON.stringify(projectObjects[id]));
-                    if ('page_id' in node['parameters']) {
-                        let page_id = node['parameters']['page_id'];
-                        let pageList_all = [].concat.apply([], Object.values(pageList));
-                        if (pageList_all.includes(page_id)) {
-                            if (!(page_id in nodeList)) {
-                                nodeList[page_id] = []
-                            }
-                            nodeList[page_id].push(node['id']);
-                        }
-                    }
-
-                }
-            }
-        }
-
-        for (let id in projectObjects) {
-            if (projectObjects.hasOwnProperty(id)) {
-                if (projectObjects[id]['group'] === 4) {
-                    let element  = JSON.parse(JSON.stringify(projectObjects[id]));
-                    if ('node_id' in element['parameters']) {
-                        let node_id = element['parameters']['node_id'];
-                        let nodeList_all = [].concat.apply([], Object.values(nodeList));
-                        if (nodeList_all.includes(node_id)) {
-                            if (!(node_id in elementList)) {
-                                elementList[node_id] = []
-                            }
-                            elementList[node_id].push(element['id']);
-                        }
-                    }
-                }
-            }
-        }
-
-        this.projectObjects = projectObjects;
-        this.dataObjects = dataObjects;
-
-        this.processList = processList;
-        this.pageList = pageList;
-        this.nodeList = nodeList;
-        this.elementList = elementList;
+        this.projectObjects = JSON.parse(JSON.stringify(this.$store.state.api.projectObjects));
+        this.dataObjects = JSON.parse(JSON.stringify(this.$store.state.api.dataObjects));
 
         this.activeProcess = this.$route.params.id;
+
+        [this.processList, this.pageList, this.nodeList, this.elementList] = initProjectBranches(this.projectObjects, this.activeProcess);
+
         this.activePage = this.pageList[this.activeProcess][0];
         this.activeNode = this.nodeList[this.activePage][0];
         this.activeElement = this.elementList[this.activeNode][0];
-
     }
 };
 </script>
