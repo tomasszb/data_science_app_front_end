@@ -36,6 +36,7 @@
                     :fieldChoices="fieldChoices"
                     @close-modal="show=false"
                     v-on="$listeners"/>
+            {{filterGroup}}
         </b-modal>
     </div>
 </template>

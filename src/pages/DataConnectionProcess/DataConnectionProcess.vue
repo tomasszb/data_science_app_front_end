@@ -271,6 +271,7 @@
                             </b-button>
                         </div>
                     </div>
+                    <Websocket>deded</Websocket>
                     <div class="conn-node-screen">
                         <h3>projectObjects</h3>
                         {{ projectObjects}}<br>
@@ -329,6 +330,7 @@ import draggable from 'vuedraggable';
 import api_store from '../../store/api/api';
 import Widget from '@/components/Widget/Widget';
 import Toolbar from "../../components/Toolbar/Toolbar";
+import Websocket from "../../components/Websocket/Websocket";
 import Toolbox from "../../components/Toolbox/Toolbox";
 import AppIcon from "../../components/AppIcon/AppIcon";
 import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
@@ -338,7 +340,7 @@ import {mapActions} from "vuex";
 
 export default {
     name: 'DataConnectionProcess',
-    components: {Toolbar, Toolbox, AppIcon, Widget, CreateObjectGroup, draggable},
+    components: {Toolbar, Toolbox, AppIcon, Widget, CreateObjectGroup, draggable, Websocket},
     data() {
         return {
             data: vueTableData(),
