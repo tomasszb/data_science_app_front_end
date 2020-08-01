@@ -43,6 +43,7 @@
             />
             <div class="toolbox-dividor"/>
             <Toolbox
+                    @toolClicked="onToolClick"
                     header="connector controls"
                     :childrenTools="[
                      [
@@ -238,6 +239,7 @@
         </Toolbar>
 
         <div class="conn-content">
+            <v-server-table :columns="tableColumns" :options="tableOptions" />
             <b-row class="y-100">
                 <b-col md="12" xs="12">
                     <div class="conn-node-bar y-100">
@@ -271,16 +273,20 @@
                             </b-button>
                         </div>
                     </div>
-                    <Websocket>deded</Websocket>
                     <div class="conn-node-screen">
+
+                        <Websocket></Websocket>
+
                         <h3>projectObjects</h3>
                         {{ projectObjects}}<br>
                         <h3>dataObjects</h3>
                         {{ dataObjects}}<br>
                         <h3>nodeList</h3>
                         {{ nodeList}}<br>
+                        {{ projectNodeList }}<br>
                         <h3>elementList</h3>
                         {{ elementList }}<br>
+                        {{ projectElementList }}<br>
                         <h3>actives</h3>
                         {{ activeProcess }}<br>
                         {{ activePage }}<br>
@@ -327,16 +333,17 @@
 
 <script>
 import draggable from 'vuedraggable';
-import api_store from '../../store/api/api';
+import api_store from '../../store/modules/api';
 import Widget from '@/components/Widget/Widget';
 import Toolbar from "../../components/Toolbar/Toolbar";
-import Websocket from "../../components/Websocket/Websocket";
 import Toolbox from "../../components/Toolbox/Toolbox";
 import AppIcon from "../../components/AppIcon/AppIcon";
 import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
-import { initProjectBranches } from '@/core/projectManager';
+import Websocket from "../../components/Websocket/Websocket";
+import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
 import { vueTableData } from './data';
-import {mapActions} from "vuex";
+import {mapActions, mapState} from "vuex";
+import axios from 'axios'
 
 export default {
     name: 'DataConnectionProcess',
@@ -350,7 +357,7 @@ export default {
                 perPage: 20,
                 perPageValues: [],
                 pagination: { chunk: 20, dropdown: false },
-                filterable: ['database', 'table', 'column'],
+                filterable: ['PLAYER'],
             },
 
             editedNode: null,
@@ -365,14 +372,62 @@ export default {
             nodeList : {},
             elementList : {},
 
+            projectProcessList: [],
+            projectPageList : {},
+            projectNodeList : {},
+            projectElementList : {},
+
             activeProcess: {},
             activePage: {},
             activeNode: {},
-            activeElement: {}
+            activeElement: {},
+
+            tableData: [{'col':1}],
+            tableColumns: ['col'],
+            tableOptions: {
+                requestFunction(settings) {
+                    window.console.log(settings);
+                    return axios.get('http://127.0.0.1:8000/media/data.json').then(response => {
+                        let start_index = (settings.page-1)*settings.limit;
+                        let end_index = settings.page*settings.limit;
+                        let filtered = response.data;
+                        let orderBy = settings.orderBy;
+                        if (orderBy !== null) {
+                            filtered = filtered.sort(function(a, b) {
+                                let result = null;
+                                let x = a[orderBy];
+                                let y = b[orderBy];
+
+                                if (settings.ascending===1) {
+                                    result = ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                                }
+                                if (settings.ascending===0) {
+                                    result = ((y < x) ? -1 : ((y > x) ? 1 : 0));
+                                }
+                                return result
+                            })
+                        }
+                        filtered = filtered.slice(start_index,end_index);
+
+                        return {data: filtered, count: response.data.length}
+                    })
+                },
+                filterByColumn: true,
+                perPage: 20,
+                perPageValues: [],
+                pagination: { chunk: 20, dropdown: false },
+                filterable: this.tableColumns,
+            }
         }
     },
+
     methods: {
         ...mapActions('api', ['updateProjectObjects']),
+        fetchData() {
+            axios.get('http://127.0.0.1:8000/media/data.json').then(response => {
+                this.tableColumns = Object.keys(response.data[0]);
+            })
+        },
         newDataObject(DoSettings) {
             let newDataObjectID = '_' + this.newDoCounter;
             let newDataObject = {'id': newDataObjectID};
@@ -445,9 +500,28 @@ export default {
         },
         updateProjectObjects() {
 
+        },
+        onToolClick(action) {
+            let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+            let projectID = this.$store.state.api.projectData['project_id'];
+            let ownerID = this.$store.state.api.projectData['owner_id'];
+            let upstreamElements = getUpstreamElements(this.projectObjects, this.elementList, [], [this.activeElement]);
+            let request = createFlowRequest(
+                this.projectElementList,
+                upstreamElements,
+                this.projectObjects,
+                projectID,
+                ownerID,
+                this.dataObjects,
+                src_request_id,
+                {}
+                );
+            this.$newRequest(src_request_id, request['request']['elements'].length);
+            this.$webSocketSend(request);
         }
     },
     computed: {
+        ...mapState('api', ['projectData']),
         processID() {
             return this.$route.params.id
         },
@@ -471,16 +545,21 @@ export default {
         }
     },
     created() {
+        this.fetchData();
         this.projectObjects = JSON.parse(JSON.stringify(this.$store.state.api.projectObjects));
         this.dataObjects = JSON.parse(JSON.stringify(this.$store.state.api.dataObjects));
 
         this.activeProcess = this.$route.params.id;
 
-        [this.processList, this.pageList, this.nodeList, this.elementList] = initProjectBranches(this.projectObjects, this.activeProcess);
+
+        [this.processList, this.pageList, this.nodeList, this.elementList] = initProcessBranches(this.projectObjects, this.activeProcess);
+        [this.projectProcessList, this.projectPageList, this.projectNodeList, this.projectElementList] = initProjectBranches(this.projectObjects);
 
         this.activePage = this.pageList[this.activeProcess][0];
         this.activeNode = this.nodeList[this.activePage][0];
         this.activeElement = this.elementList[this.activeNode][0];
+
+
     }
 };
 </script>

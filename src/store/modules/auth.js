@@ -1,6 +1,6 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import router from '../Routes';
+import router from '../../Routes';
 
 export default {
     namespaced: true,

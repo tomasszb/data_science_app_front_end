@@ -44,7 +44,7 @@ export default {
     //this.loadProjectData();
   },
   mounted() {
-    this.loadProjectList()
+    this.loadProjectList();
   }
 };
 </script>

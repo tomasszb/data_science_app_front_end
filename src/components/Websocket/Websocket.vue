@@ -1,39 +1,45 @@
 <template>
     <div id="websocket">
-        <h2>Vue.js WebSocket Tutorial</h2>
-        <button v-on:click="sendMessage('hello')">Send Message</button>
+        <span @click="wsConnect" style="color: green; cursor: pointer">Connect websockets</span> |
+        <span @click="wsDisconnect" style="color: red; cursor: pointer">Disconnect websockets</span> |
+<!--        <span @click="newRequest" style="color: blue; cursor: pointer">New Request</span>-->
+        <h3>Received events:</h3>
+        {{requests2}}
     </div>
 </template>
 
 <script>
+    import {mapState} from "vuex";
+    import { initProjectBranches } from '@/core/projectManager';
+
     export default {
         name: 'Websocket',
-        data: function() {
+        data () {
             return {
-                connection: null
+                msg: 'Vue.js websockets basic example'
+            }
+        },
+        computed: {
+            ...mapState('api', ['projectData']),
+            ...mapState('websocket', ['requests']),
+
+            requests2 () {
+                //return this.$store.state.websocket.requests;
+                return this.$store.getters['websocket/getRequests']
             }
         },
         methods: {
-            sendMessage: function(message) {
-                let data = {'message': message};
-                console.log("Hello");
-                console.log(this.connection);
-                this.connection.send(JSON.stringify(data));
+            wsConnect () {
+                let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + this.projectData.project_id + "_" +this.projectData.owner_id+"/";
+                this.$webSocketConnect({"url": url})
+            },
+            wsDisconnect () {
+                this.$webSocketDisconnect()
+            },
+            wsSend () {
+                let d = new Date() + ' hello'
+                this.$webSocketSend(d)
             }
-        },
-        created: function() {
-            console.log("Starting connection to WebSocket Server");
-            this.connection = new WebSocket("ws://127.0.0.1:8000/ws/dsw_engine/chatroom/");
-
-            this.connection.onmessage = function(event) {
-                console.log(event);
-            }
-
-            this.connection.onopen = function(event) {
-                console.log(event);
-                console.log("Successfully connected to the echo websocket server...");
-            }
-
         }
     }
 </script>

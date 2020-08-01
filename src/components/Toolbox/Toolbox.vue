@@ -16,8 +16,8 @@
                             :fontClass="tool.fontIconClass"
                             :id="'toolbox-'+tool.action"/>
                 </div>
-                <div v-else>
-                    <b-tooltip :target="'toolbox-'+tool.action" :title="tool.tooltip" triggers="hover" noninteractive>
+                <div @click="$emit('toolClicked', tool.action)" v-else>
+                    <b-tooltip  :target="'toolbox-'+tool.action" :title="tool.tooltip" triggers="hover" noninteractive>
                         {{tool.tooltip}}
                     </b-tooltip>
                     <AppIcon

@@ -228,7 +228,7 @@
 </template>
 
 <script>
-    import api_store from '../../store/api/api';
+    import api_store from '../../store/modules/api';
     import Toolbar from "../../components/Toolbar/Toolbar";
     import AppIcon from "../../components/AppIcon/AppIcon";
     import Toolbox from "../../components/Toolbox/Toolbox";

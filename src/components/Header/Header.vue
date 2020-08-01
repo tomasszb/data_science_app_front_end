@@ -65,6 +65,7 @@
                 'navbarType',
                 'navbarColorScheme'
             ]),
+            ...mapState('api', ['projectData']),
             navbarTypeClass: function () {
                 return "navbar-" + this.navbarType + "-type"
             }
@@ -77,6 +78,7 @@
             ]),
             ...mapActions('auth', ['logoutUser']),
             ...mapActions('api', ['loadObjects', 'loadObjectDefinitions']),
+            ...mapActions('websocket', ['websocketConnect']),
             switchSidebarMethod() {
                 if (!this.sidebarClose) {
                     this.switchSidebar(true);
@@ -99,11 +101,21 @@
                     this.changeSidebarActive(paths.join('/'));
                 }
             },
+            wsConnect () {
+                let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + this.projectData.project_id + "_" +this.projectData.owner_id+"/";
+                this.$webSocketConnect({"url": url})
+            },
+            wsDisconnect () {
+                this.$webSocketDisconnect()
+            }
         },
         created() {
             this.loadObjects();
             this.loadObjectDefinitions();
-            //window.console.log(this.$store.state.api.dataObjectDefinitions);
+            this.wsConnect();
+        },
+        destroyed() {
+            this.wsDisconnect();
         }
     };
 </script>

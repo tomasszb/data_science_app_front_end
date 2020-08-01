@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import layout from './layout';
-import auth from './auth';
-import register from './register';
-import api from './api/api';
+import layout from './modules/layout';
+import auth from './modules/auth';
+import register from './modules/register';
+import api from './modules/api';
+import websocket from './modules/websocket';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     layout,
     auth,
     register,
-    api
+    api,
+    websocket
   },
 });

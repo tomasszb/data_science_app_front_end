@@ -29,7 +29,7 @@ export default {
         },
         UPDATE_PROJECT_OBJECTS(state, data) {
             for (let id in data) {
-                state.projectObjects[parseInt(id,10)] = data[id]
+                state.projectObjects[id] = data[id]
             }
         },
         LOAD_OBJECTS(state) {

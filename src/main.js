@@ -4,7 +4,7 @@ import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import VueTouch from 'vue-touch';
 import Trend from 'vuetrend';
-import { ClientTable } from 'vue-tables-2';
+import { ClientTable, ServerTable } from 'vue-tables-2';
 import VueTextareaAutosize from 'vue-textarea-autosize';
 import mavonEditor from 'mavon-editor';
 import { VueMaskDirective } from 'v-mask';
@@ -23,6 +23,9 @@ import App from './App';
 import { AuthMixin } from './mixins/auth';
 import config from './config';
 import Widget from './components/Widget/Widget';
+
+import webSocketService from './core/webSocketService'
+
 
 axios.defaults.baseURL = config.baseURLApi;
 axios.defaults.headers.common['Content-Type'] = "application/json";
@@ -48,6 +51,7 @@ Vue.component('vue-code-highlight', VueCodeHighlight);
 Vue.component('Widget', Widget);
 Vue.use(bFormSlider);
 Vue.use(ClientTable, { theme: 'bootstrap4' });
+Vue.use(ServerTable, { theme: 'bootstrap4' });
 Vue.use(VueTextareaAutosize);
 Vue.use(CKEditor);
 Vue.use(mavonEditor);
@@ -57,6 +61,9 @@ Vue.use(VeeValidate, { fieldsBagName: 'fieldsbag' });
 Vue.use(VueFormWizard);
 Vue.mixin(AuthMixin);
 Vue.use(Toasted, {duration: 10000});
+
+Vue.use(webSocketService, store);
+
 
 Vue.config.productionTip = false;
 

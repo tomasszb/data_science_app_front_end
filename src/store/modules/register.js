@@ -1,6 +1,6 @@
-import config from "../config";
+import config from "../../config";
 import axios from "axios";
-import router from '../Routes';
+import router from '../../Routes';
 
 export default {
   namespaced: true,

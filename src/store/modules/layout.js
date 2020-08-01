@@ -1,5 +1,5 @@
 import isScreen from '@/core/screenHelper';
-import config from '../config';
+import config from '../../config';
 import chroma from 'chroma-js';
 
 export const NavbarTypes = {
