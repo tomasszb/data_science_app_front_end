@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-import Layout from '@/components/Layout/Layout';
+import Layout from '@/components/AppFeatures/Layout/Layout';
 import AnalyticsPage from '@/pages/Dashboard/Dashboard';
 import ProjectManager from '@/pages/ProjectManager/ProjectManager';
 import Login from '@/pages/Login/Login';

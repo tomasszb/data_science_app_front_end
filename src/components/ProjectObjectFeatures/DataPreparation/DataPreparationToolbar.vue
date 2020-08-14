@@ -1,11 +1,9 @@
 <template>
-    <div>
+    <Toolbar>
+        <Toolbox
+                header="input data"
 
-        <Toolbar>
-            <Toolbox
-                    header="input data"
-
-                    :childrenTools="[
+                :childrenTools="[
                         [
                              {
                              action: 'sampleInputs',
@@ -42,11 +40,11 @@
                         ]
 
                     ]"
-            />
-            <div class="toolbox-dividor"/>
-            <Toolbox
-                    header="all prep nodes"
-                    :childrenTools="[
+        />
+        <div class="toolbox-dividor"/>
+        <Toolbox
+                header="all prep nodes"
+                :childrenTools="[
                      [
                          {
                          action: 'newAll',
@@ -82,11 +80,11 @@
                         },
                      ]
                 ]"
-            />
-            <div class="toolbox-dividor"/>
-            <Toolbox
-                    header="data node controls"
-                    :childrenTools="[
+        />
+        <div class="toolbox-dividor"/>
+        <Toolbox
+                header="data node controls"
+                :childrenTools="[
                      [
                          {
                          action: 'saveNode',
@@ -144,11 +142,11 @@
                          }
                      ]
                 ]"
-            />
-            <div class="toolbox-dividor"/>
-            <Toolbox
-                    header="action controls"
-                    :childrenTools="[
+        />
+        <div class="toolbox-dividor"/>
+        <Toolbox
+                header="action controls"
+                :childrenTools="[
                      [
                          {
                          action: 'settingsAction',
@@ -206,59 +204,16 @@
                          }
                      ]
                 ]"
-            />
-        </Toolbar>
-
-        <b-row >
-            <b-col md="12" xs="12">
-                <b-tabs class="mb-lg" pills card vertical start>
-                    <b-tab  v-for="(page, i) in pageNodes"
-                            :key="'po-'+page.id"
-                            :title="page.name"
-                            :active="activePage == i"
-                            @click="activePage = i"
-                    >
-                    </b-tab>
-                </b-tabs>
-            </b-col>
-        </b-row>
-
-
-    </div>
+        />
+    </Toolbar>
 </template>
 
 <script>
-    import project_store from '../../store/modules/proj';
-    import Toolbar from "../../components/AppFeatures/Toolbar/Toolbar";
-    import AppIcon from "../../components/AppFeatures/AppIcon/AppIcon";
-    import Toolbox from "../../components/AppFeatures/Toolbox/Toolbox";
-
     export default {
-        name: 'DataConnectionProcess',
-        components: {Toolbar, Toolbox, AppIcon},
-        data() {
-            return {
-                activePage : 0,
-            }
-        },
-        computed: {
-            processID() {
-                return '1'
-            },
-            processPages () {
-                let pages = [];
-                if (this.processID in project_store.state.projectPages){
-                    pages = project_store.state.projectPages[this.processID]
-                }
-                return pages
-            },
-            pageNodes () {
-                let nodes = [];
-                this.processPages.forEach(function (page) {
-                    nodes = nodes.concat(project_store.state.projectNodes[page.id])
-                });
-                return nodes
-            },
-        }
-    };
+        name: "DataPreparationToolbar.vue"
+    }
 </script>
+
+<style scoped>
+
+</style>

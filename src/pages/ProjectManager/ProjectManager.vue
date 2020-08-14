@@ -28,17 +28,17 @@
 </template>
 
 <script>
-import Widget from '@/components/Widget/Widget';
+import Widget from '@/components/AppFeatures/Widget/Widget';
 import { mapActions, mapState} from 'vuex';
 
 export default {
   name: 'ProjectManager',
   components: { Widget },
   computed: {
-    ...mapState('api', ['projectList']),
+    ...mapState('proj', ['projectList']),
   },
   methods: {
-    ...mapActions('api', ['loadProjectData', 'loadProjectList']),
+    ...mapActions('proj/api', ['loadProjectData', 'loadProjectList']),
   },
   created() {
     //this.loadProjectData();

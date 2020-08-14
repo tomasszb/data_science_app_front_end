@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-  import Widget from '../../components/Widget/Widget';
+  import Widget from '../../components/AppFeatures/Widget/Widget';
   import {mapActions, mapState} from 'vuex';
 
   export default {

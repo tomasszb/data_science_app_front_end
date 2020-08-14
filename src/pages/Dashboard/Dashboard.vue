@@ -16,10 +16,10 @@ export default {
   name: 'Dashboard',
   computed: {
       projectObjects () {
-          return this.$store.state.api.projectObjects
+          return this.$store.state.proj.projectObjects
       },
       dataObjects () {
-          return this.$store.state.api.dataObjects
+          return this.$store.state.proj.dataObjects
       },
   }
 };

@@ -20,7 +20,7 @@
             }
         },
         computed: {
-            ...mapState('api', ['projectData']),
+            ...mapState('proj', ['projectData']),
             ...mapState('websocket', ['requests']),
 
             requests2 () {

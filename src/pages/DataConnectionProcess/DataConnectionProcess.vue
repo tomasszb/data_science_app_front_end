@@ -333,12 +333,12 @@
 
 <script>
 import draggable from 'vuedraggable';
-import api_store from '../../store/modules/api';
-import Widget from '@/components/Widget/Widget';
-import Toolbar from "../../components/Toolbar/Toolbar";
-import Toolbox from "../../components/Toolbox/Toolbox";
-import AppIcon from "../../components/AppIcon/AppIcon";
-import CreateObjectGroup from "../../components/CreateObjectGroup/CreateObjectGroup";
+import project_store from '../../store/modules/proj';
+import Widget from '@/components/AppFeatures/Widget/Widget';
+import Toolbar from "../../components/AppFeatures/Toolbar/Toolbar";
+import Toolbox from "../../components/AppFeatures/Toolbox/Toolbox";
+import AppIcon from "../../components/AppFeatures/AppIcon/AppIcon";
+import CreateObjectGroup from "../../components/AppFeatures/CreateObjectGroup/CreateObjectGroup";
 import Websocket from "../../components/Websocket/Websocket";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
 import { vueTableData } from './data';
@@ -422,7 +422,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('api', ['updateProjectObjects']),
+        ...mapActions('proj', ['updateProjectObjects']),
         fetchData() {
             axios.get('http://127.0.0.1:8000/media/data.json').then(response => {
                 this.tableColumns = Object.keys(response.data[0]);
@@ -503,8 +503,8 @@ export default {
         },
         onToolClick(action) {
             let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            let projectID = this.$store.state.api.projectData['project_id'];
-            let ownerID = this.$store.state.api.projectData['owner_id'];
+            let projectID = this.$store.state.proj.projectData['project_id'];
+            let ownerID = this.$store.state.proj.projectData['owner_id'];
             let upstreamElements = getUpstreamElements(this.projectObjects, this.elementList, [], [this.activeElement]);
             let request = createFlowRequest(
                 this.projectElementList,
@@ -521,7 +521,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('api', ['projectData']),
+        ...mapState('proj', ['projectData']),
         processID() {
             return this.$route.params.id
         },
@@ -529,7 +529,7 @@ export default {
             return this.dataObjects[this.projectObjects[this.activeElement]['parameters']['connector_id']]
         },
         defConnectors () {
-            let defs = api_store.state.dataObjectDefinitions;
+            let defs = project_store.state.dataObjectDefinitions;
             for (let item of defs) {
                 if (item.name=="Connectors") {
                     return item.children
@@ -546,8 +546,8 @@ export default {
     },
     created() {
         this.fetchData();
-        this.projectObjects = JSON.parse(JSON.stringify(this.$store.state.api.projectObjects));
-        this.dataObjects = JSON.parse(JSON.stringify(this.$store.state.api.dataObjects));
+        this.projectObjects = JSON.parse(JSON.stringify(this.$store.state.proj.projectObjects));
+        this.dataObjects = JSON.parse(JSON.stringify(this.$store.state.proj.dataObjects));
 
         this.activeProcess = this.$route.params.id;
 

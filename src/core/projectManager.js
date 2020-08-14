@@ -29,6 +29,18 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
   return objectList
 }
 
+export function get_active_object(activeNew, activeOld, parentList) {
+  if(activeNew in parentList) {
+    return activeNew;
+  }
+  else if(activeNew ==null && parentList.length>0) {
+    return parentList[0];
+  }
+  else {
+    return activeOld
+  }
+}
+
 export function createFlowRequest(elementList, filteredElementIDs, projectObjects, projectID, ownerID, dataObjects, src_request_id, elementCommands) {
   let request = {"action": "run_flow"};
   let elements = [];
@@ -58,6 +70,11 @@ export function createFlowRequest(elementList, filteredElementIDs, projectObject
 
   return request
 }
+
+export function concatValues(dict) {
+  return [].concat.apply([], Object.values(dict));
+}
+
 
 export function initProcessBranches(projectObjects, activeProcess) {
   let processList = getProjectBranch(projectObjects, null, null, 1);

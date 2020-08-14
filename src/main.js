@@ -22,7 +22,7 @@ import router from './Routes';
 import App from './App';
 import { AuthMixin } from './mixins/auth';
 import config from './config';
-import Widget from './components/Widget/Widget';
+import Widget from './components/AppFeatures/Widget/Widget';
 
 import webSocketService from './core/webSocketService'
 
