@@ -12,17 +12,14 @@
 </template>
 
 <script>
-export default {
-  name: 'Dashboard',
-  computed: {
-      projectObjects () {
-          return this.$store.state.proj.projectObjects
-      },
-      dataObjects () {
-          return this.$store.state.proj.dataObjects
-      },
-  }
-};
+    import {mapGetters} from 'vuex';
+
+    export default {
+      name: 'Dashboard',
+      computed: {
+          ...mapGetters('proj', ['projectObjects', 'dataObjects']),
+      }
+    };
 </script>
 
 <style src="./Dashboard.scss" lang="scss" />

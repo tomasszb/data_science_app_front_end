@@ -135,7 +135,7 @@ $helper-width: 300px;
 //== Toolbar
 //
 
-$toolbar-height:  80px !default;
+$toolbar-height:  50px !default;
 $toolbar-padding-y: 0 !default;
 $toolbar-padding-x: 0 !default;
 
@@ -151,12 +151,12 @@ $toolbar-link-disabled-bg: transparent !default;
 //== Navbar
 //
 
-$navbar-height:  40px !default;
+$navbar-height:  50px !default;
 $navbar-padding-y: 0 !default;
 $navbar-padding-x: 0 !default;
 
 // Custom navbar links
-$navbar-link-color: $white!default;
+$navbar-link-color: $text-color!default;
 $navbar-link-hover-color: $gray-300!default;
 $navbar-link-hover-bg: transparent !default;
 $navbar-link-active-color: $gray-700 !default;

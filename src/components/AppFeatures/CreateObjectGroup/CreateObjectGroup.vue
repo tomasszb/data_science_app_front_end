@@ -17,7 +17,7 @@
                 <b-tab v-for="objGroup in objDefs"
                        :title="objGroup.name"
                        :key="objGroup.name"
-                       :active="objGroup.name == selGroup">
+                       :active="objGroup.type == selGroup">
                     <CreateObjectForm
                             class="new-object-form"
                             :fields="objGroup.fields"
@@ -50,7 +50,6 @@
             id: { type: String, default: '' },
             title: { type: String, default: '' },
             currentDataObject: {type: Object, default: function () { return {} }},
-            selGroup: { type: String, default: '' },
             objDefs: { type: Array, default: []},
             filterGroup: { type: Number, default: 0 },
             showGroups: { type: Boolean, default: true}
@@ -75,6 +74,14 @@
                 });
                 return choices
             },
+            selGroup() {
+                if (Object.entries(this.currentDataObject).length === 0) {
+                    return ''
+                }
+                else {
+                    return this.objDefs[0].type
+                }
+            }
         },
 
     }

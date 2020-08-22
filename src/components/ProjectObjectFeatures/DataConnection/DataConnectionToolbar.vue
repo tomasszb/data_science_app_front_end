@@ -1,6 +1,6 @@
 <template>
     <div id="po-conn-toolbar">
-        <Toolbar>
+        <Header>
             <Toolbox
                     header="all connectors"
                     :childrenTools="[
@@ -8,16 +8,15 @@
                          {
                          action: 'directive',
                          id: 'conn-tool-new-all',
-                         bigIcon: true,
-                         svg: true,
+                         bigIcon: false,
+                         svg: false,
                          directive: 'new-connector',
                          tooltip: 'setup a new connector',
                          fontIconClass: 'la la-plus-square',
                          svgIconName: 'svg6 - browser-4',
                          name: 'new conn',
                         }
-                     ],
-                     [
+                     ], [
                          {
                          action: 'conectAll',
                          id: 'conn-tool-connect-all',
@@ -27,7 +26,8 @@
                          fontIconClass: 'la la-chain',
                          svgIconName: 'svg1 - server',
                          name: 'connect all',
-                        },
+                        }
+                     ], [
                         {
                          action: 'loadAll',
                          id: 'conn-tool-load-all',
@@ -42,50 +42,46 @@
                 ]"
             />
             <div class="toolbox-dividor"/>
+            <!--                    @toolClicked="onToolClick"-->
             <Toolbox
-                    @toolClicked="onToolClick"
                     header="connector controls"
                     :childrenTools="[
                      [
                          {
                          action: 'directive',
                          id: 'conn-tool-settings-conn',
-                         svg: true,
+                         svg: false,
                          directive: 'settings-connector',
-                         bigIcon: true,
+                         bigIcon: false,
                          tooltip: 'open settings',
                          fontIconClass: 'la la-cog',
                          svgIconName: 'svg5 - settings',
                          name: 'settings'
-                         },
-                     ],
-                     [
+                         }
+                     ], [
                          {
                          action: 'saveConn',
                          id: 'conn-tool-export-all',
-                         svg: true,
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'export all connectors',
                          fontIconClass: 'la la-file-code-o',
                          svgIconName: 'svg7 - 017-data-storage',
                          name: 'save',
                         }
-                     ],
-                     [
+                     ], [
                          {
                          action: 'directive',
                          id: 'conn-tool-explore-conn',
-                         svg: true,
+                         svg: false,
                          directive: 'connector-explorer',
-                         bigIcon: true,
+                         bigIcon: false,
                          tooltip: 'explore',
                          fontIconClass: 'la la-sitemap',
                          svgIconName: 'svg7 - 009-loupe',
                          name: 'explore'
-                        },
-                     ],
-
-                     [
+                        }
+                     ], [
                          {
                          action: 'connectConn',
                          id: 'conn-tool-connect',
@@ -95,7 +91,8 @@
                          fontIconClass: 'la la-chain',
                          svgIconName: 'svg1 - server-1',
                          name: 'connect'
-                         },
+                         }
+                      ], [
                          {
                          action: 'loadConn',
                          id: 'conn-tool-run-conn',
@@ -105,9 +102,8 @@
                          fontIconClass: 'la la-play',
                          svgIconName: 'svg1 - server-1',
                          name: 'load'
-                         },
-                     ],
-                     [
+                         }
+                     ], [
                          {
                          action: 'duplicateConn',
                          id: 'conn-tool-duplicate-conn',
@@ -117,7 +113,8 @@
                          fontIconClass: 'la la-copy',
                          svgIconName: 'svg7 - 011-file-management',
                          name: 'duplicate'
-                         },
+                         }
+                     ], [
                          {
                          action: 'deleteConn',
                          id: 'conn-tool-delete-conn',
@@ -127,7 +124,7 @@
                          fontIconClass: 'la la-close',
                          svgIconName: 'svg7 - 011-file-management',
                          name: 'delete'
-                         },
+                         }
                      ]
                 ]"
             />
@@ -139,40 +136,36 @@
                          {
                          action: 'analyzeQuery',
                          id: 'conn-tool-analyze-query',
-                         svg: true,
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'analyze query',
                          fontIconClass: 'la la-tachometer',
                          svgIconName: 'svg3 - microscope',
                          name: 'analyze'
                          },
-                     ],
-                     [
+                     ], [
                          {
                          action: 'paramsQuery',
                          id: 'conn-tool-params-query',
-                         svg: true,
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'define query parameters',
                          fontIconClass: 'la la-th-list',
                          svgIconName: 'svg7 - exchange',
                          name: 'parameters'
                          },
-                     ],
-                     [
+                     ], [
                          {
                          action: 'checkpointsQuery',
                          id: 'conn-tool-checkpoints-query',
-                         svg: true,
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'show checkpoints',
                          fontIconClass: 'la la-th-list',
                          svgIconName: 'svg4 - push-pin',
                          name: 'checkpoints'
                          },
-                     ],
-
-                     [
+                     ], [
                          {
                          action: 'saveChekpointQuery',
                          id: 'conn-tool-save-checkpoint-query',
@@ -182,7 +175,8 @@
                          fontIconClass: 'la la-save',
                          svgIconName: 'svg1 - server-1',
                          name: 'save checkpoint'
-                         },
+                         }
+                     ],[
                          {
                          action: 'runQuery',
                          id: 'conn-tool-run-query',
@@ -192,8 +186,8 @@
                          fontIconClass: 'la la-play',
                          svgIconName: 'svg1 - server-1',
                          name: 'run'
-                         },
-                     ],
+                         }
+                     ]
                 ]"
             />
             <div class="toolbox-dividor"/>
@@ -204,15 +198,14 @@
                          {
                          action: 'syntax',
                          id: 'conn-tool-syntax',
-                         svg: true,
-                         bigIcon: true,
+                         svg: false,
+                         bigIcon: false,
                          tooltip: 'select sql syntax',
                          fontIconClass: 'la la-code',
                          svgIconName: 'svg6 - coding',
                          name: 'syntax'
                         },
-                     ],
-                     [
+                     ], [
                          {
                          action: 'commentsShowHide',
                          id: 'conn-tool-comments-show-hide',
@@ -222,7 +215,8 @@
                          fontIconClass: 'la la-comments',
                          svgIconName: 'svg6 - coding',
                          name: 'comments'
-                        },
+                        }
+                     ], [
                         {
                          action: 'autocomplete',
                          id: 'conn-tool-autocomplete',
@@ -232,17 +226,20 @@
                          fontIconClass: 'la la-language',
                          svgIconName: 'svg6 - coding',
                          name: 'autocomplete'
-                        },
+                        }
                      ]
                 ]"
             />
-        </Toolbar>
+        </Header>
     </div>
 </template>
 
 <script>
+    import Header from "../../AppFeatures/Header/Header"
+    import Toolbox from "../../AppFeatures/Toolbox/Toolbox"
     export default {
-        name: "DataConnectionToolbar"
+        name: "DataConnectionToolbar",
+        components: {Header, Toolbox}
     }
 </script>
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import router from '../../../Routes';
+
 
 export default {
     namespaced: true,
@@ -13,15 +13,17 @@ export default {
         }
     },
     actions: {
-        loadProjectData({commit, dispatch}, project) {
-            axios.get('/project/'+project.id+'/'+project.version+'/objects/').then(res => {
-                window.console.log(res);
+        loadProjectData({commit, dispatch}, {projectID, projectVersion}) {
+            axios.get('/project/'+projectID+'/'+projectVersion+'/objects/').then(res => {
                 let data = res.data['Response'];
                 commit("proj/LOAD_PROJECT_DATA", data, { root: true });
-                window.console.log('hello');
-                commit("proj/LOAD_OBJECTS", null, { root: true });
-                window.console.log('hello2');
-                router.push('/app/main');
+                let selectedProcess = null;
+                let selectedPage = null;
+                let selectedNode = null;
+                let selectedElement = null;
+                dispatch("proj/object_manager/setActivePO",
+                    {selectedProcess, selectedPage, selectedNode, selectedElement},
+                    { root: true });
             }).catch(err => {
               dispatch("callError", err.response.data);
             })

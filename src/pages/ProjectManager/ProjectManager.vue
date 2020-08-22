@@ -18,7 +18,7 @@
                 v-for="project in projectList"
                 class="text-left rounded-0"
                 variant="light"
-                @click="loadProjectData(project)"
+                @click="openProject(project)"
                 block>
           {{project.name}}
         </b-button>
@@ -30,6 +30,7 @@
 <script>
 import Widget from '@/components/AppFeatures/Widget/Widget';
 import { mapActions, mapState} from 'vuex';
+import router from '../../Routes';
 
 export default {
   name: 'ProjectManager',
@@ -39,6 +40,15 @@ export default {
   },
   methods: {
     ...mapActions('proj/api', ['loadProjectData', 'loadProjectList']),
+    openProject(project) {
+      let projectID = project.version;
+      let projectVersion = project.version;
+      localStorage.setItem('project_id', projectID);
+      localStorage.setItem('project_version', projectVersion);
+
+      this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
+      router.push('/app/main');
+    }
   },
   created() {
     //this.loadProjectData();

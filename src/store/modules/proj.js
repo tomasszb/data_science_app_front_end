@@ -1,27 +1,22 @@
 import { emptyProject } from './project_data_handling/empty_project';
-import {getProjectBranch, concatValues, get_active_object} from '../../core/projectManager'
+import {getProjectBranch, concatValues, get_selected_object} from '../../core/projectManager'
 import api from './project_data_handling/api';
 import object_manager from './project_data_handling/object_manager'
+import TreeModel from 'tree-model'
 
 export default {
     namespaced: true,
     state: {
         projectData: emptyProject(),
+        projectList: [],
+        dataLoaded: false,
 
         dataObjectDefinitions: {},
-        dataObjects: {},
-        projectObjects: {},
 
-        projectList: [],
-        processList: [],
-        pageLists: {},
-        nodeLists: {},
-        elementLists: {},
-
-        activeProcess: null,
-        activePages: {},
-        activeNodes: {},
-        activeElements: {}
+        selectedProcess: null,
+        selectedPages: {},
+        selectedNodes: {},
+        selectedElements: {}
 
     },
     getters: {
@@ -31,11 +26,81 @@ export default {
                 projectObjects[i['id']]=i
             });
             return projectObjects
-        }
+        },
+        dataObjects: state => {
+            let dataObjects= {};
+            state.projectData['project_data_objects'].forEach(function (i) {
+                dataObjects[i['id']]=i
+            });
+            return dataObjects
+        },
+        processList: (state, getters) => {
+            return getProjectBranch(getters.projectObjects, null, null, 1);
+        },
+        pageLists: (state, getters) => {
+            return getProjectBranch(getters.projectObjects, getters.processList, 'process_id', 2);
+        },
+        nodeLists: (state, getters) => {
+            return getProjectBranch(getters.projectObjects, concatValues(getters.pageLists), 'page_id', 3);
+        },
+        elementLists: (state, getters) => {
+            return getProjectBranch(getters.projectObjects, concatValues(getters.nodeLists), 'node_id', 4);
+        },
+        activeProcess: (state) => {
+            return state.selectedProcess
+        },
+        activePage: (state, getters) => {
+            if (getters.activeProcess in state.selectedPages) {
+                return state.selectedPages[getters.activeProcess]
+            }
+            else {
+                return null
+            }
+        },
+        activeNode: (state, getters) => {
+            if (state.selectedNodes.hasOwnProperty(getters.activePage)) {
+                return state.selectedNodes[getters.activePage]
+            }
+            else {
+                return null
+            }
+        },
+        activeElement: (state, getters) => {
+            if (state.selectedElements.hasOwnProperty(getters.activeNode)) {
+                return state.selectedElements[getters.activeNode]
+            }
+            else {
+                return null
+            }
+        },
+        ProjectTree: (state, getters) => {
+            let tree = new TreeModel();
+
+            let ProjectDict = {'id': 'project_tree', 'children': []};
+            for (let ProcessID of getters.processList) {
+                let process = {'id': ProcessID, 'children': []};
+                for (let PageID of getters.pageLists[ProcessID]) {
+                    let page = {'id': PageID, 'children': []};
+                    for (let NodeID of getters.nodeLists[PageID]) {
+                        let node = {'id': NodeID, 'children': []};
+                        for (let ElementID of getters.elementLists[NodeID]) {
+                            let element = {'id': ElementID, 'children': []}
+                            node['children'].push(element);
+                        }
+                        page['children'].push(node);
+                    }
+                    process['children'].push(page);
+                }
+                ProjectDict['children'].push(process);
+            }
+            // console.log(ProjectDict);
+            return ProjectDict
+        },
     },
     mutations: {
         LOAD_PROJECT_DATA(state, data) {
             state.projectData = data;
+            state.dataLoaded = true;
         },
         LOAD_PROJECT_LIST(state, data) {
             state.projectList = data;
@@ -43,36 +108,31 @@ export default {
         LOAD_OBJECT_DEFINITIONS(state, data) {
             state.dataObjectDefinitions = data;
         },
-        UPDATE_PROJECT_OBJECTS(state, data) {
-            for (let id in data) {
-                state.projectObjects[id] = data[id]
-            }
+
+        SET_SELECTED_PROCESS(state, selectedProcess) {
+            state.selectedProcess = selectedProcess;
         },
-        LOAD_OBJECTS(state) {
-            state.projectObjects= {};
-            state.dataObjects = {};
-            state.projectData['project_objects'].forEach(function (i) {
-                state.projectObjects[i['id']]=i
-            });
-            state.projectData['project_data_objects'].forEach(function (i) {
-                state.dataObjects[i['id']]=i
-            });
-            state.processList = getProjectBranch(state.projectObjects, null, null, 1);
-            state.pageLists = getProjectBranch(state.projectObjects, state.processList, 'process_id', 2);
-            state.nodeLists = getProjectBranch(state.projectObjects, concatValues(state.pageLists), 'page_id', 3);
-            state.elementLists = getProjectBranch(state.projectObjects, concatValues(state.nodeLists), 'node_id', 4);
+        SET_SELECTED_PAGE(state, {activePage, activeProcess}) {
+            state.selectedPages[activeProcess] = activePage;
         },
-        SET_ACTIVE_PROCESS(state, selectedProcess) {
-            state.activeProcess = get_active_object(selectedProcess, state.activeProcess, state.processList)
+        SET_SELECTED_NODE(state, {activeNode, activePage}) {
+            state.selectedNodes[activePage] = activeNode;
         },
-        SET_ACTIVE_PAGE(state, selectedPage) {
-            state.activePages[state.activeProcess] = get_active_object(selectedPage, state.activePage, state.pageLists[state.activeProcess])
+        SET_SELECTED_ELEMENT(state, {activeElement, activeNode}) {
+            state.selectedElements[activeNode] = activeElement;
         },
-        SET_ACTIVE_NODE(state, selectedNode) {
-            state.activeNodes[state.activePage] = get_active_object(selectedNode, state.activeNode, state.nodeList[state.activePage])
+
+        UPDATE_PROJECT_OBJECT(state, ObjectId, Object) {
+            state.projectData['project_objects'][ObjectId] = Object
         },
-        SET_ACTIVE_ELEMENT(state, selectedElement) {
-            state.activeElements[state.activeNode] = get_active_object(selectedElement, state.activeElement, state.nodeList[state.activeNode])
+        DELETE_PROJECT_OBJECT(state, ObjectId) {
+            delete state.projectData['project_objects'][ObjectId]
+        },
+        UPDATE_DATA_OBJECT(state, ObjectId, Object) {
+            state.projectData['project_data_objects'][ObjectId] = Object
+        },
+        DELETE_DATA_OBJECT(state, ObjectId) {
+            delete state.projectData['project_data_objects'][ObjectId]
         }
     },
     modules: {

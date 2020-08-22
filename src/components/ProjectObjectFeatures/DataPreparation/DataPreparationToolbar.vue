@@ -1,5 +1,5 @@
 <template>
-    <Toolbar>
+    <Header>
         <Toolbox
                 header="input data"
 
@@ -205,12 +205,15 @@
                      ]
                 ]"
         />
-    </Toolbar>
+    </Header>
 </template>
 
 <script>
+    import Header from "../../AppFeatures/Header/Header"
+    import Toolbox from "../../AppFeatures/Toolbox/Toolbox"
     export default {
-        name: "DataPreparationToolbar.vue"
+        name: "DataPreparationToolbar",
+        components: {Header, Toolbox}
     }
 </script>
 

@@ -8,6 +8,7 @@ import Login from '@/pages/Login/Login';
 import Register from '@/pages/Register/Register';
 import DataConnectionProcess from '@/pages/DataConnectionProcess/DataConnectionProcess';
 import DataPreparationProcess from '@/pages/DataPreparationProcess/DataPreparationProcess';
+import Process from '@/components/ProjectObjects/Process/Process'
 
 import { isAuthenticated } from './mixins/auth';
 
@@ -59,6 +60,11 @@ export default new Router({
                     path: 'prep/:id',
                     name: 'DataPreparationProcess',
                     component: DataPreparationProcess
+                },
+                {
+                    path: 'proc/:id',
+                    name: 'Process',
+                    component: Process
                 },
 
             ],

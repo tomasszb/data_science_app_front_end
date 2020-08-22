@@ -29,6 +29,8 @@
             <i class="la la-circle text-danger mr-n-sm" />
             <i class="la la-circle text-primary" />
         </a>
+        &emsp;&emsp;&emsp;
+        <slot></slot>
         <b-nav class="ml-auto">
             <b-nav-item-dropdown id="v-step-2" class="settingsDropdown d-sm-down-none" no-caret right>
                 <template slot="button-content">

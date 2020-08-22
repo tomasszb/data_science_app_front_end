@@ -3,7 +3,6 @@
         <div :class="{ 'small-icon': !bigIcon, 'big-icon': bigIcon}">
             <img v-if="svg" :src="path" />
             <i v-else :class="fontClass"/>
-            <p>{{ name }}</p>
         </div>
     </div>
 </template>

@@ -1,3 +1,13 @@
+function comparePosition( a, b ) {
+  if ( a.relative_position < b.relative_position ){
+    return -1;
+  }
+  if ( a.relative_position > b.relative_position ){
+    return 1;
+  }
+  return 0;
+}
+
 export function getProjectBranch(projectObjects, parentIDs, parentName, groupID) {
   let objectList = null;
 
@@ -6,7 +16,9 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
   } else {
     objectList = {}
   }
-  for (let id in projectObjects) {
+  let sorted_objects = Object.values(projectObjects).sort(comparePosition);
+  for (let po of sorted_objects) {
+    let id = po.id.toString();
     if (projectObjects.hasOwnProperty(id)) {
       if (projectObjects[id]['group'] === groupID) {
         if (parentIDs == null) {
@@ -30,7 +42,7 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
 }
 
 export function get_active_object(activeNew, activeOld, parentList) {
-  if(activeNew in parentList) {
+  if(parentList.includes(activeNew)) {
     return activeNew;
   }
   else if(activeNew ==null && parentList.length>0) {
@@ -40,6 +52,7 @@ export function get_active_object(activeNew, activeOld, parentList) {
     return activeOld
   }
 }
+
 
 export function createFlowRequest(elementList, filteredElementIDs, projectObjects, projectID, ownerID, dataObjects, src_request_id, elementCommands) {
   let request = {"action": "run_flow"};

@@ -46,7 +46,7 @@
         components: { vSelect },
         props: {
             objGroup: { type: String, default: '' },
-            fields: { type: Array, default: function () { return [] }},
+            fields: { type: Array, default: null},
             currentDataObject: {type: Object, default: function () { return {} }},
             fieldChoices: { type: Object, default: function () { return {} } },
         },

@@ -1,37 +1,18 @@
 <template>
-    <div class="toolbox">
-        <div v-for="tools in childrenTools" :class="{'toolbox-icon-group':true, 'clear-both':tools.length>1}">
+    <b-nav>
+        <b-nav-item class="d-md-down-none" v-for="tools in childrenTools">
             <a v-for="tool in tools"
-               :class="{'px-1':true, 'clear-both':!tool.bigIcon}"
-               :key="tool.id">
-                <div v-if="tool.action == 'directive'" v-b-modal = "tool.directive">
-                    <b-tooltip :target="'toolbox-'+tool.action" :title="tool.tooltip" triggers="hover" noninteractive>
-                        {{tool.tooltip}}
-                    </b-tooltip>
-                    <AppIcon
-                            :name="tool.name"
-                            :bigIcon="tool.bigIcon"
-                            :svg="tool.svg"
-                            :svgName="tool.svgIconName"
-                            :fontClass="tool.fontIconClass"
-                            :id="'toolbox-'+tool.action"/>
-                </div>
-                <div @click="$emit('toolClicked', tool.action)" v-else>
-                    <b-tooltip  :target="'toolbox-'+tool.action" :title="tool.tooltip" triggers="hover" noninteractive>
-                        {{tool.tooltip}}
-                    </b-tooltip>
-                    <AppIcon
-                            :name="tool.name"
-                            :bigIcon="tool.bigIcon"
-                            :svg="tool.svg"
-                            :svgName="tool.svgIconName"
-                            :fontClass="tool.fontIconClass"
-                            :id="'toolbox-'+tool.action"/>
-                </div>
+               :key="tool.id"
+               :id="'toolbox-'+tool.action"
+               @click="$emit('toolClicked', tool.action)"
+               class="px-2" href="#">
+<!--                <b-tooltip :target="'toolbox-'+tool.action" :title="tool.tooltip" triggers="hover" noninteractive>-->
+<!--                    {{tool.tooltip}}-->
+<!--                </b-tooltip>-->
+                <i :class="'la fa-lg '+tool.fontIconClass" />
             </a>
-        </div>
-        <p>{{ header }}</p>
-    </div>
+        </b-nav-item>
+    </b-nav>
 </template>
 
 <script>

@@ -1,8 +1,7 @@
 @import '../../../styles/app';
 
 .toolbox {
-  padding-left: 4px;
-  padding-right: 4px;
+  padding: 4px 4px 0px 4px;
   height: 100%;
   float:left;
 
@@ -18,14 +17,13 @@
   }
 
   .toolbox-icon-group {
-    height: 50px;
     float: left;
-    margin: 0px 4px 5px 4px;
+    margin: 0px 10px 8px 10px;
 
     a {
       float: left;
       font-size: 25px;
-      color: $gray-900;
+      color: $gray-800;
 
       @include hover {
         color: $gray-600;

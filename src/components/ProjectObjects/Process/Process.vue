@@ -1,33 +1,17 @@
 <template>
     <div class="po-process">
-        <div v-if="proccessType='conn'">
-            <DataConnectionToolbar/>
-            <Page
-                    :pageID="nodeList[activePage]"
-                    :nodeIDs="nodeList[activePage]"
-                    type="sheet"
-                    :multipleAllowed="false"
-            />
-            <DataConnectionModals/>
-        </div>
+        <DataConnectionToolbar v-if="processType===this.dsw_config.LOAD_PROCESS_CD"/>
+        <DataPreparationToolbar v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD"/>
 
-        <div v-if="proccessType='prep'">
-            <DataConnectionToolbar/>
-<!--            <SideObjectExplorer/>-->
-            <Page
-                    :pageID="nodeList[activePage]"
-                    :nodeIDs="nodeList[activePage]"
-                    type="step"
-                    :multipleAllowed="true"
-            />
-            <DataPreparationModals/>
-        </div>
+        <Pagebar></Pagebar>
+
+        <DataConnectionModals v-if="processType===this.dsw_config.LOAD_PROCESS_CD"/>
+        <DataPreparationModals v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD"/>
     </div>
 
 </template>
 
 <script>
-import project_store from '../../../store/modules/proj';
 
 import DataConnectionModals from "../../ProjectObjectFeatures/DataConnection/DataConnectionModals";
 import DataPreparationModals from "../../ProjectObjectFeatures/DataPreparation/DataPreparationModals";
@@ -35,172 +19,48 @@ import DataPreparationModals from "../../ProjectObjectFeatures/DataPreparation/D
 import DataConnectionToolbar from "../../ProjectObjectFeatures/DataConnection/DataConnectionToolbar";
 import DataPreparationToolbar from "../../ProjectObjectFeatures/DataPreparation/DataPreparationToolbar";
 
-import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
-import { vueTableData } from './data';
-import {mapActions, mapState} from "vuex";
-import axios from 'axios'
+import Pagebar from "../../AppFeatures/Pagebar/Pagebar"
+
+import { mapState, mapGetters, mapActions} from "vuex";
+import dsw_config from "../../../dsw_config";
 
 export default {
-    name: 'DataConnectionProcess',
+    name: 'Process',
     components: {
+        Pagebar,
         DataConnectionModals, DataConnectionToolbar,
         DataPreparationModals, DataPreparationToolbar
     },
-    data() {
-        return {
-            processType: 'conn',
-            data: vueTableData(),
-
-            editedNode: null,
-            newPoCounter: 0,
-            newDoCounter: 0,
-
-            projectObjects : {},
-            dataObjects: {},
-
-            processList: [],
-            pageList : {},
-            nodeList : {},
-            elementList : {},
-
-            projectProcessList: [],
-            projectPageList : {},
-            projectNodeList : {},
-            projectElementList : {},
-
-            activeProcess: {},
-            activePage: {},
-            activeNode: {},
-            activeElement: {},
-
-            tableData: [{'col':1}],
-            tableColumns: ['col']
-        }
-    },
-
     methods: {
-        ...mapActions('proj', ['updateProjectObjects']),
-        fetchData() {
-            axios.get('http://127.0.0.1:8000/media/data.json').then(response => {
-                this.tableColumns = Object.keys(response.data[0]);
-            })
-        },
-        newDataObject(DoSettings) {
-            let newDataObjectID = '_' + this.newDoCounter;
-            let newDataObject = {'id': newDataObjectID};
-            newDataObject = {...newDataObject, ...DoSettings};
-            this.dataObjects[newDataObjectID] = newDataObject;
-            this.dataObjects = JSON.parse(JSON.stringify(this.dataObjects));
-            this.newDoCounter+=1;
-            this.addDataConnectionNode(newDataObject);
-        },
-        updateDataObject(DoSettings) {
-            let DataObjectID = DoSettings.id;
-            this.dataObjects[DataObjectID] = DoSettings;
-            this.dataObjects = JSON.parse(JSON.stringify(this.dataObjects));
-        },
-        addDataConnectionNode(DoSettings) {
-            let newNodeID = '_' + this.newPoCounter;
-            this.nodeList[this.activePage].push(newNodeID);
-            let node = {name:'New Connector '+this.newPoCounter, id:newNodeID};
-            this.projectObjects[newNodeID] = node;
-            this.activeNode=newNodeID;
-            this.elementList[newNodeID] = [];
-            this.newPoCounter+=1;
-            this.projectObjects=JSON.parse(JSON.stringify(this.projectObjects));
-            this.addDataConnectionElement(newNodeID, DoSettings);
-        },
-        addDataConnectionElement(nodeID, DoSettings) {
-            let newElementID = '_' + this.newPoCounter;
-            let connectorID = DoSettings['id'];
-            this.elementList[nodeID].push(newElementID);
-            let element = {
-                name:DoSettings['name'],
-                id:newElementID,
-                group:4,
-                type:400,
-                parameters: {
-                    connector_id: connectorID,
-                    node_id: nodeID,
-                }
-            };
-            this.projectObjects[newElementID] = element;
-            this.activeElement=newElementID;
-            this.newPoCounter+=1;
-            this.projectObjects=JSON.parse(JSON.stringify(this.projectObjects));
-        },
-        editNode(nodeId) {
-            this.editedNode = nodeId
-        },
-        unblurNode() {
-            this.editedNode = null
-        },
-        activateNode(nodeId) {
-            this.activeNode = nodeId;
-            this.activeElement = this.elementList[this.activeNode][0];
-        },
-        deleteNode(nodeId) {
-            let nodeIndex = this.nodeList[this.activePage].indexOf(nodeId);
-            this.nodeList[this.activePage].splice(nodeIndex, 1);
-            for (var i = 0; i < this.elementList[nodeId].length; i++) {
-                let elementId = this.elementList[nodeId][i];
-                let element = this.projectObjects[elementId];
-                delete this.dataObjects[element['parameters']['connector_id']]
-                delete this.projectObjects[elementId];
-            }
-            delete this.elementList[nodeId];
-            delete this.projectObjects[nodeId];
-            if (this.activeNode == nodeId) {
-                this.activeNode = this.nodeList[this.activePage][0];
-            }
+        ...mapActions('proj/object_manager',['setActivePO']),
 
+        wsConnect () {
+            let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + this.projectData.project_id + "_" +this.projectData.owner_id+"/";
+            this.$webSocketConnect({"url": url})
         },
-        updateProjectObjects() {
-
-        },
-        onToolClick(action) {
-            let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            let projectID = this.$store.state.proj.projectData['project_id'];
-            let ownerID = this.$store.state.proj.projectData['owner_id'];
-            let upstreamElements = getUpstreamElements(this.projectObjects, this.elementList, [], [this.activeElement]);
-            let request = createFlowRequest(
-                this.projectElementList,
-                upstreamElements,
-                this.projectObjects,
-                projectID,
-                ownerID,
-                this.dataObjects,
-                src_request_id,
-                {}
-                );
-            this.$newRequest(src_request_id, request['request']['elements'].length);
-            this.$webSocketSend(request);
+        wsDisconnect () {
+            this.$webSocketDisconnect()
         }
     },
     computed: {
-        ...mapState('proj', ['projectData']),
+        ...mapState('proj', [
+            'projectData',
+            'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements'
+        ]),
+        ...mapGetters('proj', [
+            'projectObjects', 'dataObjects', 'ProjectTree',
+            'processList', 'pageLists', 'nodeLists', 'elementLists',
+            'activeProcess', 'activePage', 'activeNode', 'activeElement'
+        ]),
         processID() {
             return this.$route.params.id
         },
-        selectedElement () {
-            return this.dataObjects[this.projectObjects[this.activeElement]['parameters']['connector_id']]
+        processType () {
+            return this.projectObjects[this.processID].type
         },
-        defConnectors () {
-            let defs = project_store.state.dataObjectDefinitions;
-            for (let item of defs) {
-                if (item.name=="Connectors") {
-                    return item.children
-                }
-            }
-        },
-        dataObjDefs () {
-            let defs = project_store.state.dataObjectDefinitions;
-            for (let item of defs) {
-                if (item.name=="Connectors") {
-                    return item.children
-                }
-            }
-        },
+        dsw_config() {
+            return dsw_config
+        }
     },
     directives: {
         focus: {
@@ -209,25 +69,18 @@ export default {
             }
         }
     },
-    created() {
-        this.fetchData();
-        this.projectObjects = JSON.parse(JSON.stringify(this.$store.state.proj.projectObjects));
-        this.dataObjects = JSON.parse(JSON.stringify(this.$store.state.proj.dataObjects));
-
-        this.activeProcess = this.$route.params.id;
-
-
-        [this.processList, this.pageList, this.nodeList, this.elementList] = initProcessBranches(this.projectObjects, this.activeProcess);
-        [this.projectProcessList, this.projectPageList, this.projectNodeList, this.projectElementList] = initProjectBranches(this.projectObjects);
-
-        this.activePage = this.pageList[this.activeProcess][0];
-        this.activeNode = this.nodeList[this.activePage][0];
-        this.activeElement = this.elementList[this.activeNode][0];
-
-
+    watch: {
+        processID: function (value) {
+            this.setActivePO({
+                selectedProcess:value,
+                selectedPage:null,
+                selectedNode:null,
+                selectedElement:null
+            });
+        }
     }
 };
 </script>
 
-<style src="Process.scss" lang="scss"></style>
+<style src="./Process.scss" lang="scss"></style>
 

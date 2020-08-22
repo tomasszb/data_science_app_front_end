@@ -546,8 +546,8 @@ export default {
     },
     created() {
         this.fetchData();
-        this.projectObjects = JSON.parse(JSON.stringify(this.$store.state.proj.projectObjects));
-        this.dataObjects = JSON.parse(JSON.stringify(this.$store.state.proj.dataObjects));
+        this.projectObjects = JSON.parse(JSON.stringify(this.$store.getters.proj.projectObjects));
+        this.dataObjects = JSON.parse(JSON.stringify(this.$store.getters.proj.dataObjects));
 
         this.activeProcess = this.$route.params.id;
 

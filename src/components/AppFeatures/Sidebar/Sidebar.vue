@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+  import {mapState, mapActions, mapGetters} from 'vuex';
 import isScreen from '@/core/screenHelper';
 import NavLink from './NavLink/NavLink';
 import dsw_config from "../../../dsw_config";
@@ -91,20 +91,16 @@ export default {
       sidebarOpened: state => !state.sidebarClose,
       activeItem: state => state.sidebarActiveElement,
     }),
+    ...mapGetters('proj', ['projectObjects', 'processList']),
     projectObjectSettings () {
       return dsw_config.projectObjectSettings
     },
-    projectObjects () {
-      return this.$store.state.proj.projectObjects
-    },
     projectProcesses () {
       let processes = [];
-      for (let id in this.projectObjects) {
-        if (this.projectObjects[id].group==1) {
-          let processAPI = this.projectObjects[id];
-          let process = Object.assign({}, processAPI, this.projectObjectSettings[processAPI.type]);
-          processes.push(process);
-        }
+      for (let id of this.processList) {
+        let processAPI = this.projectObjects[id];
+        let process = Object.assign({}, processAPI, this.projectObjectSettings[processAPI.type]);
+        processes.push(process);
       };
       return processes
     }
