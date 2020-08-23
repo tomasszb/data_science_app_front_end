@@ -3,6 +3,7 @@ import {getProjectBranch, concatValues, get_selected_object} from '../../core/pr
 import api from './project_data_handling/api';
 import object_manager from './project_data_handling/object_manager'
 import TreeModel from 'tree-model'
+import Vue from 'vue'
 
 export default {
     namespaced: true,
@@ -38,18 +39,25 @@ export default {
             return getProjectBranch(getters.projectObjects, null, null, 1);
         },
         pageLists: (state, getters) => {
-            return getProjectBranch(getters.projectObjects, getters.processList, 'process_id', 2);
+            let pageLists =  getProjectBranch(getters.projectObjects, getters.processList, 'process_id', 2);
+            pageLists[null] = [];
+            return pageLists
         },
         nodeLists: (state, getters) => {
-            return getProjectBranch(getters.projectObjects, concatValues(getters.pageLists), 'page_id', 3);
+            let nodeLists = getProjectBranch(getters.projectObjects, concatValues(getters.pageLists), 'page_id', 3);
+            nodeLists[null] = [];
+            return nodeLists
         },
         elementLists: (state, getters) => {
-            return getProjectBranch(getters.projectObjects, concatValues(getters.nodeLists), 'node_id', 4);
+            let elementLists = getProjectBranch(getters.projectObjects, concatValues(getters.nodeLists), 'node_id', 4);
+            elementLists[null] = [];
+            return elementLists
         },
         activeProcess: (state) => {
             return state.selectedProcess
         },
         activePage: (state, getters) => {
+            console.log(getters.activeProcess, state.selectedPages)
             if (getters.activeProcess in state.selectedPages) {
                 return state.selectedPages[getters.activeProcess]
             }
@@ -113,26 +121,31 @@ export default {
             state.selectedProcess = selectedProcess;
         },
         SET_SELECTED_PAGE(state, {activePage, activeProcess}) {
-            state.selectedPages[activeProcess] = activePage;
+            Vue.set(state.selectedPages, activeProcess, activePage)
         },
         SET_SELECTED_NODE(state, {activeNode, activePage}) {
-            state.selectedNodes[activePage] = activeNode;
+            Vue.set(state.selectedNodes, activePage, activeNode);
         },
         SET_SELECTED_ELEMENT(state, {activeElement, activeNode}) {
-            state.selectedElements[activeNode] = activeElement;
+            Vue.set(state.selectedElements, activeNode, activeElement);
         },
 
         UPDATE_PROJECT_OBJECT(state, ObjectId, Object) {
-            state.projectData['project_objects'][ObjectId] = Object
+            Vue.set(state.projectData['project_objects'], ObjectId,  Object)
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
-            delete state.projectData['project_objects'][ObjectId]
+            for (let index = 0; index < state.projectData['project_objects'].length; index++) {
+                if (state.projectData['project_objects'][index].id.toString() === ObjectId){
+                    Vue.delete(state.projectData['project_objects'], index);
+                    console.log('deleting', ObjectId)
+                }
+            }
         },
         UPDATE_DATA_OBJECT(state, ObjectId, Object) {
-            state.projectData['project_data_objects'][ObjectId] = Object
+            Vue.set(state.projectData['project_data_objects'], ObjectId, Object)
         },
         DELETE_DATA_OBJECT(state, ObjectId) {
-            delete state.projectData['project_data_objects'][ObjectId]
+            Vue.delete(state.projectData['project_data_objects'], ObjectId)
         }
     },
     modules: {

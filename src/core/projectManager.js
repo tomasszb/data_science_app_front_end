@@ -14,7 +14,11 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
   if (parentIDs == null) {
     objectList = []
   } else {
-    objectList = {}
+    objectList = {};
+    for(let parentID of parentIDs) {
+      objectList[parentID] = []
+    }
+
   }
   let sorted_objects = Object.values(projectObjects).sort(comparePosition);
   for (let po of sorted_objects) {
@@ -28,9 +32,6 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
           if (parentName in child['parameters']) {
             let parent_id = child['parameters'][parentName].toString();
             if (parentIDs.includes(parent_id)) {
-              if (!(parent_id in objectList)) {
-                objectList[parent_id] = []
-              }
               objectList[parent_id].push(id);
             }
           }
@@ -41,12 +42,16 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
   return objectList
 }
 
-export function get_active_object(activeNew, activeOld, parentList) {
-  if(parentList.includes(activeNew)) {
+export function get_active_object(activeNew, activeOld, allList) {
+  console.log(activeNew, activeOld, allList);
+  if(allList.length === 0) {
+    return null
+  }
+  else if(allList.includes(activeNew)) {
     return activeNew;
   }
-  else if(activeNew ==null && parentList.length>0) {
-    return parentList[0];
+  else if(activeNew ==null && allList.length>0) {
+    return allList[0];
   }
   else {
     return activeOld

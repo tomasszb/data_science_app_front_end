@@ -4,9 +4,9 @@
                 <div class="page-bar y-100">
                     <draggable v-model="pageList">
                         <Page
+                                v-for="pageID in pageList"
                                 class="px-4 py-3 po-page-pill mb-sm list-element d-flex justify-content-between align-items-center "
                                 :class="{'active-page':activePage==pageID}"
-                                v-for="pageID in pageList"
                                 :key="'po-'+pageID"
                                 :pageID="pageID"
                                 :active="activePage===pageID"

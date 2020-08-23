@@ -50,7 +50,7 @@
                 this.editedPage = null
             },
             activatePage(pageID) {
-                this.setActivePO(null, pageID, null, null);
+                this.setActivePO({selectedProcess:null, selectedPage:pageID, selectedNode:null, selectedElement:null})
             },
             deletePage(pageID) {
                 this.deletePO(pageID);

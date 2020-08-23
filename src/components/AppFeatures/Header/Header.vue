@@ -34,7 +34,16 @@
         <b-nav class="ml-auto">
             <b-nav-item-dropdown id="v-step-2" class="settingsDropdown d-sm-down-none" no-caret right>
                 <template slot="button-content">
-                    <span class="la la-user la-lg" />
+                    <span class="avatar rounded-circle thumb-sm float-left mr-2">
+                        <img
+                                v-if="user.avatar || user.email === 'admin@flatlogic.com'"
+                                class="rounded-circle"
+                                :src="user.avatar || avatarImage"
+                                alt="..."
+                        />
+                        <span v-else>{{firstUserLetter}}</span>
+                    </span>
+<!--                    <span class="la la-user la-lg" />-->
                     <span class="small">{{ user }}</span>
                     <span class="glyphicon glyphicon-chevron-down px-2" />
                 </template>
@@ -67,6 +76,7 @@
                 'navbarType',
                 'navbarColorScheme'
             ]),
+            firstUserLetter() { return (this.user || "A")[0].toUpperCase(); },
             ...mapState('proj', ['projectData']),
             navbarTypeClass: function () {
                 return "navbar-" + this.navbarType + "-type"
@@ -103,24 +113,9 @@
                     paths.pop();
                     this.changeSidebarActive(paths.join('/'));
                 }
-            },
-            wsConnect () {
-                let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + this.projectData.project_id + "_" +this.projectData.owner_id+"/";
-                this.$webSocketConnect({"url": url})
-            },
-            wsDisconnect () {
-                this.$webSocketDisconnect()
             }
         },
 
-        created() {
-            //this.loadObjects();
-            this.loadObjectDefinitions();
-            this.wsConnect();
-        },
-        destroyed() {
-            this.wsDisconnect();
-        }
     };
 </script>
 

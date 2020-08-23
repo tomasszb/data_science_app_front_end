@@ -191,45 +191,6 @@
                 ]"
             />
             <div class="toolbox-dividor"/>
-            <Toolbox
-                    header="editor"
-                    :childrenTools="[
-                     [
-                         {
-                         action: 'syntax',
-                         id: 'conn-tool-syntax',
-                         svg: false,
-                         bigIcon: false,
-                         tooltip: 'select sql syntax',
-                         fontIconClass: 'la la-code',
-                         svgIconName: 'svg6 - coding',
-                         name: 'syntax'
-                        },
-                     ], [
-                         {
-                         action: 'commentsShowHide',
-                         id: 'conn-tool-comments-show-hide',
-                         svg: false,
-                         bigIcon: false,
-                         tooltip: 'show comments',
-                         fontIconClass: 'la la-comments',
-                         svgIconName: 'svg6 - coding',
-                         name: 'comments'
-                        }
-                     ], [
-                        {
-                         action: 'autocomplete',
-                         id: 'conn-tool-autocomplete',
-                         svg: false,
-                         bigIcon: false,
-                         tooltip: 'autocomplete',
-                         fontIconClass: 'la la-language',
-                         svgIconName: 'svg6 - coding',
-                         name: 'autocomplete'
-                        }
-                     ]
-                ]"
-            />
         </Header>
     </div>
 </template>

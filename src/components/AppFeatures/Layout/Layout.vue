@@ -49,15 +49,16 @@ export default {
     computed: {
         ...mapState('proj', ['projectData']),
         ...mapState('proj', ['dataLoaded']),
-        ...mapState(["sidebarClose", "sidebarStatic", "sidebarColorName", "sidebarType"]),
+        ...mapState('layout', ["sidebarClose", "sidebarStatic", "sidebarColorName", "sidebarType"]),
     },
 
     created() {
         let projectID = localStorage.getItem('project_id');
         let projectVersion= localStorage.getItem('project_version');
-        this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
-        this.loadObjectDefinitions();
-
+        if (projectID != null && projectVersion != null) {
+            this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
+            this.loadObjectDefinitions();
+        }
         const staticSidebar = JSON.parse(localStorage.getItem('sidebarStatic'));
 
         if (staticSidebar) {
