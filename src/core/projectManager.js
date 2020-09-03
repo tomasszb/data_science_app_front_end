@@ -43,14 +43,13 @@ export function getProjectBranch(projectObjects, parentIDs, parentName, groupID)
 }
 
 export function get_active_object(activeNew, activeOld, allList) {
-  console.log(activeNew, activeOld, allList);
   if(allList.length === 0) {
     return null
   }
   else if(allList.includes(activeNew)) {
     return activeNew;
   }
-  else if(activeNew ==null && allList.length>0) {
+  else if(activeOld ==null && allList.length>0) {
     return allList[0];
   }
   else {
@@ -73,6 +72,7 @@ export function createFlowRequest(elementList, filteredElementIDs, projectObject
         element['command']  = element_id in elementCommands ? elementCommands[element_id] : "run";
         elements.push(element)
       }
+
     }
   }
   for (const [id, project_data_object] of Object.entries(dataObjects)) {
@@ -142,11 +142,9 @@ export function getUpstreamElements(projectObjects, elementList, elements, paren
     });
   }
   elements = elements.concat(new_elements);
-  console.log(elements, new_elements);
   if (new_elements.length > 0) {
     return getUpstreamElements(projectObjects, elementList, elements, new_elements)
   } else {
-    console.log('returning', elements);
     return elements
   }
 

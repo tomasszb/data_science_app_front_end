@@ -1,21 +1,32 @@
 <template>
-    <div>
-        <div
-                v-if="pageID!=editedPage"
-                class="po-page-text"
-                @click="activatePage(pageID)"
-                @dblclick="editPage(pageID)">
-            {{projectObjects[pageID].name}}
-        </div>
-        <input
-                v-if="pageID==editedPage"
-                class="po-page-text"
-                v-focus
-                type="text"
-                v-model="projectObjects[pageID].name"
-                @blur="unblurPage()"
-                @keyup.enter="unblurPage()">
-        <i @click="deletePage(pageID)" class="la la-times pill-delete-x fa-xs" />
+    <div @click="activatePage(pageID)">
+        <b-row>
+            <b-col>
+                <div
+                        v-if="pageID!=editedPage"
+                        class="po-page-text"
+                        @dblclick="editPage(pageID)">
+                    {{projectObjects[pageID].name}}
+                </div>
+                <input
+                        v-if="pageID==editedPage"
+                        class="po-page-text"
+                        v-focus
+                        type="text"
+                        v-model="projectObjects[pageID].name"
+                        @blur="unblurPage()"
+                        @keyup.enter="unblurPage()">
+                <i @click="deletePage(pageID)" class="la la-times pill-delete-x fa-xs" />
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <i class="pill-buttons la-md la la-play float-right ml-1" />
+                <i class="pill-buttons la-md la la-file float-right ml-1" />
+                <i class="pill-buttons la-md la la-cogs float-right ml-1" />
+            </b-col>
+        </b-row>
+
     </div>
 
 </template>
@@ -32,6 +43,13 @@
         data() {
             return {
                 editedPage: null
+            }
+        },
+        directives: {
+            focus: {
+                inserted (el) {
+                    el.focus()
+                }
             }
         },
         computed: {

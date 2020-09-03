@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{connDefinitions}}
         <CreateObjectGroup
                 id="new-connector"
                 :showGroups="true"

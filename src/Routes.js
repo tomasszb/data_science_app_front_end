@@ -41,6 +41,11 @@ export default new Router({
             name: 'Layout',
             component: Layout,
             beforeEnter: (to, from, next) => {
+                let expiration = localStorage.getItem('expires');
+                if(expiration <= Math.floor(Date.now()/1000)) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('expires');
+                }
                 let token = localStorage.getItem('token');
                 isAuthenticated(token) ? next() : next({path: '/login'});
             },

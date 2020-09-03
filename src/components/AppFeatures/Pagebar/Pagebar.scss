@@ -3,15 +3,23 @@
 
 
 .page-bar {
-  float:left;
+  //float:left;
   //background-color: $gray-200;
   border-right: solid 3px $gray-200;
   padding: 2em 1em 1em 1em;
-  width: 230px;
-
+  //width: 230px;
+  .pill-delete-x {
+    float: right;
+  }
+  .pill-buttons {
+    width: 10%;
+    opacity:0;
+    float: left;
+  }
   .po-page-text {
     cursor: pointer;
-    width: 100%;
+    width: 90%;
+    float: left;
   }
   .active-page {
     background-color: $teal !important;
@@ -24,15 +32,14 @@
   .po-page-pill {
     font-weight: 500;
     font-size: 14px;
-    background-color: $gray-200;
+    background-color: $gray-300;
     height: 50px;
     border-radius: 5px;
-    padding: 3px 10px 3px 10px!important;
+    padding: 5px 10px 3px 10px!important;
     //border: solid 1px $gray-300;
   }
-  .pill-delete-x {
-    margin: -5px -5px 0px 0px;
-    color: white;
+  .po-page-pill:hover .pill-buttons {
+    opacity: 1;
   }
   .page-add {
     border: 0px!important;

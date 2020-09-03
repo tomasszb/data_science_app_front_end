@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{prepDefinitions}}
         <CreateObjectGroup
                 id="new-data-prep"
                 :showGroups="true"

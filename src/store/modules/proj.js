@@ -2,6 +2,7 @@ import { emptyProject } from './project_data_handling/empty_project';
 import {getProjectBranch, concatValues, get_selected_object} from '../../core/projectManager'
 import api from './project_data_handling/api';
 import object_manager from './project_data_handling/object_manager'
+import data_manager from './project_data_handling/data_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 
@@ -13,6 +14,8 @@ export default {
         dataLoaded: false,
 
         dataObjectDefinitions: {},
+
+        dataFrames: {},
 
         selectedProcess: null,
         selectedPages: {},
@@ -57,7 +60,6 @@ export default {
             return state.selectedProcess
         },
         activePage: (state, getters) => {
-            console.log(getters.activeProcess, state.selectedPages)
             if (getters.activeProcess in state.selectedPages) {
                 return state.selectedPages[getters.activeProcess]
             }
@@ -130,8 +132,17 @@ export default {
             Vue.set(state.selectedElements, activeNode, activeElement);
         },
 
-        UPDATE_PROJECT_OBJECT(state, ObjectId, Object) {
-            Vue.set(state.projectData['project_objects'], ObjectId,  Object)
+        UPDATE_PROJECT_OBJECT(state, {ObjectId, Object}) {
+            for (let index = 0; index < state.projectData['project_objects'].length; index++) {
+                if (state.projectData['project_objects'][index].id.toString() === ObjectId){
+                    Vue.set(state.projectData['project_objects'], index,  Object);
+                }
+            }
+            console.log('new project data', state.projectData['project_objects']);
+        },
+        UPDATE_DATAFRAME(state, {ObjectId, command, Object}) {
+            Vue.set(state.dataFrames, ObjectId + '-' + command,  Object);
+            console.log('new data', state.dataFrames);
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
             for (let index = 0; index < state.projectData['project_objects'].length; index++) {
@@ -150,6 +161,7 @@ export default {
     },
     modules: {
         api,
-        object_manager
+        object_manager,
+        data_manager
     }
 };
