@@ -38,8 +38,9 @@ export default {
             this.changeSidebarActive(null);
           }
         },
-        wsConnect () {
-            let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + this.projectData.project_id + "_" +this.projectData.owner_id+"/";
+        wsConnect (projectID) {
+            let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + projectID + "/";
+            console.log(url);
             this.$webSocketConnect({"url": url})
         },
         wsDisconnect () {
@@ -72,7 +73,7 @@ export default {
 
         this.handleWindowResize();
         window.addEventListener('resize', this.handleWindowResize);
-        this.wsConnect();
+        this.wsConnect(projectID);
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.handleWindowResize);

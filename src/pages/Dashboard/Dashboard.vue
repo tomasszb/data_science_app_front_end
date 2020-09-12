@@ -7,17 +7,24 @@
         <div>
             {{ dataObjects }}
         </div>
+        <hr>
+        <div>
+            {{ projectObjectStatuses }}
+        </div>
+
+
 
     </div>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapState} from 'vuex';
 
     export default {
       name: 'Dashboard',
       computed: {
           ...mapGetters('proj', ['projectObjects', 'dataObjects']),
+          ...mapState('proj', ['projectObjectStatuses', 'dataFrames'])
       }
     };
 </script>

@@ -76,19 +76,29 @@ export default {
             commit('addRequest', payload)
         },
         processNotifications: ({commit}, payload) => {
-            console.log(payload, Date.now());
+            var timestamp = Number(new Date());
+            var date = new Date(timestamp);
+            console.log(date,timestamp,payload);
             let src_request_id = payload["result"]["src_request_id"];
             let project_object_id = payload["result"]["project_object_id"];
             let status = payload["result"]["status"];
+            let action = payload["action"];
             if (status==='success') {
                 commit('addSuccessRun', {
                     'src_request_id':src_request_id,
-                    'project_object_id':project_object_id})
+                    'project_object_id':project_object_id});
+                commit("proj/UPDATE_PROJECT_OBJECT_STATUS", {ObjectId: project_object_id, status: status}, { root: true });
             }
-            if (status==='failed') {
+            else if (status==='failed') {
                 commit('addFailedRun', {
                     'src_request_id':src_request_id,
-                    'project_object_id':project_object_id})
+                    'project_object_id':project_object_id});
+                commit("proj/UPDATE_PROJECT_OBJECT_STATUS", {ObjectId: project_object_id, status: status}, { root: true });
+            }
+            if (action === 'report_data') {
+                let data = JSON.parse(payload["result"]["data"]);
+                let output_filter = JSON.stringify(payload["result"]["output_filter"])
+                commit("proj/UPDATE_DATAFRAME", {ObjectId: project_object_id, command: 'run' + output_filter, data: data}, { root: true });
             }
         }
     },

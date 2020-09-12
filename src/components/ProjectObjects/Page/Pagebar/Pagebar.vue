@@ -1,7 +1,7 @@
 <template>
     <div class="page-bar y-100">
         <draggable v-model="pageList">
-            <Page
+            <PageButton
                     v-for="pageID in pageList"
                     class="px-4 py-3 po-page-pill mb-sm list-element"
                     :class="{'active-page':activePage==pageID}"
@@ -20,13 +20,13 @@
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
-    import Page from "../../ProjectObjects/Page/Page"
+    import PageButton from "./PageButton/PageButton"
     import draggable from 'vuedraggable';
 
     export default {
         name: 'Pagebar',
         components: {
-            Page, draggable
+            PageButton, draggable
         },
         prop: {
 

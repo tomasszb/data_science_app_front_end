@@ -59,16 +59,15 @@ webSocketService.install = function (Vue, store) {
             "all_tasks": all_tasks,
             "project_objects": []
         };
-        store.dispatch('websocket/prepareRequest', payload)
+        store.dispatch('proj/websocket/prepareRequest', payload)
     };
 
     /*
       Here we write our custom functions to not make a mess in one function
     */
     function handleNotification (params) {
-        console.log('notification');
         let data = JSON.parse(params.data);
-        store.dispatch('websocket/processNotifications', data)
+        store.dispatch('proj/websocket/processNotifications', data)
     }
 };
 

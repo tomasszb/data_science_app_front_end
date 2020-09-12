@@ -107,7 +107,7 @@
     overflow: hidden;
     height: 40px;
     width: 40px;
-    background: #ffc247;
+    background: var(--sidebar-item-active);
     font-weight: 600;
     font-size: 18px;
   }

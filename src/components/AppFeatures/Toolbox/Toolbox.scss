@@ -1,5 +1,16 @@
 @import '../../../styles/app';
 
+.toolbox-status-inactive {
+  color: $gray-400!important;
+  cursor: auto!important;
+}
+
+.toolbox-status-selected i {
+  //background-color: $gray-400!important;
+  //padding-bottom: 2px;
+  border-bottom: 3px solid $gray-600;
+}
+
 .toolbox {
   padding: 4px 4px 0px 4px;
   height: 100%;

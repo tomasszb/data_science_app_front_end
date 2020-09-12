@@ -1,8 +1,8 @@
 import { emptyProject } from './project_data_handling/empty_project';
 import {getProjectBranch, concatValues, get_selected_object} from '../../core/projectManager'
 import api from './project_data_handling/api';
+import websocket from './project_data_handling/websocket';
 import object_manager from './project_data_handling/object_manager'
-import data_manager from './project_data_handling/data_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 
@@ -20,7 +20,9 @@ export default {
         selectedProcess: null,
         selectedPages: {},
         selectedNodes: {},
-        selectedElements: {}
+        selectedElements: {},
+
+        projectObjectStatuses: {}
 
     },
     getters: {
@@ -140,9 +142,8 @@ export default {
             }
             console.log('new project data', state.projectData['project_objects']);
         },
-        UPDATE_DATAFRAME(state, {ObjectId, command, Object}) {
-            Vue.set(state.dataFrames, ObjectId + '-' + command,  Object);
-            console.log('new data', state.dataFrames);
+        UPDATE_DATAFRAME(state, {ObjectId, command, data}) {
+            Vue.set(state.dataFrames, ObjectId + '-' + command,  data);
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
             for (let index = 0; index < state.projectData['project_objects'].length; index++) {
@@ -157,11 +158,14 @@ export default {
         },
         DELETE_DATA_OBJECT(state, ObjectId) {
             Vue.delete(state.projectData['project_data_objects'], ObjectId)
-        }
+        },
+        UPDATE_PROJECT_OBJECT_STATUS(state, {ObjectId, status}) {
+            Vue.set(state.projectObjectStatuses, ObjectId, status)
+        },
     },
     modules: {
         api,
         object_manager,
-        data_manager
+        websocket
     }
 };

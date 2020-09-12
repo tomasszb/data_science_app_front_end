@@ -46,6 +46,7 @@ export default {
       localStorage.setItem('project_id', projectID);
       localStorage.setItem('project_version', projectVersion);
 
+
       this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
       router.push('/app/main');
     }

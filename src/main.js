@@ -22,6 +22,8 @@ import App from './App';
 import { AuthMixin } from './mixins/auth';
 import config from './config';
 import Widget from './components/AppFeatures/Widget/Widget';
+import VueColumnsResizable from 'vue-columns-resizable';
+
 
 import webSocketService from './core/webSocketService'
 
@@ -36,7 +38,7 @@ if (token) {
 Vue.use(BootstrapVue, {
     BTooltip: {
         delay: {
-            show: 800,
+            show: 200,
             hide: 100,
         },
     },
@@ -60,6 +62,8 @@ Vue.use(VeeValidate, { fieldsBagName: 'fieldsbag' });
 Vue.use(VueFormWizard);
 Vue.mixin(AuthMixin);
 Vue.use(Toasted, {duration: 10000});
+Vue.use(VueColumnsResizable);
+
 
 Vue.use(webSocketService, store);
 

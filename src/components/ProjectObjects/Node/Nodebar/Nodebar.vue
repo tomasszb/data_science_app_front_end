@@ -2,9 +2,9 @@
     <div class="node-bar x-100">
         <div class="d-flex justify-content-start">
             <draggable v-model="nodeList" class="d-flex justify-content-start">
-                <Node
+                <NodeButton
                         v-for="nodeID in nodeList"
-                        class="px-2 py-1 po-node-pill mb-sm list-element"
+                        class="px-2 py-1 po-node-pill list-element"
                         :class="{'active-node':activeNode==nodeID}"
                         :key="'po-'+nodeID"
                         :nodeID="nodeID"
@@ -19,13 +19,13 @@
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
-    import Node from "../../ProjectObjects/Node/Node"
+    import NodeButton from "./NodeButton/NodeButton"
     import draggable from 'vuedraggable';
 
     export default {
         name: 'Nodebar',
         components: {
-            Node, draggable
+            NodeButton, draggable
         },
         prop: {
 

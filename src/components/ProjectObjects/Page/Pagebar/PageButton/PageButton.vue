@@ -6,6 +6,7 @@
                         v-if="pageID!=editedPage"
                         class="po-page-text"
                         @dblclick="editPage(pageID)">
+                    <i :class="'fa fa-circle mr-2 '+status" />
                     {{projectObjects[pageID].name}}
                 </div>
                 <input
@@ -35,7 +36,7 @@
     import {mapActions, mapGetters} from "vuex";
 
     export default {
-        name: 'Page',
+        name: 'PageButton',
         props: {
             pageID: { type: String, default: null },
             active: { type: Boolean, default: false}
@@ -56,6 +57,9 @@
             ...mapGetters('proj', [
                 'projectObjects'
             ]),
+            status() {
+                return 'no-data'
+            }
         },
         methods: {
             ...mapActions('proj/object_manager', [

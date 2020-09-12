@@ -1,4 +1,4 @@
-@import '../../../styles/app';
+@import '../../../../styles/app';
 
 
 
@@ -8,7 +8,7 @@
   border-right: solid 3px $gray-300;
   padding: 0;
   position: absolute;
-  bottom: 0;
+  bottom: 3px;
   //width: 230px;
   .pill-delete-x {
     float: right;
@@ -23,7 +23,7 @@
     float: left;
   }
   .active-node {
-    background-color: $white !important;
+    background-color: white !important;
     font-weight: 600 !important;
 
     //color: white;
@@ -64,8 +64,8 @@
     align-items: center;
     font-size: 14px;
     background-color: $gray-300;
-    height: 50px;
-    border-right: $white solid 2px;
+    height: 43px;
+    border-right: $body-bg solid 3px;
     font-weight: 400;
 
     //padding: 15px 20px 3px 20px!important;

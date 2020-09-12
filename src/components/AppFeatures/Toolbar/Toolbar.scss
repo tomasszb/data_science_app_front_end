@@ -1,6 +1,11 @@
 @import '../../../styles/app';
 
-
+.toolbox-dividor {
+  float:left;
+  border-right: 1px solid $gray-300;
+  height: 50%;
+  margin: 0px 10px 0px 10px;
+}
 
 .app-toolbar.navbar {
   height: $toolbar-height;
@@ -13,12 +18,7 @@
   font-weight: 500;
   justify-content: flex-start;
 
-  .toolbox-dividor {
-    float:left;
-    border-right: 2px solid $gray-300;
-    height: 90%;
-    margin: -4px 4px 0px 4px;
-  }
+
 
   .nav {
     height: 100%;

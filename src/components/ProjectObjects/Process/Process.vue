@@ -7,12 +7,10 @@
                 <Pagebar></Pagebar>
             </b-col>
             <b-col class="col-md-9 p-0">
-                <Elem></Elem>
+                <Node></Node>
                 <Nodebar></Nodebar>
             </b-col>
         </b-row>
-
-
 
         <DataConnectionModals v-if="processType===this.dsw_config.LOAD_PROCESS_CD"/>
         <DataPreparationModals v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD"/>
@@ -28,9 +26,9 @@ import DataPreparationModals from "../../ProjectObjectFeatures/DataPreparation/D
 import DataConnectionToolbar from "../../ProjectObjectFeatures/DataConnection/DataConnectionToolbar";
 import DataPreparationToolbar from "../../ProjectObjectFeatures/DataPreparation/DataPreparationToolbar";
 
-import Pagebar from "../../AppFeatures/Pagebar/Pagebar"
-import Nodebar from "../../AppFeatures/Nodebar/Nodebar"
-import Elem from "../Element/Element"
+import Pagebar from "../Page/Pagebar/Pagebar"
+import Nodebar from "../Node/Nodebar/Nodebar"
+import Node from "../Node/Node"
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -39,7 +37,7 @@ import dsw_config from "../../../dsw_config";
 export default {
     name: 'Process',
     components: {
-        Pagebar, Nodebar, Elem,
+        Pagebar, Nodebar, Node,
         DataConnectionModals, DataConnectionToolbar,
         DataPreparationModals, DataPreparationToolbar,
     },
@@ -49,15 +47,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions('proj/object_manager',['setActivePO']),
-
-        wsConnect () {
-            let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + this.projectData.project_id + "_" +this.projectData.owner_id+"/";
-            this.$webSocketConnect({"url": url})
-        },
-        wsDisconnect () {
-            this.$webSocketDisconnect()
-        }
+        ...mapActions('proj/object_manager',['setActivePO'])
     },
     computed: {
         ...mapState('proj', [

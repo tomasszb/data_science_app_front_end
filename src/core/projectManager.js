@@ -1,3 +1,7 @@
+import store from '../store/index'
+import {mapGetters, mapState} from "vuex";
+
+
 function comparePosition( a, b ) {
   if ( a.relative_position < b.relative_position ){
     return -1;
@@ -58,17 +62,26 @@ export function get_active_object(activeNew, activeOld, allList) {
 }
 
 
-export function createFlowRequest(elementList, filteredElementIDs, projectObjects, projectID, ownerID, dataObjects, src_request_id, elementCommands) {
+export function createFlowRequest(elementCommands, parentElements) {
+  let elementLists = store.getters['proj/elementLists'];
+  let projectObjects = store.getters['proj/projectObjects'];
+  let dataObjects = store.getters['proj/dataObjects'];
+
+  let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
   let request = {"action": "run_flow"};
   let elements = [];
   let project_data_objects = [];
-  for (const [parent_node_id, element_ids] of Object.entries(elementList)) {
+  let filteredElementIDs = getUpstreamElements(projectObjects, elementLists, [], parentElements);
+  let projectID = localStorage.getItem('project_id');
+
+  for (const [parent_node_id, element_ids] of Object.entries(elementLists)) {
     for (let index in element_ids) {
       let element_id = element_ids[index];
       if(filteredElementIDs.includes(element_id)) {
         let element = projectObjects[element_id];
         let parent_node = projectObjects[parent_node_id];
         element['source_data_node_id'] = parent_node['parameters']['source_data_node_id'];
+        console.log(element);
         element['command']  = element_id in elementCommands ? elementCommands[element_id] : "run";
         elements.push(element)
       }
@@ -82,7 +95,7 @@ export function createFlowRequest(elementList, filteredElementIDs, projectObject
   request['request']={};
   request['request']['src_request_id'] = src_request_id;
   request['request']["project_id"] = projectID;
-  request['request']["owner_id"] = ownerID;
+  // request['request']["owner_id"] = ownerID;
   request['request']['project_data_objects'] = project_data_objects;
   request['request']['elements'] = elements;
 
