@@ -6,6 +6,16 @@ import object_manager from './project_data_handling/object_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 
+function getObjectIndex(objectList, objectID) {
+    let index = null;
+    for (let i = 0; i < objectList.length; i++) {
+        if (objectList[i].id === objectID) {
+            index = i;
+        }
+    }
+    return index
+}
+
 export default {
     namespaced: true,
     state: {
@@ -37,6 +47,7 @@ export default {
             let dataObjects= {};
             state.projectData['project_data_objects'].forEach(function (i) {
                 dataObjects[i['id']]=i
+
             });
             return dataObjects
         },
@@ -134,30 +145,34 @@ export default {
             Vue.set(state.selectedElements, activeNode, activeElement);
         },
 
-        UPDATE_PROJECT_OBJECT(state, {ObjectId, Object}) {
-            for (let index = 0; index < state.projectData['project_objects'].length; index++) {
-                if (state.projectData['project_objects'][index].id.toString() === ObjectId){
-                    Vue.set(state.projectData['project_objects'], index,  Object);
-                }
+        UPDATE_PROJECT_OBJECT(state, {ObjectID, Object}) {
+            let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
+            if (index === null) {
+                state.projectData['project_objects'].push(Object)
             }
-            console.log('new project data', state.projectData['project_objects']);
+            else {
+                Vue.set(state.projectData['project_objects'], index, Object)
+            }
         },
-        UPDATE_DATAFRAME(state, {ObjectId, command, data}) {
-            Vue.set(state.dataFrames, ObjectId + '-' + command,  data);
+        UPDATE_DATAFRAME(state, {ObjectId, tableIndexName, data}) {
+            Vue.set(state.dataFrames, tableIndexName,  data);
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
-            for (let index = 0; index < state.projectData['project_objects'].length; index++) {
-                if (state.projectData['project_objects'][index].id.toString() === ObjectId){
-                    Vue.delete(state.projectData['project_objects'], index);
-                    console.log('deleting', ObjectId)
-                }
+            let index = getObjectIndex(state.projectData['project_objects'], ObjectId);
+            Vue.delete(state.projectData['project_objects'], index);
+        },
+        UPDATE_DATA_OBJECT(state, {ObjectID, Object}) {
+            let index = getObjectIndex(state.projectData['project_data_objects'], ObjectID);
+            if (index === null) {
+                state.projectData['project_data_objects'].push(Object)
+            }
+            else {
+                Vue.set(state.projectData['project_data_objects'], index, Object)
             }
         },
-        UPDATE_DATA_OBJECT(state, ObjectId, Object) {
-            Vue.set(state.projectData['project_data_objects'], ObjectId, Object)
-        },
         DELETE_DATA_OBJECT(state, ObjectId) {
-            Vue.delete(state.projectData['project_data_objects'], ObjectId)
+            let index = getObjectIndex(state.projectData['project_data_objects'], ObjectId);
+            Vue.delete(state.projectData['project_data_objects'], index);
         },
         UPDATE_PROJECT_OBJECT_STATUS(state, {ObjectId, status}) {
             Vue.set(state.projectObjectStatuses, ObjectId, status)

@@ -12,6 +12,20 @@ function comparePosition( a, b ) {
   return 0;
 }
 
+
+export function getEmptyDataObject(type) {
+  let object = {
+    'id': "_" + (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase(),
+    'type': type,
+    'group': Number(type.toString().slice(0,-2)),
+    'name': 'noname',
+    'owner_id': 1,
+    'parameters': {}
+  };
+  return object
+}
+
+
 export function getProjectBranch(projectObjects, parentIDs, parentName, groupID) {
   let objectList = null;
 
@@ -98,6 +112,8 @@ export function createFlowRequest(elementCommands, parentElements) {
   // request['request']["owner_id"] = ownerID;
   request['request']['project_data_objects'] = project_data_objects;
   request['request']['elements'] = elements;
+
+  console.log(request);
 
   return request
 }

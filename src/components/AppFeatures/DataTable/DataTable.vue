@@ -1,7 +1,7 @@
 <template>
     <div class = 'data-table'>
-        {{tableIndexName}}
 <!--        <v-server-table :columns="tableColumns" :options="tableOptions"/>-->
+<!--        {{[tableIndexName]}}-->
     <Widget
             title=""
             :class="{'data-table':true, 'loading': loading}"
@@ -77,17 +77,18 @@
 
 <script>
     import axios from "axios";
-    import {mapGetters, mapMutations, mapState} from "vuex";
+    import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
     import draggable from "vuedraggable";
     import Vue from 'vue';
     import Loader from '../Loader/Loader';
+    import { getEmptyDataObject, createFlowRequest } from '@/core/projectManager';
 
-    function waitForCondition(dataFrames, output_filter) {
+    function waitForCondition(dataFrames, tableIndexName) {
         return new Promise(resolve => {
             let start_time = Date.now();
             function checkFlag() {
-                if (typeof dataFrames[output_filter]!== "undefined") {
-                    resolve( {data: dataFrames[output_filter], count: 1000});
+                if (typeof dataFrames[tableIndexName]!== "undefined") {
+                    resolve( {data: dataFrames[tableIndexName], count: 1000});
                 } else {
                         window.setTimeout(checkFlag, 200);
                     }
@@ -110,75 +111,18 @@
                 tableKey:this.elementID+'-table-no-data',
                 pageSize: this.pageSizes[0],
                 pageIndex: 1,
-                countRow:102,
+                countRow:10000,
                 loading: false,
-                columns: [
-                    {'name': 'Column 1', 'width': '10ch', 'sort': true, 'ascending': true},
-                    {'name': 'Column 2', 'width': '10ch', 'sort': true, 'ascending': false},
-                    {'name': 'Column 3', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 4', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 5', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 6', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 7', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 8', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 9', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 10', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 11', 'width': '10ch', 'sort': false, 'ascending': true},
-                    {'name': 'Column 12', 'width': '10ch', 'sort': false, 'ascending': true},
-                ],
-                tableData: [
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 234123214, 'Column 2': 232332, 'Column 3': 132413421, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 'dweiudhqweoidhqewiuodqhwdohqwiodhwqiewhewi', 'Column 2': 432, 'Column 3': 31423124, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 142332, 'Column 2': 232, 'Column 3': 1432143234, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 3421, 'Column 2': 323, 'Column 3': 3421342342, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421},
-                    {'Column 1': 32143423, 'Column 2': 423, 'Column 3': 134232, 'Column 4': 234123214, 'Column 5': 1324334324, 'Column 6': 132413421, 'Column 7': 234123214, 'Column 8': 1324334324, 'Column 9': 132413421, 'Column 10': 234123214, 'Column 11': 1324334324, 'Column 12': 132413421}
-
-                ]
+                columns: [],
+                tableData: []
             }
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_DATA_OBJECT'
+                'UPDATE_DATA_OBJECT', 'CREATE_DATA_OBJECT', 'UPDATE_PROJECT_OBJECT'
+            ]),
+            ...mapActions('proj', [
+                'createDO'
             ]),
             changePageSize(value) {
                 Vue.set(this, 'pageSize', value);
@@ -191,17 +135,35 @@
                     Vue.set(this.columns[i], 'ascending' , true);
                 }
             },
-            updateFilter(start, end) {
-                let dataLen = null;
-                let filterObject = Object.assign({}, this.dataObjects[this.outputFilterID]);
-                filterObject['parameters']['kwargs'] = {'conditions': [{'column':null, 'type':'iloc', 'value':[start, end]}]};
-                this.UPDATE_DATA_OBJECT(this.outputFilterID, filterObject);
+            updateFilterObject() {
+                let Element = Object.assign({}, this.projectObjects[this.elementID]);
+                let outputFilterID = Element.parameters['output_filter_id'];
+                let Filter = {};
+                if (outputFilterID === null) {
+                    Filter = getEmptyDataObject(200);
+                    Element.parameters['output_filter_id'] = Filter.id;
+                    this.UPDATE_PROJECT_OBJECT({ObjectID: Element.id, Object: Element});
+                }
+                else {
+                    Filter = Object.assign({}, this.dataObjects[outputFilterID]);
+                }
+                Filter.parameters = {'kwargs': this.filterKwargs};
+                this.UPDATE_DATA_OBJECT({ObjectID: Filter.id, Object: Filter});
             },
-            updateSort(sortList) {
-                let dataLen = null;
-                let sortObject = Object.assign({}, this.dataObjects[this.outputSortID]);
-                sortObject['parameters']['kwargs'] = {'conditions': sortList};
-                this.UPDATE_DATA_OBJECT(this.outputSortID, sortObject);
+            updateSortObject() {
+                let Element = Object.assign({}, this.projectObjects[this.elementID]);
+                let outputSortID = this.projectObjects[this.elementID].parameters['output_sort_id'];
+                let Sort = {};
+                if (outputSortID === null) {
+                    Sort = getEmptyDataObject(204);
+                    Element.parameters['output_sort_id'] = Sort.id;
+                    this.UPDATE_PROJECT_OBJECT({ObjectID: Element.id, Object: Element});
+                }
+                else {
+                    Sort = Object.assign({}, this.dataObjects[outputSortID]);
+                }
+                Sort.parameters = {'kwargs': this.sortKwargs};
+                this.UPDATE_DATA_OBJECT({ObjectID: Sort.id, Object: Sort});
             },
             toggleSort(event, columnIndex) {
                 let oldSettings = Object.assign({}, this.columns[columnIndex]);
@@ -225,9 +187,38 @@
             },
             requestTable() {
                 this.loading = true;
-                setTimeout(function() {
-                    this.loading = false;
-                }.bind(this), 500);
+                this.updateFilterObject();
+                this.updateSortObject();
+                console.log('here1');
+                const promise = waitForCondition(this.dataFrames, this.tableIndexName);
+
+                if(typeof this.dataFrames[this.tableIndexName] === "undefined"){
+                    let request = createFlowRequest({}, [this.activeElement]);
+                    this.$newRequest(request['request']['src_request_id'], request['request']['elements'].length);
+                    this.$webSocketSend(request);
+                }
+
+                promise.then(
+                    function(result) {
+                        console.log('here2', result);
+                        this.tableData = result['data'];
+                        let columns = [];
+                        for (let columnName of Object.keys(this.tableData[0])) {
+                            let result =  {'name': columnName, 'sort': false, 'ascending': true};
+                            for (let condition of this.sortKwargs['conditions']) {
+                                if (condition.column === result.name) {
+                                    result.name = condition.column;
+                                    result.sort = true;
+                                    result.ascending = condition.ascending;
+                                }
+                            }
+                            columns.push(result)
+                        };
+                        this.columns = columns;
+                        this.loading = false;
+                    }.bind(this), function() {
+                        alert('error')
+                    })
             },
 
             refreshTable() {
@@ -236,39 +227,19 @@
         },
         computed: {
             ...mapState('proj', [
-                    'dataFrames',
+                    'dataFrames', 'projectData'
                 ]),
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects', 'ProjectTree',
                 'processList', 'pageLists', 'nodeLists', 'elementLists',
                 'activeProcess', 'activePage', 'activeNode', 'activeElement'
             ]),
-            // outputFilterID() {
-            //     let FilterID = this.projectObjects[this.activeElement].parameters['output_filter_id'];
-            //     if(FilterID===null) {
-            //         FilterID = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            //     }
-            //     return FilterID
-            // },
-            // outputSortID() {
-            //     let SortID = this.projectObjects[this.activeElement].parameters['output_sort_id'];
-            //     if(SortID===null) {
-            //         SortID = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            //     }
-            //     return SortID
-            // },
-            // outputFilterKwargs() {
-            //     return this.dataObjects[this.outputFilterID]['parameters']['kwargs']
-            // },
-            // outputSortKwargs() {
-            //     return this.dataObjects[this.outputSortID]['parameters']['kwargs']
-            // },
-            // tableIndexName() {
-            //     return this.elementID + "-run" + JSON.stringify(this.outputFilterKwargs)
-            // },
-            // tableIndexNameNew() {
-            //     return this.elementID + "-run" + JSON.stringify(this.outputFilterKwargs) + "-" + JSON.stringify(this.outputSortKwargs)
-            // },
+            outputFilterID() {
+                return this.projectObjects[this.activeElement].parameters['output_filter_id'];
+            },
+            outputSortID() {
+                return this.projectObjects[this.activeElement].parameters['output_sort_id'];
+            },
             tableColumns() {
                 return typeof this.dataFrames[this.tableIndexName]!== "undefined" ? Object.keys(this.dataFrames[this.tableIndexName][0]) : ['col']
             },
@@ -286,7 +257,7 @@
                 for(let i = 0; i < this.columns.length; i++) {
                     let column = this.columns[i];
                     if (column.sort) {
-                        sortList.push({'name': column.name, 'asc': column.ascending})
+                        sortList.push({'column': column.name, 'ascending': column.ascending})
                     }
                 }
                 return {'conditions': sortList};
@@ -294,6 +265,9 @@
             tableIndexName() {
                 return this.elementID + "-run" + JSON.stringify(this.filterKwargs) + "-" + JSON.stringify(this.sortKwargs)
             }
+        },
+        created() {
+            this.requestTable()
         }
     }
 </script>

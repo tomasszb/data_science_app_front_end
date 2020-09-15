@@ -82,7 +82,6 @@ export default {
     },
   },
   created() {
-    window.console.log('here');
     this.setActiveByRoute();
   },
   computed: {
