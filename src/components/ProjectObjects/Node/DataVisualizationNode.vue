@@ -1,17 +1,16 @@
 <template>
     <div>
-        <v-if=DataConnectionElement></v-ifDataConnectionElement>
-
+        <DataVisualizationElement></DataVisualizationElement>
     </div>
 </template>
 
 <script>
     import { mapGetters} from "vuex";
-    import DataConnectionElement from "../Element/DataConnectionElement"
+    import DataVisualizationElement from "../Element/DataVisualizationElement"
 
     export default {
         name: "Node",
-        components: { DataConnectionElement },
+        components: { DataVisualizationElement },
         computed: {
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects', 'ProjectTree',

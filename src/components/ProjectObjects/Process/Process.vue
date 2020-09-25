@@ -1,19 +1,47 @@
 <template>
-    <div class="po-process">
-        <DataConnectionToolbar v-if="processType===this.dsw_config.LOAD_PROCESS_CD"/>
-        <DataPreparationToolbar v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD"/>
-        <b-row class="y-100 m-0">
-            <b-col class="col-md-3 p-0">
-                <Pagebar></Pagebar>
-            </b-col>
-            <b-col class="col-md-9 p-0">
-                <Node></Node>
-                <Nodebar></Nodebar>
-            </b-col>
-        </b-row>
+    <div class="app-container">
 
-        <DataConnectionModals v-if="processType===this.dsw_config.LOAD_PROCESS_CD"/>
-        <DataPreparationModals v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD"/>
+        <div v-if="processType===this.dsw_config.LOAD_PROCESS_CD" class="po-process">
+            <DataConnectionToolbar/>
+            <b-row class="y-100 m-0">
+                <b-col class="col-md-2 p-0">
+                    <Pagebar></Pagebar>
+                </b-col>
+                <b-col class="col-md-10 p-0">
+                    <DataConnectionNode/>
+                    <Nodebar></Nodebar>
+                </b-col>
+<!--                <DataConnectionModals/>-->
+            </b-row>
+        </div>
+
+        <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="po-process">
+            <DataPreparationToolbar/>
+            <b-row class="y-100 m-0">
+                <b-col class="col-md-2 p-0">
+                    <Pagebar></Pagebar>
+                </b-col>
+                <b-col class="col-md-10 p-0">
+<!--                    <DataPreparationNode/>-->
+                    <Nodebar></Nodebar>
+                </b-col>
+                <DataPreparationModals/>
+            </b-row>
+        </div>
+
+        <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="po-process">
+            <DataConnectionToolbar/>
+            <b-row class="y-100 m-0">
+                <b-col class="col-md-2 p-0">
+                    <PageColumnbar></PageColumnbar>
+                </b-col>
+                <b-col class="col-md-10 p-0">
+                    <DataVisualizationNode/>
+                </b-col>
+                <Nodebar></Nodebar>
+            </b-row>
+<!--            <DataVisualizationModals/>-->
+        </div>
     </div>
 
 </template>
@@ -27,8 +55,11 @@ import DataConnectionToolbar from "../../ProjectObjectFeatures/DataConnection/Da
 import DataPreparationToolbar from "../../ProjectObjectFeatures/DataPreparation/DataPreparationToolbar";
 
 import Pagebar from "../Page/Pagebar/Pagebar"
+import PageColumnbar from "../Page/PageColumnbar/PageColumnbar"
 import Nodebar from "../Node/Nodebar/Nodebar"
-import Node from "../Node/Node"
+
+import DataConnectionNode from "../Node/DataConnectionNode"
+import DataVisualizationNode from "../Node/DataVisualizationNode"
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -37,7 +68,8 @@ import dsw_config from "../../../dsw_config";
 export default {
     name: 'Process',
     components: {
-        Pagebar, Nodebar, Node,
+        Pagebar, Nodebar, PageColumnbar,
+        DataConnectionNode, DataVisualizationNode,
         DataConnectionModals, DataConnectionToolbar,
         DataPreparationModals, DataPreparationToolbar,
     },

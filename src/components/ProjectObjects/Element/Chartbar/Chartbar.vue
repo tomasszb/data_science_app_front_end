@@ -1,32 +1,26 @@
 <template>
-    <div class="page-bar y-100">
-        <draggable v-model="pageList">
-            <PageButton
-                    v-for="pageID in pageList"
-                    class="px-4 py-3 po-page-pill mb-sm list-element"
-                    :class="{'active-page':activePage==pageID}"
-                    :key="'po-'+pageID"
-                    :pageID="pageID"
-                    :active="activePage===pageID"
-            />
-            <div class="px-4 py-3 border page-add mb-sm list-element align-items-center">
-                <b-button variant="outline-success" v-b-modal="'new-connector'" class="mb-xs mr-xs">
-                    <i class="fa fa-plus" />
-                </b-button>
-            </div>
-        </draggable>
+    <div class="chart-bar y-100">
+        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>
+        <ChartTypeSelector/>
+        <ChartDataCard chartType=""/>
+        <Widget
+                class="mb-2"
+                title="<h5>Chart<span class='fw-semi-bold'> Layout</span></h5>"
+                collapse customHeader>
+        </Widget>
     </div>
 </template>
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
-    import PageButton from "./PageButton/PageButton"
     import draggable from 'vuedraggable';
+    import ChartTypeSelector from "./ChartTypeSelector/ChartTypeSelector";
+    import ChartDataCard from "./ChartTypeSelector/ChartDataCard/ChartDataCard";
 
     export default {
-        name: 'Pagebar',
+        name: 'Chartbar',
         components: {
-            PageButton, draggable
+            ChartTypeSelector, ChartDataCard, draggable
         },
         prop: {
 
@@ -63,4 +57,4 @@
     };
 </script>
 
-<style src="./Pagebar.scss" lang="scss"></style>
+<style src="./Chartbar.scss" lang="scss"></style>

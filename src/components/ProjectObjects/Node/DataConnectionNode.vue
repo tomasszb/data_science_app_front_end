@@ -1,7 +1,6 @@
 <template>
     <div>
-        <v-if=DataConnectionElement></v-ifDataConnectionElement>
-
+        <DataConnectionElement></DataConnectionElement>
     </div>
 </template>
 

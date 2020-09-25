@@ -5,6 +5,8 @@
 .node-bar {
   //float:left;
   background-color: $gray-300;
+  //box-shadow: var(--widget-shadow);
+  border-top: solid 4px white;
   border-right: solid 3px $gray-300;
   padding: 0;
   position: absolute;

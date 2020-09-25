@@ -4,7 +4,7 @@ export default {
     [100]: {'sideIcon': 'flaticon-database-1', 'link': 'proc'},
     [101]: {'sideIcon': 'flaticon-server-1', 'link': 'proc'},
     [102]: {'sideIcon': 'flaticon-upload', 'link': 'proc'},
-    [103]: {'sideIcon': 'flaticon-database-1', 'link': 'proc'},
+    [103]: {'sideIcon': 'flaticon-controls', 'link': 'proc'},
   },
   // ################################  PROJECT OBJECTS  ################################
 
