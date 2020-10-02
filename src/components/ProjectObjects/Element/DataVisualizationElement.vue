@@ -1,20 +1,14 @@
 <template>
     <div>
-        <b-row class="y-100 m-0">
-            <b-col class="col-md-3 p-0">
-                <Chartbar/>
-            </b-col>
-            <b-col class="col-md-9 p-0">
-                <Widget
-                        title=""
-                        :class="{'data-table':true}"
-                        refresh settings customHeader fullscreen
-                        :showLoader="false"
-                >
-                    <echart :options="bar" :init-options="initOptions"></echart>
-                </Widget>
-            </b-col>
-        </b-row>
+        <Chartbar/>
+        <Widget
+                title=""
+                class="chart-area"
+                refresh settings customHeader fullscreen
+                :showLoader="false"
+        >
+            <echart :options="bar" :init-options="initOptions"></echart>
+        </Widget>
     </div>
 </template>
 

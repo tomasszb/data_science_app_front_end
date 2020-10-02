@@ -6,14 +6,37 @@
   border-radius: 6px;
   display: block;
   //min-height: 30px;
+  overflow: scroll!important;
+  display: block;
 }
 
+.chart-area {
+  width: 70%;
+  margin: 0;
+  float: left;
+  height: calc(100vh - 100px);
+}
 .chart-bar {
   //float:left;
   //background-color: $gray-200;
+  width:30%;
+  float: left;
   border-right: solid 3px $gray-200;
   padding: 1em;
+  overflow: scroll!important;
+  height: calc(100vh - 100px);
   //width: 230px;
+
+  .collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+  }
+
+  .chart-settings {
+    overflow: scroll!important;
+    display: block;
+  }
 
   .no-data {
     display: none;

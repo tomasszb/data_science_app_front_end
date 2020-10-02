@@ -3,7 +3,7 @@
 
         <div v-if="processType===this.dsw_config.LOAD_PROCESS_CD" class="po-process">
             <DataConnectionToolbar/>
-            <b-row class="y-100 m-0">
+            <b-row class="m-0 content-space">
                 <b-col class="col-md-2 p-0">
                     <Pagebar></Pagebar>
                 </b-col>
@@ -17,7 +17,7 @@
 
         <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="po-process">
             <DataPreparationToolbar/>
-            <b-row class="y-100 m-0">
+            <b-row class="m-0 content-space">
                 <b-col class="col-md-2 p-0">
                     <Pagebar></Pagebar>
                 </b-col>
@@ -31,15 +31,13 @@
 
         <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="po-process">
             <DataConnectionToolbar/>
-            <b-row class="y-100 m-0">
-                <b-col class="col-md-2 p-0">
-                    <PageColumnbar></PageColumnbar>
-                </b-col>
-                <b-col class="col-md-10 p-0">
+            <div class="content-space">
+                <div class="node-space">
+                    <PageColumnbar/>
                     <DataVisualizationNode/>
-                </b-col>
+                </div>
                 <Nodebar></Nodebar>
-            </b-row>
+            </div>
 <!--            <DataVisualizationModals/>-->
         </div>
     </div>

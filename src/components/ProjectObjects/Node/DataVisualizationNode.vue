@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="po-node">
         <DataVisualizationElement></DataVisualizationElement>
     </div>
 </template>

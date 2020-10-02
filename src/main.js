@@ -4,6 +4,7 @@ import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import VueTouch from 'vue-touch';
 import Trend from 'vuetrend';
+
 import { ClientTable, ServerTable } from 'vue-tables-2';
 import VueTextareaAutosize from 'vue-textarea-autosize';
 import mavonEditor from 'mavon-editor';

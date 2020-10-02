@@ -22,7 +22,7 @@
     --sidebar-progress-bg-color: var(--sidebar-action-bg);
     --sidebar-icon-active: var(--sidebar-bg-color);
     --sidebar-item-hover-bg-color: var(--sidebar-action-bg);
-    --widget-shadow: 4px 4px 30px rgba(var(--widget-shadow-color), 0.2);
+    --widget-shadow: 1px 1px 5px rgba(var(--widget-shadow-color), 0.15);
 
     &.sidebar-white {
       --sidebar-bg-color: #ffffff;
