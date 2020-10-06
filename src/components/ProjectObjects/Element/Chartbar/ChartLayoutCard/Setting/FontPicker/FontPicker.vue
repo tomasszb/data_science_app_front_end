@@ -1,14 +1,21 @@
 <template>
-    <div>
-        {{title}}
+    <div class="font-picker-form">
+        <div class="chart-setting-title">
+            {{setting.title}}:
+        </div>
+        <div class="font-picker">
+
+        </div>
     </div>
+
 </template>
 
 <script>
+
     export default {
-        name: "ColorPicker",
+        name: "FontPicker",
         props: {
-            title: { type: String, default: '' }
+            setting: { type: Object, default: function() {return {}} }
         },
     }
 </script>

@@ -1,21 +1,39 @@
 <template>
     <div class="chart-bar">
-        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>
+<!--        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>-->
         <ChartTypeSelector :chartsSettings="chartsSettings"/>
         <ChartSettingSelector :chartLayoutSelectors="chartLayoutSelectors"/>
 <!--        <img :src="" />-->
-        <div class="chart-settings">
-            <ChartDataCard :chartDataFields="chartDataFields"/>
-            <ChartLayoutCard
-                    :chartsLayoutSettings="chartLayoutSettings"
-                    :chartLayoutPartPictures="chartLayoutPartPictures"
-                    :chartLayoutTypePictures="chartLayoutTypePictures"
-            />
+        <div class="chart-settings p-1">
+
+            <div class="card panel mb-xs" v-for="(card, index) in chartCards">
+                <div class="card-header panel-header py-2 px-3 mb-0" role="button" @click="toggleAccordion(index)">
+                    <a class="accordion-toggle" role="button">
+                        <h5 v-if="card === 'chart-data-card'">chart <strong>Data</strong></h5>
+                        <h5 v-if="card === 'chart-layout-card'">chart <strong>Layout</strong></h5>
+                        <i :class="`fa fa-angle-down ${(openSettings === card) ? 'expanded' : ''}`" />
+                    </a>
+                </div>
+                <b-collapse id="accordion-second" class="panel-body" :visible="openSettings === card">
+                    <div v-if="card === 'chart-data-card'" class="card-body py-1">
+                        <ChartDataCard :chartDataFields="chartDataFields"/>
+                    </div>
+                    <div v-if="card === 'chart-layout-card'" class="card-body py-1">
+                        <ChartLayoutCard
+                                :chartsLayoutSettings="chartLayoutSettings"
+                                :chartLayoutPartPictures="chartLayoutPartPictures"
+                                :chartLayoutTypePictures="chartLayoutTypePictures"
+                        />
+                    </div>
+                </b-collapse>
+                <div v-if="index===0" class="separator"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import Vue from 'vue'
     import {mapGetters, mapMutations, mapState} from "vuex";
     import draggable from 'vuedraggable';
     import ChartLayoutCard from "./ChartLayoutCard/ChartLayoutCard"
@@ -37,13 +55,23 @@
             ...mapMutations('proj', [
                 'UPDATE_PROJECT_OBJECT'
             ]),
+            toggleAccordion(index) {
+                if (this.openSettings !== this.chartCards[index]) {
+                    Vue.set(this,'openSettings', this.chartCards[index]);
+                } else {
+                    index = (index + 1) % 2;
+                    Vue.set(this,'openSettings', this.chartCards[index]);
+                }
+            },
         },
         data() {
             return {
                 chartsSettings: chartsSettings,
                 chartsDataFields: chartsDataFields,
                 chartLayoutPartPictures: chartLayoutPartPictures,
-                chartLayoutTypePictures: chartLayoutTypePictures
+                chartLayoutTypePictures: chartLayoutTypePictures,
+                chartCards: ['chart-data-card', 'chart-layout-card'],
+                openSettings: 'chart-data-card'
             }
         },
         computed: {

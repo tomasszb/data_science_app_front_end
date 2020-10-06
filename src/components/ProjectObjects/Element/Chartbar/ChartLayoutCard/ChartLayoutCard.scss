@@ -1,5 +1,17 @@
 @import '../../../../../styles/app';
 
+.chart-layout {
+  background-color: white;
+
+  i {
+    color: $gray-400;
+  }
+
+  .panel-body {
+    background-color: $gray-100;
+  }
+}
+
 .chart-data-card {
   //border: 3px solid rgba(var(--widget-shadow-color), 0.05);
 }

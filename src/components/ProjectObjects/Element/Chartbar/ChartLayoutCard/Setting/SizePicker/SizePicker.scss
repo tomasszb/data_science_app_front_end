@@ -1,1 +1,17 @@
 @import '../../../../../../../styles/app';
+
+.size-picker-form {
+  display: flex;
+  align-items: center;
+
+  .size-picker {
+    width: 50%!important;
+    float: left;
+    display: inline-block;
+  }
+
+  .btn {
+    background-color: $gray-100!important;
+    border: none!important;
+  }
+}

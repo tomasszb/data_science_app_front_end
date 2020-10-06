@@ -18,13 +18,13 @@
         <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="po-process">
             <DataPreparationToolbar/>
             <b-row class="m-0 content-space">
-                <b-col class="col-md-2 p-0">
+                <b-col class="col-md-4 p-0">
                     <Pagebar></Pagebar>
                 </b-col>
-                <b-col class="col-md-10 p-0">
-<!--                    <DataPreparationNode/>-->
-                    <Nodebar></Nodebar>
+                <b-col class="col-md-8 p-0">
+                    <DataPreparationNode/>
                 </b-col>
+                <Nodebar></Nodebar>
                 <DataPreparationModals/>
             </b-row>
         </div>
@@ -57,6 +57,7 @@ import PageColumnbar from "../Page/PageColumnbar/PageColumnbar"
 import Nodebar from "../Node/Nodebar/Nodebar"
 
 import DataConnectionNode from "../Node/DataConnectionNode"
+import DataPreparationNode from "../Node/DataPreparationNode"
 import DataVisualizationNode from "../Node/DataVisualizationNode"
 
 import { mapState, mapGetters, mapActions} from "vuex";
@@ -67,7 +68,7 @@ export default {
     name: 'Process',
     components: {
         Pagebar, Nodebar, PageColumnbar,
-        DataConnectionNode, DataVisualizationNode,
+        DataConnectionNode, DataVisualizationNode, DataPreparationNode,
         DataConnectionModals, DataConnectionToolbar,
         DataPreparationModals, DataPreparationToolbar,
     },

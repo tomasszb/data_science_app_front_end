@@ -1,7 +1,7 @@
 <template>
     <div class = 'data-table'>
 <!--        <v-server-table :columns="tableColumns" :options="tableOptions"/>-->
-<!--        {{[tableIndexName]}}-->
+        {{[tableIndexName]}}
     <Widget
             title=""
             :class="{'data-table':true, 'loading': loading}"

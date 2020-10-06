@@ -1,15 +1,12 @@
 <template>
-    <Widget
-            class="mb-2 chart-data-card"
-            title="<h5>Chart<span class='fw-semi-bold'> Data</span></h5>"
-            collapse customHeader>
-
+    <div class="mb-2 chart-data-card p-2">
         <div v-for="settings in chartDataFields" v-if="!inactiveChartSettings.includes(settings.selector)">
-            <div class="mb-1">{{settings.name}}</div>
-            <div class="chart-column-container p-3 pb-3 mb-2"></div>
+            <div class="chart-column mb-1">
+                <div class="chart-column-label mb-1">{{settings.name}} :</div>
+                <div class="chart-column-container p-3 pb-3 mb-2"></div>
+            </div>
         </div>
-
-    </Widget>
+    </div>
 </template>
 
 <script>

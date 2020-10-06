@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{title}}
+        {{setting.title}}
     </div>
 </template>
 
@@ -8,7 +8,7 @@
     export default {
         name: "ColorPicker",
         props: {
-            title: { type: String, default: '' }
+            setting: { type: Object, default: function() {return {}} }
         },
     }
 </script>

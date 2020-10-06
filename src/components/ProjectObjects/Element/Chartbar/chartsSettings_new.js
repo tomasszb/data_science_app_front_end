@@ -8,6 +8,7 @@ import lineStackedAreaChart from '@/assets/charts/line_stacked_area.png';
 import barStackedChart from '@/assets/charts/bar_stacked.png';
 import pivotTable from '@/assets/charts/table_simple.png';
 
+import general from '@/assets/icons/svg/chartparts-select.svg'
 import title from '@/assets/icons/svg/chartparts-text.svg'
 import border from '@/assets/icons/svg/chartparts-border-style.svg'
 import size from '@/assets/icons/svg/chartparts-scale.svg'
@@ -26,47 +27,47 @@ export let chartsSettings = {
     'line': {
         'name': 'lineChart',
         'chartPicture': lineChart,
-        'layout_elements': ['grid', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'markerS', 'tooltip'] },
     'lineA': {
         'name': 'lineAreaChart',
         'chartPicture': lineAreaChart,
-        'layout_elements': ['grid', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'markerS', 'tooltip']},
     'lineSA': {
         'name': 'lineStackedAreaChart',
         'chartPicture': lineStackedAreaChart,
-        'layout_elements': ['grid', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'markerS', 'tooltip']},
     'bar': {
         'name': 'barChart',
         'chartPicture': barChart,
-        'layout_elements': ['grid', 'title', 'legend', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'tooltip']},
     'barS': {
         'name': 'barStackedChart',
         'chartPicture': barStackedChart,
-        'layout_elements': ['grid', 'title', 'legend', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'tooltip']},
     'scatter': {
         'name': 'scatterChart',
         'chartPicture': scatterChart,
-        'layout_elements': ['grid', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'xaxis', 'yaxis', 'color', 'size', 'tooltip']},
     'treemap': {
         'name': 'treeMapChart',
         'chartPicture': treeMapChart,
-        'layout_elements': ['grid', 'title', 'legend', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'xaxis', 'yaxis', 'color', 'size', 'tooltip']},
     'map': {
         'name': 'mapChart',
         'chartPicture': mapChart,
-        'layout_elements': ['grid', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'latitude', 'longitude', 'tooltip']},
     'pivot': {
         'name': 'pivotTable',
         'chartPicture': pivotTable,
-        'layout_elements': ['grid', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
+        'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
         'data_fields': ['xgrid', 'ygrid', 'columns', 'rows', 'values', 'color', 'tooltip']}
 };
 
@@ -92,7 +93,7 @@ export let chartsDataFields = [
 
 
 export let chartLayoutPartPictures = {
-    'general': tooltip,
+    'general': general,
     'title': title,
     'grid': grid,
     'xaxis': xaxis,
@@ -110,38 +111,38 @@ export let chartLayoutTypePictures= {
 };
 
 export let chartsLayoutSettings = [
-    {'element': 'general', 'type': 'bcolor', 'form': 'color', 'title': 'Background Color', 'setting_id': 'chart_bcolor', 'selector': null},
-    {'element': 'general', 'type': 'size', 'form': 'coordinates', 'title': 'Chart Size', 'setting_id': 'chart_size', 'selector': null},
-    {'element': 'general', 'type': 'border', 'form': 'border', 'title': 'Chart Border', 'setting_id': 'chart_border', 'selector': null},
+    {'element': 'general', 'type': 'bcolor', 'form': 'color', 'form_detail': null, 'title': 'background color', 'setting_id': 'chart_bcolor', 'selector': null},
+    {'element': 'general', 'type': 'size', 'form': 'coordinates', 'form_detail': 'size', 'title': 'chart size', 'setting_id': 'chart_size', 'selector': null},
+    {'element': 'general', 'type': 'border', 'form': 'border', 'form_detail': null, 'title': 'chart border', 'setting_id': 'chart_border', 'selector': null},
 
-    {'element': 'title', 'type': 'position', 'form': 'coordinates', 'title': 'Chart Title Position', 'setting_id': 'title_coordinates', 'selector': 'title'},
-    {'element': 'title', 'type': 'title', 'form': 'text', 'title': 'Chart Title', 'setting_id': 'title_text', 'selector': 'title'},
-    {'element': 'title', 'type': 'font', 'form': 'coordinates', 'title': 'Chart Size', 'setting_id': 'title_font', 'selector': 'title'},
-    {'element': 'title', 'type': 'border', 'form': 'border', 'title': 'Chart Border', 'setting_id': 'title_border', 'selector': 'title'},
+    {'element': 'title', 'type': 'title', 'form': 'text', 'form_detail': null, 'title': 'title text', 'setting_id': 'title_text', 'selector': 'title'},
+    {'element': 'title', 'type': 'position', 'form': 'size', 'form_detail': 'offset', 'title': 'position offset', 'setting_id': 'title_coordinates', 'selector': 'title'},
+    {'element': 'title', 'type': 'font', 'form': 'style', 'form_detail': 'font', 'title': 'title size', 'setting_id': 'title_font', 'selector': 'title'},
+    {'element': 'title', 'type': 'border', 'form': 'border', 'form_detail': null, 'title': 'title border', 'setting_id': 'title_border', 'selector': 'title'},
 
-    {'element': 'legend', 'type': 'position', 'form': 'position', 'title': 'Horizontal Position', 'setting_id': 'legend_position', 'selector': 'legend'},
-    {'element': 'legend', 'type': 'title', 'form': 'text', 'title': 'Legend Title', 'setting_id': 'legend_title', 'selector': 'legend'},
-    {'element': 'legend', 'type': 'font', 'form': 'font', 'title': 'Legend Font', 'setting_id': 'legend_font', 'selector': 'legend'},
-    {'element': 'legend', 'type': 'border', 'form': 'border', 'title': 'Legend Border', 'setting_id': 'legend_border', 'selector': 'legend'},
+    {'element': 'legend', 'type': 'title', 'form': 'text', 'form_detail': null, 'title': 'legend title', 'setting_id': 'legend_title', 'selector': 'legend'},
+    {'element': 'legend', 'type': 'position', 'form': 'position', 'form_detail': null, 'title': 'horizontal position', 'setting_id': 'legend_position', 'selector': 'legend'},
+    {'element': 'legend', 'type': 'font', 'form': 'style', 'form_detail': 'font', 'title': 'legend font', 'setting_id': 'legend_font', 'selector': 'legend'},
+    {'element': 'legend', 'type': 'border', 'form': 'border', 'form_detail': null, 'title': 'legend border', 'setting_id': 'legend_border', 'selector': 'legend'},
 
-    {'element': 'xaxis', 'type': 'position', 'form': 'coordinates', 'title': 'X Axis Offset', 'setting_id': 'xaxis_offset', 'selector': 'xaxis'},
-    {'element': 'xaxis', 'type': 'title', 'form': 'text', 'title': 'X Axis Title', 'setting_id': 'xaxis_title', 'selector': 'xaxis'},
-    {'element': 'xaxis', 'type': 'font', 'form': 'font', 'title': 'X Axis Font', 'setting_id': 'xaxis_font', 'selector': 'xaxis'},
-    {'element': 'xaxis', 'type': 'border', 'form': 'border', 'title': 'X Axis Border', 'setting_id': 'xaxis_border', 'selector': 'xaxis'},
+    {'element': 'xaxis', 'type': 'title', 'form': 'text', 'form_detail': null, 'title': 'x axis title', 'setting_id': 'xaxis_title', 'selector': 'xaxis'},
+    {'element': 'xaxis', 'type': 'position', 'form': 'size', 'form_detail': 'offset', 'title': 'x axis offset', 'setting_id': 'xaxis_offset', 'selector': 'xaxis'},
+    {'element': 'xaxis', 'type': 'font', 'form': 'style', 'form_detail': 'font', 'title': 'x axis font', 'setting_id': 'xaxis_font', 'selector': 'xaxis'},
+    {'element': 'xaxis', 'type': 'border', 'form': 'border', 'form_detail': null, 'title': 'x axis border', 'setting_id': 'xaxis_border', 'selector': 'xaxis'},
 
-    {'element': 'yaxis', 'type': 'position', 'form': 'coordinates', 'title': 'Y Axis Offset', 'setting_id': 'yaxis_offset', 'selector': 'y axis'},
-    {'element': 'yaxis', 'type': 'title', 'form': 'text', 'title': 'Y Axis Title', 'setting_id': 'yaxis_title', 'selector': 'y axis'},
-    {'element': 'yaxis', 'type': 'font', 'form': 'font', 'title': 'Y Axis Font', 'setting_id': 'yaxis_font', 'selector': 'y axis'},
-    {'element': 'yaxis', 'type': 'border', 'form': 'border', 'title': 'Y Axis Border', 'setting_id': 'yaxis_border', 'selector': 'y axis'},
+    {'element': 'yaxis', 'type': 'title', 'form': 'text', 'form_detail': null, 'title': 'y axis title', 'setting_id': 'yaxis_title', 'selector': 'yaxis'},
+    {'element': 'yaxis', 'type': 'position', 'form': 'size', 'form_detail': 'offset', 'title': 'y axis offset', 'setting_id': 'yaxis_offset', 'selector': 'yaxis'},
+    {'element': 'yaxis', 'type': 'font', 'form': 'style', 'form_detail': 'font', 'title': 'y axis font', 'setting_id': 'yaxis_font', 'selector': 'yaxis'},
+    {'element': 'yaxis', 'type': 'border', 'form': 'border', 'form_detail': null, 'title': 'y axis border', 'setting_id': 'yaxis_border', 'selector': 'yaxis'},
 
-    {'element': 'marker', 'type': 'size', 'form': 'size', 'title': 'Marker Size', 'setting_id': 'marker_size', 'selector': 'marker'},
-    {'element': 'marker', 'type': 'style', 'form': 'style', 'title': 'Marker Style', 'setting_id': 'marker_style', 'selector': 'marker'},
-    {'element': 'marker', 'type': 'color', 'form': 'color', 'title': 'Marker Color', 'setting_id': 'marker_color', 'selector': 'marker'},
+    {'element': 'marker', 'type': 'size', 'form': 'size', 'form_detail': '', 'title': 'marker size', 'setting_id': 'marker_size', 'selector': 'marker'},
+    {'element': 'marker', 'type': 'style', 'form': 'style', 'form_detail': 'marker', 'title': 'marker style', 'setting_id': 'marker_style', 'selector': 'marker'},
+    {'element': 'marker', 'type': 'color', 'form': 'color', 'form_detail': null, 'title': 'marker color', 'setting_id': 'marker_color', 'selector': 'marker'},
 
-    {'element': 'line', 'type': 'size', 'form': 'size', 'title': 'Line Size', 'setting_id': 'line_size', 'selector': null},
-    {'element': 'line', 'type': 'style', 'form': 'style', 'title': 'Line Style', 'setting_id': 'line_style', 'selector': null},
-    {'element': 'line', 'type': 'color', 'form': 'color', 'title': 'Line Color', 'setting_id': 'line_color', 'selector': null},
+    {'element': 'line', 'type': 'size', 'form': 'size', 'form_detail': null, 'title': 'line size', 'setting_id': 'line_size', 'selector': null},
+    {'element': 'line', 'type': 'style', 'form': 'style', 'form_detail': null, 'title': 'line style', 'setting_id': 'line_style', 'selector': null},
+    {'element': 'line', 'type': 'color', 'form': 'color', 'form_detail': null, 'title': 'line color', 'setting_id': 'line_color', 'selector': null},
 
-    {'element': 'bar', 'type': 'size', 'form': 'size', 'title': 'Bar Size', 'setting_id': 'bar_size', 'selector': null},
-    {'element': 'bar', 'type': 'color', 'form': 'color', 'title': 'Bar Color', 'setting_id': 'bar_color', 'selector': null}
+    {'element': 'bar', 'type': 'size', 'form': 'size', 'form_detail': null, 'title': 'bar size', 'setting_id': 'bar_size', 'selector': null},
+    {'element': 'bar', 'type': 'color', 'form': 'color', 'form_detail': null, 'title': 'bar color', 'setting_id': 'bar_color', 'selector': null}
 ];

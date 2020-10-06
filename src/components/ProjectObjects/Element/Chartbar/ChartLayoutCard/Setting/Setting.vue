@@ -1,12 +1,12 @@
 <template>
-    <div>
-        <ColorPicker v-if="setting.form==='color'" :title="setting.title"/>
-        <CoordinatesPicker v-if="setting.form==='coordinates'" :title="setting.title"/>
-        <BorderPicker v-if="setting.form==='border'" :title="setting.title"/>
-        <TextPicker v-if="setting.form==='text'" :title="setting.title"/>
-        <FontPicker v-if="setting.form==='font'" :title="setting.title"/>
-        <StylePicker v-if="setting.form==='style'" :title="setting.title"/>
-        <SizePicker v-if="setting.form==='size'" :title="setting.title"/>
+    <div class="chart-setting">
+        <ColorPicker v-if="setting.form==='color'" :setting="setting"/>
+        <CoordinatesPicker v-if="setting.form==='coordinates'" :setting="setting"/>
+        <BorderPicker v-if="setting.form==='border'" :setting="setting"/>
+        <TextPicker v-if="setting.form==='text'" :setting="setting"/>
+        <FontPicker v-if="setting.form==='font'" :setting="setting"/>
+        <StylePicker v-if="setting.form==='style'" :setting="setting"/>
+        <SizePicker v-if="setting.form==='size'" :setting="setting"/>
     </div>
 </template>
 
@@ -32,3 +32,5 @@
         }
     }
 </script>
+
+<style src="./Setting.scss" lang="scss"></style>

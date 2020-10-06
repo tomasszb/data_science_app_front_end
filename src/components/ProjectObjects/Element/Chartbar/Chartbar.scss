@@ -23,7 +23,8 @@
   float: left;
   border-right: solid 3px $gray-200;
   padding: 1em;
-  overflow: scroll!important;
+  overflow-y: scroll!important;
+  overflow-x: hidden;
   height: calc(100vh - 100px);
   //width: 230px;
 
@@ -34,8 +35,29 @@
   }
 
   .chart-settings {
-    overflow: scroll!important;
+    //overflow: scroll!important;
     display: block;
+    background-color: white!important;
+
+    .card {
+      background-color: white!important;
+    }
+
+    .panel-header {
+      background-color: white!important;
+      font-weight: bolder;
+    }
+
+    .panel-header :hover {
+      text-decoration: none!important;
+    }
+
+    .separator {
+      background-color: $gray-100;
+      padding: 5px;
+      margin: 0 -25px 0 -25px;
+    }
+
   }
 
   .no-data {

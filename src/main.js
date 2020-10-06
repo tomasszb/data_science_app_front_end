@@ -25,8 +25,11 @@ import config from './config';
 import Widget from './components/AppFeatures/Widget/Widget';
 import VueColumnsResizable from 'vue-columns-resizable';
 
-
 import webSocketService from './core/webSocketService'
+
+import VueNumericInput from 'vue-numeric-input';
+import FontPicker from 'font-picker-vue';
+
 
 
 axios.defaults.baseURL = config.baseURLApi;
@@ -64,7 +67,8 @@ Vue.use(VueFormWizard);
 Vue.mixin(AuthMixin);
 Vue.use(Toasted, {duration: 10000});
 Vue.use(VueColumnsResizable);
-
+Vue.use(VueNumericInput);
+Vue.use(FontPicker);
 
 Vue.use(webSocketService, store);
 

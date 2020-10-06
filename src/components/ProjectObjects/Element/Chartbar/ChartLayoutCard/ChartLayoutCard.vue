@@ -1,15 +1,11 @@
 <template>
-    <Widget
-            class="mb-2 chart-layout"
-            title="<h5>Chart<span class='fw-semi-bold'> Layout</span></h5>"
-            collapse customHeader>
-        <div class="separator"></div>
+    <div class="mb-2 p-2 chart-layout">
         <div
                 v-for="(settings, element) in chartsLayoutSettings"
-                class="card panel mb-xs" :key="`accord-one-${element.toString()}`">
+                class="card panel mb-2" :key="`accord-one-${element.toString()}`">
             <div
-                    class="card-header panel-header p-2" role="button"
-                    @click="toggleAccordion('openSetting', element)"
+                    class="card-header panel-header px-0" role="button"
+                    @click="toggleAccordion(element)"
                     v-if="!inactiveChartSettings.includes(element)"
             >
                 <div class="mb-0">
@@ -18,19 +14,19 @@
                             <img :src="chartLayoutPartPictures[element]" class="chart-layout-picker mr-3"/>
                             {{element}}
                         </div>
-                        <i :class="`fa fa-angle-down ${openSetting[element] ? 'expanded' : ''}`" />
+                        <i :class="`fa fa-angle-down ${openSettings.includes(element) ? 'expanded' : ''}`" />
                     </a>
                 </div>
             </div>
-            <b-collapse v-if="!inactiveChartSettings.includes(settings.alias)" id="accordion-second" class="panel-body" :visible="openSetting === element ">
-                <div class="card-body">
+            <b-collapse v-if="!inactiveChartSettings.includes(element)" id="accordion-second" class="panel-body my-2" :visible="openSettings.includes(element)">
+                <div class="card-body py-2">
                     <div v-for="setting in settings">
                         <Setting :setting="setting" :alias="setting.alias"/>
                     </div>
                 </div>
             </b-collapse>
         </div>
-    </Widget>
+    </div>
 </template>
 
 <script>
@@ -51,7 +47,7 @@
         },
         data() {
             return {
-                openSetting: -1,
+                openSettings: [],
             }
         },
         computed: {
@@ -67,11 +63,13 @@
             }
         },
         methods: {
-            toggleAccordion(field, index) {
-                if (this[field] !== index) {
-                    Vue.set(this, field, index);
+            toggleAccordion(element) {
+                console.log(element);
+                if (this.openSettings.includes(element)) {
+                    let index = this.openSettings.indexOf(element);
+                    this.openSettings.splice(index, 1);
                 } else {
-                    Vue.set(this, field, -1);
+                    this.openSettings.push(element);
                 }
             },
         }
