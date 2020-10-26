@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import Widget from '@/components/AppFeatures/Widget/Widget';
+import Widget from '@/components/layout/Widget/Widget';
 import { mapActions, mapState} from 'vuex';
 import router from '../../Routes';
 

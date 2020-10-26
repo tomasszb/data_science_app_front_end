@@ -6,6 +6,7 @@ export default {
   hostApi,
   portApi,
   baseURLApi,
+  debug: true,
   remote: "https://flatlogic-node-backend.herokuapp.com",
   isBackend: process.env.VUE_APP_BACKEND,
   auth: {

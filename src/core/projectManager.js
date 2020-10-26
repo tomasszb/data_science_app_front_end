@@ -95,7 +95,6 @@ export function createFlowRequest(elementCommands, parentElements) {
         let element = projectObjects[element_id];
         let parent_node = projectObjects[parent_node_id];
         element['source_data_node_id'] = parent_node['parameters']['source_data_node_id'];
-        console.log(element);
         element['command']  = element_id in elementCommands ? elementCommands[element_id] : "run";
         elements.push(element)
       }

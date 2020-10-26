@@ -1,0 +1,69 @@
+@import '../../../styles/app';
+
+
+.object-selector {
+  cursor: pointer;
+  padding: 0 10px 0 15px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  background-color: $gray-300;
+
+  .pill-buttons {
+    font-size: 14px;
+    color: $gray-600;
+  }
+
+  .object-selector-text {
+    margin-right: 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 3px 12px 3px 8px;
+    color: $gray-600;
+    font-weight: 600;
+  }
+
+}
+
+.object-selector:last-of-type {
+  border-right: 0;
+}
+
+.object-selector.active {
+  background-color: white !important;
+
+  .object-selector-text {
+    color: $gray-900;
+  }
+
+  .input {
+    outline: none;
+    border-radius: 3px;
+    box-shadow: 0 0 0 2px var(--sidebar-item-active);
+    color: $gray-700;
+
+    span {
+      cursor: text;
+      display: inline-block;
+      width: 100%;
+      outline: none;
+    }
+
+  }
+}
+
+.object-selector.rounded {
+  border-radius: 7px;
+}
+
+
+.node-add {
+  cursor: pointer;
+  color: $gray-600;
+  font-size: 14px!important;
+}
+
+.node-add:hover {
+  color: $gray-500;
+}

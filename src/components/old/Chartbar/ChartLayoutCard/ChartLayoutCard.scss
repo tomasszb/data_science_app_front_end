@@ -1,0 +1,38 @@
+@import '../../../../styles/app';
+
+.chart-layout {
+  background-color: white;
+
+  i {
+    color: $gray-400;
+  }
+
+  .panel-body {
+    background-color: $gray-100;
+  }
+}
+
+.chart-data-card {
+  //border: 3px solid rgba(var(--widget-shadow-color), 0.05);
+}
+
+.chart-layout .panel-header {
+  background-color: white!important;
+  font-weight: bolder;
+}
+
+.chart-layout .panel-header :hover {
+  text-decoration: none!important;
+}
+
+.chart-layout .separator {
+  margin-bottom: 25px;
+}
+
+.chart-layout-picker {
+  width: 20px;
+  float:left;
+  filter: grayscale(90%);
+  //opacity: 40%;
+
+}

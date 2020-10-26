@@ -1,0 +1,23 @@
+@import '../../../../../styles/app';
+
+.chart-type-option {
+  border-bottom: 4px solid white;
+  opacity: 40%;
+  background-color: white;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+
+  img {
+    height: 35px;
+  }
+}
+
+.chart-type-option:hover {
+  opacity: 100%;
+}
+
+.chart-type-option.active {
+  opacity: 100%;
+  border-bottom: 4px solid var(--sidebar-item-active)!important;
+}

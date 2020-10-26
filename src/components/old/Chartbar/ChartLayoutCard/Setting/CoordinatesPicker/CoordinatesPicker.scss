@@ -1,0 +1,21 @@
+@import '../../../../../../styles/app';
+
+.coordinates-picker-form {
+
+  .coordinates-picker-form-1, .coordinates-picker-form-2 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .btn {
+    background-color: $gray-100!important;
+    border: none!important;
+  }
+  .coordinates-picker {
+    float: left;
+    display: inline-block;
+    width: 20%;
+  }
+}
+

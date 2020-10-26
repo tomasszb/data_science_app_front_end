@@ -1,0 +1,11 @@
+@import '../../../styles/app';
+
+.nav-sidebar {
+  max-height: 100%;
+  border-right: solid 2px $gray-200;
+
+  .nav-sidebar-wrapper {
+    min-height: 100%;
+  }
+}
+

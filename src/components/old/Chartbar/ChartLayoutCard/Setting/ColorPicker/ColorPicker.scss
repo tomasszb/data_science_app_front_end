@@ -1,0 +1,13 @@
+@import '../../../../../../styles/app';
+
+.color-picker-form {
+  display: flex;
+  align-items: center;
+
+  .color-picker {
+    width: 40px!important;
+    float: left;
+    display: inline-block;
+  }
+}
+

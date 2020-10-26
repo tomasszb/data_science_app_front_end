@@ -1,0 +1,60 @@
+@import '../../../styles/app';
+
+
+.sheet-bar {
+  flex-grow: 1;
+  background-color: $gray-300;
+  padding: 0;
+  height: 100%;
+
+
+  .object-selector {
+    cursor: pointer;
+    padding: 0 10px 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    background-color: $gray-300;
+    height: calc(#{$toolfooter-height} - 3px);
+    border-right: $body-bg solid 2px;
+
+    .pill-buttons {
+      font-size: 18px;
+      color: $gray-600;
+      margin-top: calc(-#{$toolfooter-height} / 5);
+    }
+
+    .object-selector-text {
+      margin-right: 5px;
+      padding: 3px 12px 3px 8px;
+      color: $gray-600;
+      font-weight: 600;
+    }
+
+  }
+
+  .object-selector:last-of-type {
+    border-right: 0;
+  }
+
+  .object-selector.active {
+    background-color: white !important;
+
+    .object-selector-text {
+      color: $gray-900;
+    }
+
+    .input {
+      outline: none;
+      border-radius: 3px;
+      box-shadow: 0 0 0 2px var(--sidebar-item-active);
+      color: $gray-700;
+
+      span {
+        outline: none;
+      }
+
+    }
+  }
+}

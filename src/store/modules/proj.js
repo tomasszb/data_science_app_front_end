@@ -26,6 +26,7 @@ export default {
         dataObjectDefinitions: {},
 
         dataFrames: {},
+        dataFrameMapping: {},
 
         selectedProcess: null,
         selectedPages: {},
@@ -88,9 +89,53 @@ export default {
                 return null
             }
         },
+        nodeElements: (state, getters) => {
+            let result = {};
+            if (getters.elementLists.hasOwnProperty(getters.activeNode)) {
+                for (let nodeID of Object.keys(getters.elementLists)) {
+                    result[nodeID] = {};
+                    for (let elementID of getters.elementLists[nodeID]) {
+                        let element = getters.projectObjects[elementID];
+                        if (element['front_end_tag']!=='') {
+                            result[nodeID][element['front_end_tag']] = element.id
+                        }
+                    }
+                }
+            }
+            return result
+        },
         activeElement: (state, getters) => {
             if (state.selectedElements.hasOwnProperty(getters.activeNode)) {
                 return state.selectedElements[getters.activeNode]
+            }
+            else {
+                return null
+            }
+        },
+        activeElementSettings: (state, getters) => {
+            if (getters.activeElement != null) {
+                return getters.projectObjects[getters.activeElement]
+            }
+            else {
+                return null
+            }
+        },
+        activeObjectSettings: (state, getters) => {
+            if (getters.activeElement != null) {
+                return getters.projectObjects[getters.activeElement]
+            }
+            else {
+                return null
+            }
+        },
+        activeElementDisplaySettings: (state, getters) => {
+            if (getters.activeElementSettings != null) {
+                if(typeof getters.activeElementSettings['display_settings']!='undefined') {
+                    return getters.activeElementSettings['display_settings']
+                }
+                else {
+                    return {}
+                }
             }
             else {
                 return null
@@ -154,8 +199,15 @@ export default {
                 Vue.set(state.projectData['project_objects'], index, Object)
             }
         },
-        UPDATE_DATAFRAME(state, {ObjectId, tableIndexName, data}) {
-            Vue.set(state.dataFrames, tableIndexName,  data);
+        UPDATE_DISPLAY_SETTINGS(state, {ObjectID, displaySettings}) {
+            let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
+            Vue.set(state.projectData['project_objects'][index], 'display_settings', displaySettings)
+        },
+        UPDATE_DATAFRAME_MAPPING(state, {srcRequestID, tableSettings}) {
+            Vue.set(state.dataFrameMapping, tableSettings, srcRequestID);
+        },
+        UPDATE_DATAFRAME(state, {ObjectId, srcRequestID, data}) {
+            Vue.set(state.dataFrames, srcRequestID,  data);
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectId);

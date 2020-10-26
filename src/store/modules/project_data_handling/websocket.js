@@ -97,11 +97,7 @@ export default {
             }
             if (action === 'report_data') {
                 let data = JSON.parse(payload["result"]["data"]);
-                let output_filter = JSON.stringify(payload["result"]["output_filter"]);
-                let output_sort = JSON.stringify(payload["result"]["output_sort"]);
-                let tableIndexName = project_object_id + "-run" + output_filter + "-" + output_sort;
-                console.log(tableIndexName);
-                commit("proj/UPDATE_DATAFRAME", {ObjectId: project_object_id, tableIndexName: tableIndexName, data: data}, { root: true });
+                commit("proj/UPDATE_DATAFRAME", {ObjectId: project_object_id, srcRequestID: payload["result"]['src_request_id'], data: data}, { root: true });
             }
         }
     },

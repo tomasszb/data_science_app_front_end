@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import Widget from '@/components/AppFeatures/Widget/Widget';
+import Widget from '@/components/layout/Widget/Widget';
 import {mapState, mapActions} from 'vuex';
 
 import config from '../../config';

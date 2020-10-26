@@ -8,7 +8,7 @@
 
 <script>
     import { mapState, mapGetters, mapActions} from "vuex";
-    import DataTable from "../../AppFeatures/DataTable/DataTable"
+    import DataTable from "../../widgets/DataTable/DataTable"
     import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
 
     export default {
