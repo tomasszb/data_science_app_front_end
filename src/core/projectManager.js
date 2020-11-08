@@ -76,7 +76,7 @@ export function get_active_object(activeNew, activeOld, allList) {
 }
 
 
-export function createFlowRequest(elementCommands, parentElements) {
+export function createFlowRequest(elementCommands, parentElements, localElements) {
   let elementLists = store.getters['proj/elementLists'];
   let projectObjects = store.getters['proj/projectObjects'];
   let dataObjects = store.getters['proj/dataObjects'];
@@ -91,8 +91,8 @@ export function createFlowRequest(elementCommands, parentElements) {
   for (const [parent_node_id, element_ids] of Object.entries(elementLists)) {
     for (let index in element_ids) {
       let element_id = element_ids[index];
-      if(filteredElementIDs.includes(element_id)) {
-        let element = projectObjects[element_id];
+      let element = projectObjects[element_id];
+      if((filteredElementIDs.includes(element_id) && element['local_execution'] === false) || localElements.includes(parseInt(element_id))) {
         let parent_node = projectObjects[parent_node_id];
         element['source_data_node_id'] = parent_node['parameters']['source_data_node_id'];
         element['command']  = element_id in elementCommands ? elementCommands[element_id] : "run";

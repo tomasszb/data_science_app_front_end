@@ -11,6 +11,14 @@
         <div>
             {{ projectObjectStatuses }}
         </div>
+        <hr>
+        <div>
+            {{ dataObjectTypeMapping }}
+        </div>
+        <hr>
+        <div>
+            {{ dataObjectGroupMapping }}
+        </div>
 
 
 
@@ -23,8 +31,8 @@
     export default {
       name: 'Dashboard',
       computed: {
-          ...mapGetters('proj', ['projectObjects', 'dataObjects']),
-          ...mapState('proj', ['projectObjectStatuses', 'dataFrames'])
+          ...mapGetters('proj', ['projectObjects', 'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping']),
+          ...mapState('proj', ['projectObjectStatuses', 'dataFrames', 'dataObjectDefinitions'])
       }
     };
 </script>

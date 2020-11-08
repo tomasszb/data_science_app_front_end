@@ -62,12 +62,13 @@
                 <b-form-group
                         v-for="(kwarg, i) in activeFunctionKwargs"
                         horizontal
+                        :key="'connector-kwargs-'+activeNode+'-'+i"
                         :label="kwarg['name']"
-                        label-for="normal-field"
+                        :label-for="'connector-kwargs-'+activeNode+'-'+i"
                         label-class="text-md-right"
                         :label-cols="4"
                 >
-                    <b-form-input type="text" :id="'connector-kwargs-'+i" autocomplete="off" size="md"/>
+                    <b-form-input type="text" :id="'connector-kwargs-'+activeNode+'-'+i" autocomplete="off" size="md"/>
                 </b-form-group>
             </div>
             <div class="footer">
@@ -113,7 +114,7 @@
         },
         computed: {
             ...mapState('proj', [
-                'dataObjectDefinitions'
+                'dataObjectDefinitions', 'activeNode'
             ]),
             dataConnectorTypes() {
                 let result = {};

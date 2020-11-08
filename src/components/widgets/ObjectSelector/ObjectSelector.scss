@@ -9,9 +9,23 @@
   font-size: 12px;
   background-color: $gray-300;
 
+  .object-selector-position {
+  }
+
   .pill-buttons {
     font-size: 14px;
+    line-height: 15px;
     color: $gray-600;
+    //margin-top: -6px;
+    //margin-left: 10px;
+
+    .fa-sort-down {
+      margin-top: -2px;
+    }
+
+    i {
+      margin-left: 12px;
+    }
   }
 
   .object-selector-text {
@@ -19,11 +33,19 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    padding: 3px 12px 3px 8px;
+    padding: 0 12px 0 8px;
     color: $gray-600;
+    font-size: 12px;
+    line-height: 15px;
     font-weight: 600;
+    width: 100%;
   }
 
+  .object-selector-detail {
+    padding: 0 12px 0 8px;
+    font-size: 10px;
+    line-height: 13px;
+  }
 }
 
 .object-selector:last-of-type {
@@ -51,10 +73,6 @@
     }
 
   }
-}
-
-.object-selector.rounded {
-  border-radius: 7px;
 }
 
 

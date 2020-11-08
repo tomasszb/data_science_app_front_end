@@ -16,8 +16,8 @@
                         v-for="pageID in pageList"
                         :key="'po-'+pageID"
                         :objectID="pageID"
-                        activeBorder
-                        rounded
+                        showDetail
+                        detailType="connector_type"
                 />
             </draggable>
         </div>
@@ -61,9 +61,9 @@
                 set(pageIDs) {
                     for (let i = 0; i < pageIDs.length ;i++) {
                         let pageID = pageIDs[i];
-                        let node = R.clone(this.projectObjects[pageID]);
-                        node.relative_position = i;
-                        this.UPDATE_PROJECT_OBJECT({ObjectId: pageID, Object: node})
+                        let page = R.clone(this.projectObjects[pageID]);
+                        page.relative_position = i;
+                        this.UPDATE_PROJECT_OBJECT({ObjectId: pageID, Object: page})
                     }
                 }
             }

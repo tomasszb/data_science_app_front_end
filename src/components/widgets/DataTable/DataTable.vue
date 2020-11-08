@@ -80,12 +80,12 @@
     import { getEmptyDataObject, createFlowRequest } from '@/core/projectManager';
     const R = require('ramda');
 
-    function waitForCondition(dataFrames, flowRequestID) {
+    function waitForCondition(dataFrames, dataFrameID) {
         return new Promise(resolve => {
             let start_time = Date.now();
             function checkFlag() {
-                if (typeof dataFrames[flowRequestID]!== "undefined") {
-                    resolve( {data: dataFrames[flowRequestID], count: 1000});
+                if (typeof dataFrames[dataFrameID]!== "undefined") {
+                    resolve( {data: dataFrames[dataFrameID], count: 1000});
                 } else {
                         window.setTimeout(checkFlag, 200);
                     }
@@ -115,12 +115,12 @@
 
                 loading: false,
                 columns: [],
+                column_names: [],
                 tableData: []
             }
         },
         watch: {
             activeNode(newValue) {
-                console.log('activeNodeChange');
                 this.setDefaultTableSettings();
                 this.requestTable();
 
@@ -139,10 +139,12 @@
                     this.pageSize = this.tableDisplaySettings['page_size'];
                     this.pageIndex = this.tableDisplaySettings['page_index'];
                     this.countRow = this.tableDisplaySettings['count_row'];
+                    this.columns = this.tableDisplaySettings['columns'];
                 } else {
                     this.pageSize = this.defaultPageSize;
                     this.pageIndex = this.defaultPageIndex;
                     this.countRow = this.defaultCountRow;
+                    this.columns = []
                 }
             },
 
@@ -162,13 +164,13 @@
                 Vue.set(
                     this.columns[columnIndex],
                     'ascending' ,
-                    oldSettings.ascending===false | oldSettings.sort===false
+                    oldSettings.ascending===false || oldSettings.sort===false
                 );
 
                 Vue.set(
                     this.columns[columnIndex],
                     'sort' ,
-                    oldSettings.ascending===true | oldSettings.sort===false
+                    oldSettings.ascending===true || oldSettings.sort===false
                 );
 
                 this.requestTable();
@@ -194,7 +196,8 @@
                 displaySettings['table_settings'] = {
                     'page_size': this.pageSize,
                     'page_index': this.pageIndex,
-                    'count_row': this.countRow
+                    'count_row': this.countRow,
+                    'columns': this.columns
                 };
                 this.UPDATE_DISPLAY_SETTINGS({
                     ObjectID: this.projectObjects[this.activeNode].id,
@@ -206,23 +209,28 @@
                 this.updateFilterObject();
                 this.updateSortObject();
                 this.updateDisplaySettings();
-                console.log('here1');
 
-                if(typeof this.dataFrames[this.flowRequestID] === "undefined"){
-                    let request = createFlowRequest({}, [this.activeElement]);
-                    let newFlowRequestID = request['request']['src_request_id'];
-                    this.UPDATE_DATAFRAME_MAPPING({srcRequestID: newFlowRequestID, tableSettings: this.tableSettings});
+                if(typeof this.dataFrames[this.dataFrameID] === "undefined") {
+                    let request = createFlowRequest(
+                        {},
+                        [this.connectorElement],
+                        [this.tableSortElement, this.tableFilterElement]
+                    );
+                    let src_request_id = request['request']['src_request_id'];
+                    let project_object_id = this.tableFilterElement;
+                    let dataFrameID = src_request_id + '-id:' + project_object_id.toString();
+                    this.UPDATE_DATAFRAME_MAPPING({dataFrameID: dataFrameID, settings: this.tableSettings});
                     this.$newRequest(request['request']['src_request_id'], request['request']['elements'].length);
                     this.$webSocketSend(request);
                 }
 
-                const promise = waitForCondition(this.dataFrames, this.flowRequestID);
+                const promise = waitForCondition(this.dataFrames, this.dataFrameID);
 
                 promise.then(
                     function(result) {
-                        console.log('here2', result);
                         this.tableData = result['data'];
                         let columns = [];
+                        let column_names = [];
                         for (let columnName of Object.keys(this.tableData[0])) {
                             let result =  {'name': columnName, 'sort': false, 'ascending': true};
                             for (let condition of this.sortParameters['conditions']) {
@@ -232,8 +240,10 @@
                                     result.ascending = condition.ascending;
                                 }
                             }
-                            columns.push(result)
+                            columns.push(result);
+                            column_names.push(columnName);
                         };
+                        this.column_names = column_names
                         this.columns = columns;
                         this.loading = false;
                     }.bind(this), function() {
@@ -257,6 +267,15 @@
             displaySettings() {
                 return this.activeNodeSettings['display_settings']
             },
+            connectorElement() {
+                return this.nodeElements[this.activeNode]['connector']
+            },
+            tableSortElement() {
+                return this.nodeElements[this.activeNode]['table_sort']
+            },
+            tableFilterElement() {
+                return  this.nodeElements[this.activeNode]['table_filter']
+            },
             tableDisplaySettings() {
                 return (this.displaySettings['table_settings'] = this.displaySettings['table_settings'] || {})
             },
@@ -267,7 +286,7 @@
                 return this.projectObjects[this.nodeElements[this.activeNode]['table_sort']].parameters['action_id'];
             },
             tableColumns() {
-                return typeof this.dataFrames[this.flowRequestID]!== "undefined" ? Object.keys(this.dataFrames[this.flowRequestID][0]) : ['col']
+                return typeof this.dataFrames[this.dataFrameID]!== "undefined" ? Object.keys(this.dataFrames[this.dataFrameID][0]) : ['col']
             },
             firstRow() {
                 return (this.pageIndex-1)*this.pageSize + 1
@@ -288,10 +307,19 @@
                 }
                 return {'conditions': sortList};
             },
-            tableSettings() {
-                return this.activeNode + '-' +this.pageSize.toString() + '-' + this.pageIndex.toString() + '-' + this.countRow.toString()
+            columnParameters() {
+                let result = '';
+                for (let p of this.sortParameters['conditions']) {
+                    let cIndex = this.column_names.indexOf(p['column']).toString();
+                    let cOrder = p['ascending'] ? 'a' : 'd';
+                    result = result.concat('-c', cIndex, cOrder)
+                }
+                return result
             },
-            flowRequestID() {
+            tableSettings() {
+                return this.activeNode + '-' +this.pageSize.toString() + '-' + this.pageIndex.toString() + '-' + this.countRow.toString() + '-' + this.columnParameters
+            },
+            dataFrameID() {
                 return this.dataFrameMapping[this.tableSettings]
             }
 

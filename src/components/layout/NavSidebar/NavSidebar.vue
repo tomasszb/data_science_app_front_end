@@ -2,12 +2,12 @@
     <div class="nav-sidebar">
         <vue-resizable
                 :width="width"
-                :min-width="130"
-                :max-width="500"
+                :min-width="minWidth"
+                :max-width="maxWidth"
                 :height="0"
                 :active="['r']"
                 :disableAttributes="['h']"
-                class="nav-sidebar-wrapper flex-vertical"
+                class="nav-sidebar-wrapper flex-vertical-no-scroll"
                 @resize:end="storeWidth"
         >
             <slot></slot>
@@ -26,6 +26,8 @@
         name: "NavSidebar",
         props: {
             defaultWidth: { type: Number},
+            minWidth: { type: Number },
+            maxWidth: { type: Number },
             settingPrefix: { type: String }
         },
         components: {
@@ -69,6 +71,9 @@
                     displaySettings: displaySettings
                 });
             }
+        },
+        created() {
+          console.log('created')
         }
     }
 </script>

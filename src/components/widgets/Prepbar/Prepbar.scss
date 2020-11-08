@@ -1,10 +1,10 @@
 @import '../../../styles/app';
 
 
-.connector-bar {
+.prep-bar {
   flex-grow: 1;
   background-color: $gray-100;
-  height: 100%;
+  height: 90%;
   padding: 10px 10px 20px 10px;
 
   .title-bar {
@@ -20,7 +20,7 @@
       width: 80%;
     }
 
-    .add-connector-button {
+    .add-prep-button {
       display: inline-block;
       vertical-align: middle;
       background-color: $gray-100;
@@ -35,13 +35,26 @@
   .object-selector {
     margin-bottom: 7px;
     background-color: $gray-200;
-    height: $connector-selector;
+    border-left: 7px solid $gray-200;
+    height: $prep-selector;
+
+
+    .object-selector-text {
+      line-height: 17px;
+    }
+
+    .object-selector-detail {
+      font-size: 12px;
+      font-weight: 500;
+      margin-top: 5px;
+    }
 
   }
 
   .object-selector.active {
     //border-left: solid var(--sidebar-item-active) 5px;
-    background-color: var(--sidebar-item-active)!important;
+    background-color: white!important;
+    border-left: 7px solid var(--sidebar-item-active);
 
     .pill-buttons, .object-selector-text {
       color: $gray-700;

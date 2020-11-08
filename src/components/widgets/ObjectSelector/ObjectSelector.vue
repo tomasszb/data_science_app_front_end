@@ -3,21 +3,36 @@
             @click="activateObject(objectID)"
             class="object-selector"
             :class="{'active': activeObject===objectID}">
-        <div
-                v-if="objectID!==editedObject"
-                class="object-selector-text"
-                @dblclick="editObject(objectID)">
-            {{title}}
+        <div class="flex-horizontal-no-scroll align-items-center">
+            <div v-if="position!==0" class="object-selector-position mt-2 mr-3">
+                <h4>#{{position}}</h4>
+            </div>
+            <div class="flex-vertical-no-scroll">
+                <div class="d-flex align-items-center">
+                    <div
+                            v-if="objectID!==editedObject"
+                            class="object-selector-text"
+                            @dblclick="editObject(objectID)">
+                        {{title}}
+                    </div>
+                    <div
+                            v-if="objectID===editedObject"
+                            class="input object-selector-text"
+                            role="textbox">
+                        <span v-focus @keydown="onInput" @blur="unblurObject" contenteditable>{{title}}</span>
+                    </div>
+                    <div class="pill-buttons d-flex">
+                        <i v-if="settingsButton" @click="emitEvent('settings', objectID)" class="fa fa-cog"  />
+                        <i @click="deleteObject(objectID)" class="fa fa-sort-down"  />
+                    </div>
+                </div>
+                <div class="object-selector-detail" v-if="showDetail">
+                    {{detail}}
+                </div>
         </div>
-        <div
-                v-if="objectID===editedObject"
-                class="input object-selector-text"
-                role="textbox">
-            <span v-focus @keydown="onInput" @blur="unblurObject" contenteditable>{{title}}</span>
         </div>
-        <div class="pill-buttons">
-            <i @click="deleteObject(objectID)" class="fa fa-sort-down"  />
-        </div>
+
+
     </div>
 </template>
 
@@ -29,7 +44,11 @@
     export default {
         name: 'ObjectButton',
         props: {
-            objectID: { type: String, default: null }
+            objectID: { type: String, default: null },
+            showDetail: {type: Boolean, default: false},
+            settingsButton: {type: Boolean, default: false},
+            detailType: {type: String, default: ''},
+            position: {type: Number, default: 0}
         },
         data() {
             return {
@@ -46,7 +65,8 @@
         },
         computed: {
             ...mapGetters('proj', [
-                'projectObjects', 'dataObjects', 'ProjectTree',
+                'projectObjects', 'dataObjects', 'ProjectTree', 'projectObjectDataObjects',
+                'dataObjectTypeMapping', 'dataObjectGroupMapping',
                 'processList', 'pageLists', 'nodeLists', 'elementLists',
                 'activeProcess', 'activePage', 'activeNode', 'activeElement'
             ]),
@@ -61,11 +81,33 @@
             objectGroup() {
                 return getObjectSetting(this.projectObjects, this.objectID, 'group', '')
             },
+            objectType() {
+                return getObjectSetting(this.projectObjects, this.objectID, 'type', '')
+            },
             activeObject() {
                 return this.activeObjectMapping[this.objectGroup]
             },
             title() {
                 return this.projectObjects[this.objectID].name
+            },
+            detail() {
+                if (this.detailType==='connector_type') {
+                    let connectorIDs = this.projectObjectDataObjects[this.objectID]['connectors'];
+                    let typeNames = [];
+                    for (let connectorID of connectorIDs) {
+                        typeNames.push(this.dataObjectTypeMapping[this.dataObjects[connectorID].type])
+                    }
+                    return typeNames.join(', ')
+                }
+                if (this.detailType==='action_description') {
+                    let actionIDs = this.projectObjectDataObjects[this.objectID]['actions'];
+                    let actionInputObjectIDs = this.projectObjectDataObjects[this.objectID]['inputs'];
+                    let groupNames = [];
+                    for (let actionID of actionIDs) {
+                        groupNames.push(this.dataObjectGroupMapping[this.dataObjects[actionID].group])
+                    }
+                    return groupNames.join(', ')
+                }
             }
         },
         methods: {
@@ -106,6 +148,10 @@
                         selectedNode: this.objectGroup===3 ? objectID : null,
                         selectedElement: this.objectGroup===4 ? objectID : null
                 });
+            },
+            emitEvent(eventName, objectID) {
+                console.log('emiting', eventName, objectID);
+                this.$emit(eventName, objectID)
             },
             deleteObject(objectID) {
                 this.deletePO(objectID);

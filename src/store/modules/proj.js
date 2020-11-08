@@ -5,6 +5,7 @@ import websocket from './project_data_handling/websocket';
 import object_manager from './project_data_handling/object_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
+const R = require('ramda');
 
 function getObjectIndex(objectList, objectID) {
     let index = null;
@@ -141,6 +142,27 @@ export default {
                 return null
             }
         },
+
+        dataObjectTypeMapping: (state, getters) => {
+            let result = {};
+            for (const [categoryName, category] of Object.entries(state.dataObjectDefinitions)) {
+                for (let child  of category["children"]) {
+                    if (child["type_cd"]!==null) result[child["type_cd"]] = child["type_name"]
+                }
+            }
+            return result
+        },
+
+        dataObjectGroupMapping: (state, getters) => {
+            let result = {};
+            for (const [categoryName, category] of Object.entries(state.dataObjectDefinitions)) {
+                for (let child  of category["children"]) {
+                    if (child["group_cd"]!==null) result[child["group_cd"]] = child["group_name"]
+                }
+            }
+            return result
+        },
+
         ProjectTree: (state, getters) => {
             let tree = new TreeModel();
 
@@ -152,7 +174,7 @@ export default {
                     for (let NodeID of getters.nodeLists[PageID]) {
                         let node = {'id': NodeID, 'children': []};
                         for (let ElementID of getters.elementLists[NodeID]) {
-                            let element = {'id': ElementID, 'children': []}
+                            let element = {'id': ElementID, 'children': []};
                             node['children'].push(element);
                         }
                         page['children'].push(node);
@@ -164,6 +186,57 @@ export default {
             // console.log(ProjectDict);
             return ProjectDict
         },
+        projectObjectDataObjects: (state, getters) => {
+            let result = {};
+            let empty = {'actions': [], 'connectors': [], 'inputs': []};
+            for (let processID of getters.processList) {
+                result[processID] = R.clone(empty);
+                for (let pageID of getters.pageLists[processID]) {
+                    result[pageID] = R.clone(empty);
+                    for (let nodeID of getters.nodeLists[pageID]) {
+                        result[nodeID] = R.clone(empty);
+                        for (let elementID of getters.elementLists[nodeID]) {
+                            result[elementID] = R.clone(empty);
+                            let elementSettings = getters.projectObjects[elementID];
+                            if (elementSettings['local_execution']===false) {
+                                result[elementID] = R.clone(empty);
+                                let parameters = getters.projectObjects[elementID]['parameters'];
+
+                                let connectorID = parameters['connector_id'];
+                                if (typeof connectorID !=='undefined') {
+                                    result[processID]['connectors'].push(connectorID);
+                                    result[pageID]['connectors'].push(connectorID);
+                                    result[nodeID]['connectors'].push(connectorID);
+                                    result[elementID]['connectors'].push(connectorID);
+                                }
+
+                                let actionID = parameters['action_id'];
+                                if (typeof actionID !=='undefined') {
+                                    result[processID]['actions'].push(actionID);
+                                    result[pageID]['actions'].push(actionID);
+                                    result[nodeID]['actions'].push(actionID);
+                                    result[elementID]['actions'].push(actionID);
+                                }
+
+                                let actionInputObjectID = parameters['action_input_object_id'];
+                                if (typeof actionID !=='undefined') {
+                                    result[processID]['inputs'].push(actionInputObjectID);
+                                    result[pageID]['inputs'].push(actionInputObjectID);
+                                    result[nodeID]['inputs'].push(actionInputObjectID);
+                                    result[elementID]['inputs'].push(actionInputObjectID);
+                                }
+
+
+                            }
+
+
+
+                        }
+                    }
+                }
+            }
+            return result
+        }
     },
     mutations: {
         LOAD_PROJECT_DATA(state, data) {
@@ -203,11 +276,11 @@ export default {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
             Vue.set(state.projectData['project_objects'][index], 'display_settings', displaySettings)
         },
-        UPDATE_DATAFRAME_MAPPING(state, {srcRequestID, tableSettings}) {
-            Vue.set(state.dataFrameMapping, tableSettings, srcRequestID);
+        UPDATE_DATAFRAME_MAPPING(state, {dataFrameID, settings}) {
+            Vue.set(state.dataFrameMapping, settings, dataFrameID);
         },
-        UPDATE_DATAFRAME(state, {ObjectId, srcRequestID, data}) {
-            Vue.set(state.dataFrames, srcRequestID,  data);
+        UPDATE_DATAFRAME(state, {dataFrameID, data}) {
+            Vue.set(state.dataFrames, dataFrameID,  data);
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectId);

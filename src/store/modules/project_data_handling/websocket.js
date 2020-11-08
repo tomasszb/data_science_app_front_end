@@ -83,6 +83,7 @@ export default {
             let project_object_id = payload["result"]["project_object_id"];
             let status = payload["result"]["status"];
             let action = payload["action"];
+
             if (status==='success') {
                 commit('addSuccessRun', {
                     'src_request_id':src_request_id,
@@ -96,8 +97,9 @@ export default {
                 commit("proj/UPDATE_PROJECT_OBJECT_STATUS", {ObjectId: project_object_id, status: status}, { root: true });
             }
             if (action === 'report_data') {
+                let dataFrameID = src_request_id + '-id:' + project_object_id.toString();
                 let data = JSON.parse(payload["result"]["data"]);
-                commit("proj/UPDATE_DATAFRAME", {ObjectId: project_object_id, srcRequestID: payload["result"]['src_request_id'], data: data}, { root: true });
+                commit("proj/UPDATE_DATAFRAME", {dataFrameID: dataFrameID, data: data}, { root: true });
             }
         }
     },
