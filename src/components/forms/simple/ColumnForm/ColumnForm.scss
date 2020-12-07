@@ -1,0 +1,24 @@
+@import '../../../../styles/app';
+
+.multiselect {
+  font-size: 12px!important;
+}
+
+.multiselect, .multiselect__input, .multiselect__single {
+  font-family: inherit;
+  font-size: 12px;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+.multiselect__input, .multiselect__single {
+  min-height: 14px;
+  line-height: 14px;
+}
+
+.multiselect__tags {
+  font-size: 12px;
+}
+.multiselect__tag-icon:after {
+  font-size: 12px;
+}

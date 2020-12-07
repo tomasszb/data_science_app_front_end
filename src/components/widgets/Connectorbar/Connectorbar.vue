@@ -4,11 +4,11 @@
             <span class="title">Connections</span>
             <span
                     class="add-connector-button"
-                    v-b-modal="'connector-explorer'"
+                    v-b-modal="'new-connector-explorer'"
             >
                 <a>Add</a>
             </span>
-            <connector-form/>
+            <connector-explorer/>
         </div>
         <div class="d-flex justify-content-start align-items-center flex-vertical">
             <draggable v-model="pageList" class="d-flex justify-content-start flex-vertical">
@@ -27,14 +27,14 @@
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
     import ObjectSelector from "../ObjectSelector/ObjectSelector"
-    import ConnectorForm from "../ConnectorForm/ConnectorForm"
+    import ConnectorExplorer from "../ConnectorExplorer/ConnectorExplorer"
     import draggable from 'vuedraggable';
     const R = require('ramda');
 
     export default {
         name: 'Connectorbar',
         components: {
-            ObjectSelector, ConnectorForm, draggable
+            ObjectSelector, ConnectorExplorer, draggable
         },
         props: {
             objectType: { type: String, default: null },

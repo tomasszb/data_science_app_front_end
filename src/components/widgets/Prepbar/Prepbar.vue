@@ -9,18 +9,19 @@
             </span>
         </div>
         <div class="flex-vertical">
-            <draggable v-model="elementList" >
+            <draggable v-model="elementList" handle=".drag-handle">
                 <div v-for="(elementID, position) in elementList">
                     <object-selector
                             :key="'po-'+elementID"
                             :objectID="elementID"
                             v-on:settings = "toggleSettings"
                             :position = "position+1"
+                            class="drag-handle"
                             showDetail
                             settingsButton
                             detailType="action_description"
                     />
-                    <prep-settings v-if="openSettings === elementID"/>
+                    <prep-settings v-if="openSettings === elementID" :objectID="elementID"/>
                 </div>
             </draggable>
         </div>
@@ -30,7 +31,7 @@
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
     import ObjectSelector from "../ObjectSelector/ObjectSelector"
-    import PrepSettings from "../PrepSettings/PrepSettings"
+    import PrepSettings from "../DataObjectSettings/DataObjectSettings"
     import draggable from 'vuedraggable';
     const R = require('ramda');
 

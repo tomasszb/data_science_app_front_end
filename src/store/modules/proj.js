@@ -1,5 +1,5 @@
 import { emptyProject } from './project_data_handling/empty_project';
-import {getProjectBranch, concatValues, get_selected_object} from '../../core/projectManager'
+import {getProjectBranch, concatValues, get_selected_object, getObjectByRoute} from '../../core/projectManager'
 import api from './project_data_handling/api';
 import websocket from './project_data_handling/websocket';
 import object_manager from './project_data_handling/object_manager'
@@ -10,7 +10,7 @@ const R = require('ramda');
 function getObjectIndex(objectList, objectID) {
     let index = null;
     for (let i = 0; i < objectList.length; i++) {
-        if (objectList[i].id === objectID) {
+        if (objectList[i].id.toString() === objectID.toString()) {
             index = i;
         }
     }
@@ -163,6 +163,16 @@ export default {
             return result
         },
 
+        dataObjectParameterMapping: (state, getters) => {
+            let result = {};
+            for (const [categoryName, category] of Object.entries(state.dataObjectDefinitions)) {
+                for (let child  of category["children"]) {
+                    if (child["type_cd"]!==null) result[child["type_cd"]] = child["function"]["parameters"]
+                }
+            }
+            return result
+        },
+
         ProjectTree: (state, getters) => {
             let tree = new TreeModel();
 
@@ -188,7 +198,8 @@ export default {
         },
         projectObjectDataObjects: (state, getters) => {
             let result = {};
-            let empty = {'actions': [], 'connectors': [], 'inputs': []};
+            let empty = {'actions': [], 'connectors': []};
+            let emptyElement = {'action': null, 'connector': null};
             for (let processID of getters.processList) {
                 result[processID] = R.clone(empty);
                 for (let pageID of getters.pageLists[processID]) {
@@ -196,18 +207,18 @@ export default {
                     for (let nodeID of getters.nodeLists[pageID]) {
                         result[nodeID] = R.clone(empty);
                         for (let elementID of getters.elementLists[nodeID]) {
-                            result[elementID] = R.clone(empty);
+                            result[elementID] = R.clone(emptyElement);
+
                             let elementSettings = getters.projectObjects[elementID];
-                            if (elementSettings['local_execution']===false) {
-                                result[elementID] = R.clone(empty);
-                                let parameters = getters.projectObjects[elementID]['parameters'];
+                            let parameters = elementSettings['parameters'];
+                            if (parameters['local_execution']===false) {
 
                                 let connectorID = parameters['connector_id'];
                                 if (typeof connectorID !=='undefined') {
                                     result[processID]['connectors'].push(connectorID);
                                     result[pageID]['connectors'].push(connectorID);
                                     result[nodeID]['connectors'].push(connectorID);
-                                    result[elementID]['connectors'].push(connectorID);
+                                    result[elementID]['connector']=connectorID;
                                 }
 
                                 let actionID = parameters['action_id'];
@@ -215,18 +226,8 @@ export default {
                                     result[processID]['actions'].push(actionID);
                                     result[pageID]['actions'].push(actionID);
                                     result[nodeID]['actions'].push(actionID);
-                                    result[elementID]['actions'].push(actionID);
+                                    result[elementID]['action']=actionID;
                                 }
-
-                                let actionInputObjectID = parameters['action_input_object_id'];
-                                if (typeof actionID !=='undefined') {
-                                    result[processID]['inputs'].push(actionInputObjectID);
-                                    result[pageID]['inputs'].push(actionInputObjectID);
-                                    result[nodeID]['inputs'].push(actionInputObjectID);
-                                    result[elementID]['inputs'].push(actionInputObjectID);
-                                }
-
-
                             }
 
 
@@ -262,7 +263,6 @@ export default {
         SET_SELECTED_ELEMENT(state, {activeElement, activeNode}) {
             Vue.set(state.selectedElements, activeNode, activeElement);
         },
-
         UPDATE_PROJECT_OBJECT(state, {ObjectID, Object}) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
             if (index === null) {
@@ -293,6 +293,21 @@ export default {
             }
             else {
                 Vue.set(state.projectData['project_data_objects'], index, Object)
+            }
+        },
+        UPDATE_DATA_OBJECT_PARAMETER(state, {objectID, route, parameterName, parameterValue}) {
+            let index = getObjectIndex(state.projectData['project_data_objects'], objectID);
+
+            if (index !== null) {
+                if (route!=null) {
+                    let parameterObject = getObjectByRoute(route, state.projectData['project_data_objects'][index]['parameters']);
+                    if (parameterObject!=null) {
+                        Vue.set(parameterObject, parameterName, parameterValue)
+                    }
+                }
+                else {
+                    Vue.set(state.projectData['project_data_objects'][index]['parameters'], parameterName, parameterValue)
+                }
             }
         },
         DELETE_DATA_OBJECT(state, ObjectId) {

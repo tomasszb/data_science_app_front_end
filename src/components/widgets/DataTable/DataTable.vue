@@ -295,7 +295,7 @@
                 return Math.min(this.pageIndex*this.pageSize, this.countRow)
             },
             filterParameters() {
-                return {'conditions': [{'column':null, 'type':'iloc', 'value':[this.firstRow, this.lastRow]}]};
+                return {'lower': this.firstRow, 'upper': this.lastRow};
             },
             sortParameters() {
                 let sortList = [];

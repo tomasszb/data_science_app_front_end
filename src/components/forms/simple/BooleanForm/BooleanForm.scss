@@ -1,0 +1,23 @@
+@import '../../../../styles/app';
+
+.integer-form {
+
+  .btn {
+    background-color: $gray-100!important;
+    border: none!important;
+  }
+
+  .btn-decrement .btn-icon {
+    border-color: $gray-800 transparent transparent!important;
+  }
+
+  .btn-increment .btn-icon {
+    border-color: transparent transparent $gray-800 !important;
+  }
+
+  .vue-numeric-input input {
+    height: 31px;
+    border-radius: 3px;
+  }
+
+}

@@ -72,7 +72,6 @@ Vue.use(FontPicker);
 
 Vue.use(webSocketService, store);
 
-
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

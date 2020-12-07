@@ -1,27 +1,13 @@
 <template>
     <div class="dashboard-page">
-        <div>
-            {{ projectObjects }}
-        </div>
-        <hr>
-        <div>
-            {{ dataObjects }}
-        </div>
-        <hr>
-        <div>
-            {{ projectObjectStatuses }}
-        </div>
-        <hr>
-        <div>
-            {{ dataObjectTypeMapping }}
-        </div>
-        <hr>
-        <div>
-            {{ dataObjectGroupMapping }}
-        </div>
-
-
-
+        <h3>Project Objects</h3><hr><div>{{ projectObjects }}</div><br>
+        <h3>Data Objects</h3><hr><div>{{ dataObjects }}</div><br>
+        <h3>Data Object Parameters</h3><hr><div>{{ dataObjectParameterMapping }}</div><br>
+        <h3>Project Object Data Objects</h3><hr><div>{{ projectObjectDataObjects }}</div><br>
+        <h3>Objects Statuses</h3><hr><div>{{ projectObjectStatuses }}</div><br>
+        <h3>Data Object Type Mapping</h3><hr><div>{{ dataObjectTypeMapping }}</div><br>
+        <h3>Data Object Group Mapping</h3><hr><div>{{ dataObjectGroupMapping }}</div>
+        <br>
     </div>
 </template>
 
@@ -31,7 +17,8 @@
     export default {
       name: 'Dashboard',
       computed: {
-          ...mapGetters('proj', ['projectObjects', 'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping']),
+          ...mapGetters('proj', ['projectObjects', 'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping',
+              'dataObjectParameterMapping', 'projectObjectDataObjects']),
           ...mapState('proj', ['projectObjectStatuses', 'dataFrames', 'dataObjectDefinitions'])
       }
     };

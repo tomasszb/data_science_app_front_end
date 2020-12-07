@@ -1,5 +1,7 @@
 const path = require('path');
 let publicPath = process.env.NODE_ENV === 'production' ? 'sing-app-vue/' : '/';
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 
 module.exports = {
   publicPath,

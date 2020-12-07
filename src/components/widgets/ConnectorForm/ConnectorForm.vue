@@ -1,19 +1,12 @@
 <template>
-    <b-modal
-            id="connector-explorer"
-            title="Explore Database"
-            size="lg"
-            @hide="disableActive"
-            body-class="flex-horizontal"
-            no-fade
-            hide-footer
-            hide-header>
+    <div class="connector-explorer flex-horizontal-no-scroll">
         <div class="connector-explorer-panel flex-vertical">
             <div class="connector-explorer-title">
                 <div class="title">Connector</div>
+                {{dataObjectID}}
                 <b-form-group>
                     <b-form-input
-                            id="tranparent-field"
+                            id="transparent-field"
                             class="input-no-border input-sm"
                             type="text"
                             autocomplete="off"
@@ -23,105 +16,118 @@
                 </b-form-group>
             </div>
             <div class="connector-type-picker">
-                <div v-for="(connectorSubTypes, connectorType) in dataConnectorTypes">
-                    <div class="connector-type-header">{{connectorType}}</div>
-                    <div v-for="connectorSubType in connectorSubTypes">
+                <div v-for="(connectorTypes, connectorGroup) in dataConnectorGroups">
+                    <div class="connector-type-header">{{dataObjectGroupMapping[connectorGroup]}}</div>
+                    <div v-for="connectorType in connectorTypes">
                         <div
                                 class="connector-name"
-                                :class="{'active': activeConnectorSubType===connectorSubType}"
-                                @click="selectConnectorSubType(connectorSubType)">
-                            {{connectorSubType}}
+                                :class="{'active': activeConnectorType===connectorType}"
+                                @click="selectConnectorType(connectorType)">
+                            {{dataObjectTypeMapping[connectorType]}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="connector-explorer-form flex-vertical" :class="{hidden: activeConnectorSubType===''}">
+        <div class="connector-explorer-form" :class="{hidden: activeConnectorType===''}">
             <div class="title">
-                {{activeConnectorSubType}}
+                {{dataObjectTypeMapping[activeConnectorType]}}
             </div>
             <div class="connector-kwargs">
-<!--                {{activeFunctionKwargs}}-->
+                <!--                {{activeFunctionKwargs}}-->
                 <b-form-group
                         horizontal
                         class="connector-name-form"
-                        label=""
-                        label-for="connector-name"
                         label-class="text-md-right"
-                        :label-cols="4"
                 >
                     <b-form-input
-                            placeholder="Name"
+                            placeholder="Connector Name"
                             type="text"
+                            v-model="elementName"
                             id="connector-name"
                             autocomplete="off"
                             size="md"
                             class="bg-gray-lighter"/>
                 </b-form-group>
+                <data-object-settings
+                        :dataObjectID="dataObjectID"
+                        :horizontal="true"
+                />
 
-                <b-form-group
-                        v-for="(kwarg, i) in activeFunctionKwargs"
-                        horizontal
-                        :key="'connector-kwargs-'+activeNode+'-'+i"
-                        :label="kwarg['name']"
-                        :label-for="'connector-kwargs-'+activeNode+'-'+i"
-                        label-class="text-md-right"
-                        :label-cols="4"
-                >
-                    <b-form-input type="text" :id="'connector-kwargs-'+activeNode+'-'+i" autocomplete="off" size="md"/>
-                </b-form-group>
             </div>
             <div class="footer">
                 <div class="text-md-right mt-sm">
                     <b-button variant="gray" class="mr-3 width-100">Test</b-button>
-                    <b-button variant="warning" class="width-100">Save</b-button>
+                    <b-button variant="warning" class="width-100" @click="saveConnector">Save</b-button>
                 </div>
             </div>
         </div>
-    </b-modal>
+    </div>
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapState} from "vuex";
-    import ObjectSelector from "../ObjectSelector/ObjectSelector"
+    import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
+    import DataObjectSettings from "../DataObjectSettings/DataObjectSettings";
     import draggable from 'vuedraggable';
     const R = require('ramda');
 
     export default {
         name: 'ConnectorForm',
         components: {
-            ObjectSelector, draggable
+            DataObjectSettings, draggable
         },
         data() {
           return {
               connectorFilter: '',
-              activeConnectorSubType: ''
+              activeConnectorType: '',
+              elementName: '',
           }
         },
         props: {
             objectType: { type: String, default: null },
+            dataObjectID: { type: String, default: '' },
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT'
+                'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT'
             ]),
-            selectConnectorSubType(connectorSubType) {
-                this.activeConnectorSubType = connectorSubType
+            ...mapActions('proj/object_manager', [
+                'newPage'
+            ]),
+            selectConnectorType(connectorType) {
+                console.log('selectConnectorType');
+                let objectID = this.dataObjectID;
+                let object = R.clone(this.dataObjects[objectID]);
+                object['type'] = connectorType;
+                object['parameters'] = {};
+                this.UPDATE_DATA_OBJECT({ObjectID: objectID, Object: object});
+                this.activeConnectorType = connectorType;
             },
             disableActive() {
-                this.activeConnectorSubType = ''
+                this.activeConnectorType = ''
+            },
+            saveConnector() {
+                this.newPage({
+                    typeCD: 200,
+                    selName: this.elementName,
+                    conObjects: {'connector_id': this.dataObjectID}
+                });
+
             }
         },
         computed: {
             ...mapState('proj', [
-                'dataObjectDefinitions', 'activeNode'
+                'dataObjectDefinitions'
             ]),
-            dataConnectorTypes() {
+            ...mapGetters('proj', [
+                'dataObjectTypeMapping', 'dataObjectGroupMapping', 'activeNode', 'activeProcess', 'activePage', 'dataObjects'
+            ]),
+            dataConnectorGroups() {
                 let result = {};
                 for (let dataType of this.dataObjectDefinitions["Data Connector"]["children"]) {
-                    let filterCheck = dataType['type_name'].toLowerCase().includes(this.connectorFilter);
+                    let filterCheck = this.dataObjectTypeMapping[dataType['type_cd']].toLowerCase().includes(this.connectorFilter);
                     if (filterCheck || this.connectorFilter==='') {
-                        (result[dataType["group_name"]] = result[dataType["group_name"]] || []).push(dataType['type_name']);
+                        (result[dataType["group_cd"]] = result[dataType["group_cd"]] || []).push(dataType['type_cd']);
                     }
                 }
                 return result
@@ -129,7 +135,7 @@
             activeFunction() {
                 let result = {};
                 for (let dataType of this.dataObjectDefinitions["Data Connector"]["children"]) {
-                    if (this.activeConnectorSubType===dataType['type_name']) {
+                    if (this.activeConnectorType===dataType['type_name']) {
                         result = dataType.hasOwnProperty('function') ? dataType['function'] : {}
                     }
                 }

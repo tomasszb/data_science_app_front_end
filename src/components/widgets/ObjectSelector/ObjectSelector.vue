@@ -22,7 +22,7 @@
                         <span v-focus @keydown="onInput" @blur="unblurObject" contenteditable>{{title}}</span>
                     </div>
                     <div class="pill-buttons d-flex">
-                        <i v-if="settingsButton" @click="emitEvent('settings', objectID)" class="fa fa-cog"  />
+                        <i v-if="settingsButton" @click="emitEvent('settings', objectID)" class="la la-cog"  />
                         <i @click="deleteObject(objectID)" class="fa fa-sort-down"  />
                     </div>
                 </div>
@@ -42,7 +42,7 @@
     import {getObjectSettings, getObjectSetting} from "../../../core/projectObjectParser";
 
     export default {
-        name: 'ObjectButton',
+        name: 'ObjectSelector',
         props: {
             objectID: { type: String, default: null },
             showDetail: {type: Boolean, default: false},
@@ -92,21 +92,12 @@
             },
             detail() {
                 if (this.detailType==='connector_type') {
-                    let connectorIDs = this.projectObjectDataObjects[this.objectID]['connectors'];
-                    let typeNames = [];
-                    for (let connectorID of connectorIDs) {
-                        typeNames.push(this.dataObjectTypeMapping[this.dataObjects[connectorID].type])
-                    }
-                    return typeNames.join(', ')
+                    let connectorID = this.projectObjectDataObjects[this.objectID]['connectors'];
+                    return connectorID.length !== 0 ? this.dataObjectTypeMapping[this.dataObjects[connectorID].type] : ''
                 }
                 if (this.detailType==='action_description') {
-                    let actionIDs = this.projectObjectDataObjects[this.objectID]['actions'];
-                    let actionInputObjectIDs = this.projectObjectDataObjects[this.objectID]['inputs'];
-                    let groupNames = [];
-                    for (let actionID of actionIDs) {
-                        groupNames.push(this.dataObjectGroupMapping[this.dataObjects[actionID].group])
-                    }
-                    return groupNames.join(', ')
+                    let actionID = this.projectObjectDataObjects[this.objectID]['action'];
+                    return actionID !== null ? this.dataObjectGroupMapping[this.dataObjects[actionID].group] : ''
                 }
             }
         },

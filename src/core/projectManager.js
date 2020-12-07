@@ -92,7 +92,8 @@ export function createFlowRequest(elementCommands, parentElements, localElements
     for (let index in element_ids) {
       let element_id = element_ids[index];
       let element = projectObjects[element_id];
-      if((filteredElementIDs.includes(element_id) && element['local_execution'] === false) || localElements.includes(parseInt(element_id))) {
+      console.log(element);
+      if((filteredElementIDs.includes(element_id) && element['parameters']['local_execution'] === false) || localElements.includes(parseInt(element_id))) {
         let parent_node = projectObjects[parent_node_id];
         element['source_data_node_id'] = parent_node['parameters']['source_data_node_id'];
         element['command']  = element_id in elementCommands ? elementCommands[element_id] : "run";
@@ -176,4 +177,18 @@ export function getUpstreamElements(projectObjects, elementList, elements, paren
     return elements
   }
 
+}
+
+export function getObjectByRoute(route, parentObject) {
+  let output = parentObject;
+  // console.log('route', route, parentObject);
+  for (let i = 0; i < route.length; i++) {
+    if (output.hasOwnProperty(route[i])) {
+      output = output[route[i]]
+    }
+    else {
+      return null
+    }
+  }
+  return output
 }
