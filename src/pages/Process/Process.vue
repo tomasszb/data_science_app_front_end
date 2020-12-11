@@ -9,7 +9,7 @@
                 <div class="flex-vertical">
                     <main-content>
 <!--                        <DataTable/>-->
-                        <data-column-explorer/>
+<!--                        <data-column-explorer/>-->
                     </main-content>
                     <tool-footer>
                         <sheetbar objectType="node"></sheetbar>
@@ -17,38 +17,38 @@
                 </div>
             </div>
         </div>
-        <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="flex-vertical" :key="processKey">
-            <tool-header></tool-header>
-<!--            <div class="flex-vertical">-->
-                <div class="flex-horizontal">
-                    <nav-sidebar :defaultWidth="450" :minWidth="200" :maxWidth="700"  settingPrefix="prep">
-                        <prepbar></prepbar>
-                    </nav-sidebar>
-                    <main-content>
-                        <div>
+<!--        <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="flex-vertical" :key="processKey">-->
+<!--            <tool-header></tool-header>-->
+<!--&lt;!&ndash;            <div class="flex-vertical">&ndash;&gt;-->
+<!--                <div class="flex-horizontal">-->
+<!--                    <nav-sidebar :defaultWidth="450" :minWidth="200" :maxWidth="700"  settingPrefix="prep">-->
+<!--                        <prepbar></prepbar>-->
+<!--                    </nav-sidebar>-->
+<!--                    <main-content>-->
+<!--                        <div>-->
 
-                        <br><br>
-                        </div>
-                    </main-content>
-                </div>
-                <tool-footer>
-                    <sheetbar objectType="node"></sheetbar>
-                </tool-footer>
+<!--                        <br><br>-->
+<!--                        </div>-->
+<!--                    </main-content>-->
+<!--                </div>-->
+<!--                <tool-footer>-->
+<!--                    <sheetbar objectType="node"></sheetbar>-->
+<!--                </tool-footer>-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">-->
+<!--            <tool-header></tool-header>-->
+<!--            <div class="flex-vertical">-->
+<!--                <div class="flex-horizontal">-->
+<!--                    <nav-sidebar :defaultWidth="200" :minWidth="130" :maxWidth="700" settingPrefix="column"></nav-sidebar>-->
+<!--                    <nav-sidebar :defaultWidth="300" :minWidth="130" :maxWidth="700" settingPrefix="chart"></nav-sidebar>-->
+<!--                    <main-content></main-content>-->
+<!--                </div>-->
+<!--                <tool-footer>-->
+<!--                    <sheetbar objectType="node"></sheetbar>-->
+<!--                </tool-footer>-->
 <!--            </div>-->
-        </div>
-        <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">
-            <tool-header></tool-header>
-            <div class="flex-vertical">
-                <div class="flex-horizontal">
-                    <nav-sidebar :defaultWidth="200" :minWidth="130" :maxWidth="700" settingPrefix="column"></nav-sidebar>
-                    <nav-sidebar :defaultWidth="300" :minWidth="130" :maxWidth="700" settingPrefix="chart"></nav-sidebar>
-                    <main-content></main-content>
-                </div>
-                <tool-footer>
-                    <sheetbar objectType="node"></sheetbar>
-                </tool-footer>
-            </div>
-        </div>
+<!--        </div>-->
     </div>
 
 </template>
@@ -59,11 +59,11 @@ import NavSidebar from "../../components/layout/NavSidebar/NavSidebar"
 import ToolHeader from "../../components/layout/ToolHeader/ToolHeader"
 import ToolFooter from "../../components/layout/ToolFooter/ToolFooter"
 import MainContent from "../../components/layout/MainContent/MainContent"
-import DataTable from "../../components/widgets/DataTable/DataTable"
-import DataColumnExplorer from "../../components/widgets/DataColumnExplorer/DataColumnExplorer"
+// import DataTable from "../../components/widgets/DataTable/DataTable"
+// import DataColumnExplorer from "../../components/widgets/DataColumnExplorer/DataColumnExplorer"
 import Sheetbar from "../../components/widgets/Sheetbar/Sheetbar"
 import Connectorbar from "../../components/widgets/Connectorbar/Connectorbar"
-import Prepbar from "../../components/widgets/Prepbar/Prepbar"
+// import Prepbar from "../../components/widgets/Prepbar/Prepbar"
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -72,10 +72,11 @@ import dsw_config from "../../dsw_config";
 export default {
     name: 'Process',
     components: {
-        Connectorbar, Prepbar,
-        NavSidebar, ToolHeader, ToolFooter,
-        DataTable, DataColumnExplorer, MainContent,
-        Sheetbar
+        // Connectorbar, Prepbar,
+        // NavSidebar, ToolHeader, ToolFooter,
+        // DataTable, DataColumnExplorer, MainContent,
+        // Sheetbar
+        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar
     },
     data() {
         return {
@@ -89,12 +90,12 @@ export default {
     computed: {
         ...mapState('proj', [
             'projectData',
-            'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements'
+            'selectedProcess', 'selectedPages', 'selectedNodes'
         ]),
         ...mapGetters('proj', [
-            'projectObjects', 'dataObjects', 'ProjectTree',
-            'processList', 'pageLists', 'nodeLists', 'elementLists',
-            'activeProcess', 'activePage', 'activeNode', 'activeElement'
+            'projectObjects', 'dataObjects',
+            'processList', 'pageLists', 'nodeLists',
+            'activeProcess', 'activePage', 'activeNode',
         ]),
         processID() {
             return this.$route.params.id
@@ -119,8 +120,7 @@ export default {
             this.setActivePO({
                 selectedProcess:value,
                 selectedPage:null,
-                selectedNode:null,
-                selectedElement:null
+                selectedNode:null
             });
         }
     }

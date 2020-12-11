@@ -10,7 +10,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :dataObjectID="dataObjectID"/>
+            <connector-form :dataObjectID="dataObjectID" type="new"/>
         </b-modal>
         <b-modal
                 id="existing-connector-explorer"
@@ -21,7 +21,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form/>
+            <connector-form :dataObjectID="activeDataObjectID" type="existing"/>
         </b-modal>
     </div>
 </template>
@@ -70,6 +70,14 @@
                     }
                 });
                 this.dataObjectID = dataObjectID;
+            }
+        },
+        computed: {
+            ...mapGetters('proj', [
+                'projectObjects', 'activePage', 'activeNode'
+            ]),
+            activeDataObjectID() {
+                return this.projectObjects[this.activePage]['data_object_tags']['connector'].toString();
             }
         }
     };

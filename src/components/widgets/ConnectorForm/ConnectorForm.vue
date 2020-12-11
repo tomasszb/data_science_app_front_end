@@ -22,7 +22,7 @@
                         <div
                                 class="connector-name"
                                 :class="{'active': activeConnectorType===connectorType}"
-                                @click="selectConnectorType(connectorType)">
+                                @click="selectConnectorTypeGroup(connectorType, connectorGroup) ">
                             {{dataObjectTypeMapping[connectorType]}}
                         </div>
                     </div>
@@ -85,6 +85,7 @@
         },
         props: {
             objectType: { type: String, default: null },
+            type: { type: String, default: null },
             dataObjectID: { type: String, default: '' },
         },
         methods: {
@@ -94,11 +95,13 @@
             ...mapActions('proj/object_manager', [
                 'newPage'
             ]),
-            selectConnectorType(connectorType) {
-                console.log('selectConnectorType');
+            selectConnectorTypeGroup(connectorType, connectorGroup) {
                 let objectID = this.dataObjectID;
                 let object = R.clone(this.dataObjects[objectID]);
                 object['type'] = connectorType;
+                object['type_text'] = this.dataObjectTypeMapping[connectorType];
+                object['group'] = connectorGroup;
+                object['group_text'] = this.dataObjectGroupMapping[connectorGroup];
                 object['parameters'] = {};
                 this.UPDATE_DATA_OBJECT({ObjectID: objectID, Object: object});
                 this.activeConnectorType = connectorType;
@@ -107,12 +110,15 @@
                 this.activeConnectorType = ''
             },
             saveConnector() {
-                this.newPage({
-                    typeCD: 200,
-                    selName: this.elementName,
-                    conObjects: {'connector_id': this.dataObjectID}
-                });
-
+                if (this.type==='new') {
+                    this.newPage({
+                        typeCD: 200,
+                        selName: this.elementName,
+                        dataObjectTags: {'connector': this.dataObjectID}
+                    });
+                }
+                this.$bvModal.hide('new-connector-explorer');
+                this.$bvModal.hide('existing-connector-explorer');
             }
         },
         computed: {
@@ -120,7 +126,7 @@
                 'dataObjectDefinitions'
             ]),
             ...mapGetters('proj', [
-                'dataObjectTypeMapping', 'dataObjectGroupMapping', 'activeNode', 'activeProcess', 'activePage', 'dataObjects'
+                'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping', 'activeNode', 'activeProcess', 'activePage', 'dataObjects'
             ]),
             dataConnectorGroups() {
                 let result = {};
@@ -131,6 +137,9 @@
                     }
                 }
                 return result
+            },
+            dataObject() {
+                return this.dataObjects[this.dataObjectID]
             },
             activeFunction() {
                 let result = {};
@@ -144,6 +153,12 @@
             activeFunctionKwargs() {
                 return this.activeFunction.hasOwnProperty('parameters') ? this.activeFunction['parameters'] : []
             }
+        },
+        mounted() {
+            if (this.dataObject.type) {
+                this.activeConnectorType = this.dataObject.type;
+            }
+
         }
     };
 </script>

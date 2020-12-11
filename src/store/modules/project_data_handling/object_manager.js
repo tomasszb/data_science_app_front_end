@@ -2,6 +2,7 @@ import axios from "axios";
 import router from "../../../Routes";
 import TreeModel from 'tree-model'
 import {get_active_object} from "../../../core/projectManager";
+const R = require('ramda');
 
 function getOrDefault(providedValue, defaultValue) {
     return providedValue!==null ? providedValue : defaultValue;
@@ -9,6 +10,10 @@ function getOrDefault(providedValue, defaultValue) {
 
 function genProjectObjectID() {
     return 'po-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+}
+
+function genDataObjectID() {
+    return 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
 }
 
 function getPosition(list) {
@@ -50,27 +55,23 @@ const childTypes = {
 export default {
     namespaced: true,
     actions: {
-        setActivePO({state, commit, rootState, rootGetters}, {selectedProcess, selectedPage, selectedNode, selectedElement}) {
+        setActivePO({state, commit, rootState, rootGetters}, {selectedProcess, selectedPage, selectedNode}) {
             let currentActiveProcess = rootState['proj']['selectedProcess'];
             let currentActivePages = rootState['proj']['selectedPages'];
             let currentActiveNodes = rootState['proj']['selectedNodes'];
-            let currentActiveElements = rootState['proj']['selectedElements'];
 
             let processList = rootGetters['proj/processList'];
             let pageLists = rootGetters['proj/pageLists'];
             let nodeLists = rootGetters['proj/nodeLists'];
-            let elementLists = rootGetters['proj/elementLists'];
 
             let activeProcess = get_active_object(selectedProcess, currentActiveProcess, processList);
             // console.log(selectedPage, currentActivePages[activeProcess], pageLists[activeProcess]);
             let activePage = get_active_object(selectedPage, currentActivePages[activeProcess], pageLists[activeProcess]);
             let activeNode = get_active_object(selectedNode, currentActiveNodes[activePage], nodeLists[activePage]);
-            let activeElement = get_active_object(selectedElement, currentActiveElements[activeNode], elementLists[activeNode]);
 
             commit("proj/SET_SELECTED_PROCESS", activeProcess, { root: true });
             commit("proj/SET_SELECTED_PAGE", {activePage, activeProcess}, { root: true });
             commit("proj/SET_SELECTED_NODE", {activeNode, activePage}, { root: true });
-            commit("proj/SET_SELECTED_ELEMENT", {activeElement, activeNode}, { root: true });
 
         },
         updatePO({commit}, {ProjectObjectID, ProjectObject}) {
@@ -92,79 +93,20 @@ export default {
             console.log(childrenIDs);
 
             commit("proj/DELETE_PROJECT_OBJECT", ProjectObjectID, { root: true });
-            dispatch("setActivePO", {selectedProcess:null, selectedPage:null, selectedNode:null, selectedElement:null});
+            dispatch("setActivePO", {selectedProcess:null, selectedPage:null, selectedNode:null});
         },
         updateDO({commit}, {DataObjectID, DataObject}) {
             commit("proj/UPDATE_PROJECT_OBJECT", {DataObjectID, DataObject}, { root: true });
-        },
-        newElement(
-            {commit, dispatch, rootGetters},
-            {
-                typeCD,
-                selName,
-                existElementID=null,
-                selNode=null,
-                selPosition=null,
-                conObjects=null
-            }
-        ) {
-            let rg = rootGetters;
-            let elementID = getOrDefault(existElementID, genProjectObjectID());
-            let nodeID = getOrDefault(selNode, rg['proj/activeNode']);
-            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/elementLists'][nodeID]));
-            let name = getOrDefault(selName, defaultNames[typeCD]);
-
-            let parameters = {};
-
-            if (conObjects!==null) {
-                if (typeCD===400) {
-                    parameters = {
-                        'node_id': nodeID,
-                        'connector_id': conObjects.hasOwnProperty('connector_id') ? conObjects['connector_id'] : null,
-                        "cache_data": true,
-                        "save_data": false,
-                        "local_execution": false,
-                        "pass_data": true,
-                        "report_data": false
-                    }
-                }
-                if (typeCD===401) {
-                    parameters = {
-                        'node_id': nodeID,
-                        'action_id': conObjects.hasOwnProperty('action_id') ? conObjects['action_id'] : null,
-                        "cache_data": true,
-                        "save_data": false,
-                        "local_execution": false,
-                        "pass_data": true,
-                        "report_data": false
-                    }
-                }
-            }
-
-            let emptyElement = {
-                'id': elementID,
-                'name': name,
-                'group': 4,
-                'type': typeCD,
-                "project_id": localStorage.getItem('project_id'),
-                "relative_position": relativePosition,
-                "front_end_tag": "connector",
-                'parameters': parameters,
-                "display_settings": {}
-            };
-            console.log(emptyElement);
-            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID:elementID, Object: emptyElement}, { root: true });
         },
         newNode(
             {commit, dispatch, rootGetters},
             {
                 typeCD,
-                selName,
+                selName=null,
                 existNodeID=null,
                 selPage=null,
                 selPosition=null,
-                createChild=true,
-                conObjects=null
+                dataObjectTags=null
             }
         ) {
             let rg = rootGetters;
@@ -187,11 +129,35 @@ export default {
             };
             console.log(emptyNode);
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID:nodeID, Object: emptyNode}, { root: true });
-            if (createChild) {
-                let childType = childTypes[typeCD];
-                let name = defaultNames[childType];
-                dispatch('newElement', {typeCD: childType, selName: name, selNode: nodeID, conObjects: conObjects})
+        },
+        copyDataObject(
+            {commit, dispatch, rootGetters},
+            {
+               dataObjectID
             }
+        ) {
+            let dataObject = R.clone(rootGetters['proj/dataObjects'][dataObjectID]);
+            let newDataObjectID = genDataObjectID();
+            dataObject['id'] = newDataObjectID;
+            commit("proj/UPDATE_DATA_OBJECT", {ObjectID: newDataObjectID, Object: dataObject}, { root: true });
+            return newDataObjectID;
+        },
+        copyProjectObject(
+            {commit, dispatch, rootGetters},
+            {
+                projectObjectID
+            }
+        ) {
+            let projectObject = R.clone(rootGetters['proj/projectObjects'][projectObjectID]);
+            let newProjectObjectID = genProjectObjectID();
+            projectObject['id'] = newProjectObjectID;
+
+            let newDataObjectTags = {};
+            for (const [tag, dataObjectID] of Object.entries(projectObject['data_object_tags'])) {
+                newDataObjectTags[tag] = dispatch('copyDataObject', {dataObjectID: dataObjectID})
+            }
+
+            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: newProjectObjectID, Object: projectObject}, { root: true });
         },
         newPage(
             {commit, dispatch, rootGetters},
@@ -202,7 +168,7 @@ export default {
                 selProcess=null,
                 selPosition=null,
                 createChild=true,
-                conObjects=null
+                dataObjectTags=null
             }
         ) {
             let rg = rootGetters;
@@ -218,6 +184,7 @@ export default {
                 'type': typeCD,
                 "project_id": localStorage.getItem('project_id'),
                 "relative_position": relativePosition,
+                "data_object_tags": dataObjectTags,
                 'parameters': {
                     'process_id': processID,
                 },
@@ -226,8 +193,12 @@ export default {
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: pageID, Object: emptyPage}, { root: true });
             if (createChild) {
                 let childType = childTypes[typeCD];
+                let dataObjectTags = {};
+                if (childType===300) {
+                    dataObjectTags['query'] = null;
+                }
                 let name = defaultNames[childType];
-                dispatch('newNode', {typeCD: childType, selName: name, selPage: pageID, conObjects: conObjects})
+                dispatch('newNode', {typeCD: childType, selName: name, selPage: pageID, dataObjectTags: dataObjectTags})
             }
         }
     },

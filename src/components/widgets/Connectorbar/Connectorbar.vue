@@ -10,8 +10,7 @@
             </span>
             <connector-explorer/>
         </div>
-        <div class="d-flex justify-content-start align-items-center flex-vertical">
-            <draggable v-model="pageList" class="d-flex justify-content-start flex-vertical">
+        <draggable id="testing-connector-bar" class="justify-content-start align-items-center page-list" v-model="pageList">
                 <object-selector
                         v-for="pageID in pageList"
                         :key="'po-'+pageID"
@@ -19,8 +18,8 @@
                         showDetail
                         detailType="connector_type"
                 />
-            </draggable>
-        </div>
+
+        </draggable>
     </div>
 </template>
 
@@ -40,19 +39,10 @@
             objectType: { type: String, default: null },
         },
         methods: {
-            ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT'
-            ]),
+            ...mapMutations('proj', ['UPDATE_PROJECT_OBJECT']),
         },
         computed: {
-            ...mapGetters('proj', [
-                'projectObjects', 'dataObjects', 'ProjectTree',
-                'processList', 'pageLists', 'pageLists', 'elementLists',
-                'activeProcess', 'activePage', 'activeNode', 'activeElement'
-            ]),
-            ...mapState('proj', [
-                'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements'
-            ]),
+            ...mapGetters('proj', ['projectObjects', 'pageLists', 'activeProcess']),
 
             pageList: {
                 get() {
@@ -62,8 +52,9 @@
                     for (let i = 0; i < pageIDs.length ;i++) {
                         let pageID = pageIDs[i];
                         let page = R.clone(this.projectObjects[pageID]);
-                        page.relative_position = i;
-                        this.UPDATE_PROJECT_OBJECT({ObjectId: pageID, Object: page})
+                        page.relative_position = i+1;
+                        console.log(pageID, pageIDs, page);
+                        this.UPDATE_PROJECT_OBJECT({ObjectID: pageID, Object: page})
                     }
                 }
             }

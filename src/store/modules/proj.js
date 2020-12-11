@@ -32,7 +32,6 @@ export default {
         selectedProcess: null,
         selectedPages: {},
         selectedNodes: {},
-        selectedElements: {},
 
         projectObjectStatuses: {}
 
@@ -66,11 +65,6 @@ export default {
             nodeLists[null] = [];
             return nodeLists
         },
-        elementLists: (state, getters) => {
-            let elementLists = getProjectBranch(getters.projectObjects, concatValues(getters.nodeLists), 'node_id', 4);
-            elementLists[null] = [];
-            return elementLists
-        },
         activeProcess: (state) => {
             return state.selectedProcess
         },
@@ -85,58 +79,6 @@ export default {
         activeNode: (state, getters) => {
             if (state.selectedNodes.hasOwnProperty(getters.activePage)) {
                 return state.selectedNodes[getters.activePage]
-            }
-            else {
-                return null
-            }
-        },
-        nodeElements: (state, getters) => {
-            let result = {};
-            if (getters.elementLists.hasOwnProperty(getters.activeNode)) {
-                for (let nodeID of Object.keys(getters.elementLists)) {
-                    result[nodeID] = {};
-                    for (let elementID of getters.elementLists[nodeID]) {
-                        let element = getters.projectObjects[elementID];
-                        if (element['front_end_tag']!=='') {
-                            result[nodeID][element['front_end_tag']] = element.id
-                        }
-                    }
-                }
-            }
-            return result
-        },
-        activeElement: (state, getters) => {
-            if (state.selectedElements.hasOwnProperty(getters.activeNode)) {
-                return state.selectedElements[getters.activeNode]
-            }
-            else {
-                return null
-            }
-        },
-        activeElementSettings: (state, getters) => {
-            if (getters.activeElement != null) {
-                return getters.projectObjects[getters.activeElement]
-            }
-            else {
-                return null
-            }
-        },
-        activeObjectSettings: (state, getters) => {
-            if (getters.activeElement != null) {
-                return getters.projectObjects[getters.activeElement]
-            }
-            else {
-                return null
-            }
-        },
-        activeElementDisplaySettings: (state, getters) => {
-            if (getters.activeElementSettings != null) {
-                if(typeof getters.activeElementSettings['display_settings']!='undefined') {
-                    return getters.activeElementSettings['display_settings']
-                }
-                else {
-                    return {}
-                }
             }
             else {
                 return null
@@ -195,48 +137,6 @@ export default {
             }
             // console.log(ProjectDict);
             return ProjectDict
-        },
-        projectObjectDataObjects: (state, getters) => {
-            let result = {};
-            let empty = {'actions': [], 'connectors': []};
-            let emptyElement = {'action': null, 'connector': null};
-            for (let processID of getters.processList) {
-                result[processID] = R.clone(empty);
-                for (let pageID of getters.pageLists[processID]) {
-                    result[pageID] = R.clone(empty);
-                    for (let nodeID of getters.nodeLists[pageID]) {
-                        result[nodeID] = R.clone(empty);
-                        for (let elementID of getters.elementLists[nodeID]) {
-                            result[elementID] = R.clone(emptyElement);
-
-                            let elementSettings = getters.projectObjects[elementID];
-                            let parameters = elementSettings['parameters'];
-                            if (parameters['local_execution']===false) {
-
-                                let connectorID = parameters['connector_id'];
-                                if (typeof connectorID !=='undefined') {
-                                    result[processID]['connectors'].push(connectorID);
-                                    result[pageID]['connectors'].push(connectorID);
-                                    result[nodeID]['connectors'].push(connectorID);
-                                    result[elementID]['connector']=connectorID;
-                                }
-
-                                let actionID = parameters['action_id'];
-                                if (typeof actionID !=='undefined') {
-                                    result[processID]['actions'].push(actionID);
-                                    result[pageID]['actions'].push(actionID);
-                                    result[nodeID]['actions'].push(actionID);
-                                    result[elementID]['action']=actionID;
-                                }
-                            }
-
-
-
-                        }
-                    }
-                }
-            }
-            return result
         }
     },
     mutations: {
@@ -259,9 +159,6 @@ export default {
         },
         SET_SELECTED_NODE(state, {activeNode, activePage}) {
             Vue.set(state.selectedNodes, activePage, activeNode);
-        },
-        SET_SELECTED_ELEMENT(state, {activeElement, activeNode}) {
-            Vue.set(state.selectedElements, activeNode, activeElement);
         },
         UPDATE_PROJECT_OBJECT(state, {ObjectID, Object}) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);

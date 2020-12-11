@@ -10,19 +10,19 @@
                         :objectType="objectType"
                 />
             </draggable>
-            <i class="fa fa-plus ml-3 list-element node-add" />
+            <i class="fa fa-plus ml-3 list-element node-add" @click="addNode()"/>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapState} from "vuex";
+    import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import ObjectSelector from "../ObjectSelector/ObjectSelector"
     import draggable from 'vuedraggable';
     const R = require('ramda');
 
     export default {
-        name: 'Sheettbar',
+        name: 'Sheetbar',
         components: {
             ObjectSelector, draggable
         },
@@ -31,8 +31,19 @@
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT'
+                'UPDATE_PROJECT_OBJECT', 'new'
             ]),
+            ...mapActions('proj/object_manager', [
+                'newNode'
+            ]),
+            addNode() {
+                console.log('here')
+                this.newNode({
+                    typeCD: 300,
+                    dataObjectTags: {'query': null}
+                });
+
+            }
         },
         computed: {
             ...mapGetters('proj', [

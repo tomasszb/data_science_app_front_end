@@ -3,7 +3,7 @@
 
 .object-selector {
   cursor: pointer;
-  padding: 0 10px 0 15px;
+  padding: 10px 10px 10px 15px;
   display: flex;
   align-items: center;
   font-size: 12px;
@@ -16,16 +16,25 @@
     font-size: 14px;
     line-height: 15px;
     color: $gray-600;
+    min-width: 10px!important;
     //margin-top: -6px;
     //margin-left: 10px;
-
     .fa-sort-down {
       margin-top: -2px;
+    }
+
+    button {
+      padding: 0;
     }
 
     i {
       margin-left: 12px;
     }
+  }
+
+  .dropdown-toggle {
+    background-color: transparent!important;
+    border: none;
   }
 
   .object-selector-text {
@@ -85,3 +94,6 @@
 .node-add:hover {
   color: $gray-500;
 }
+
+
+
