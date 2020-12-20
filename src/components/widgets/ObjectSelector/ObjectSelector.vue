@@ -40,7 +40,7 @@
                                 <b-dropdown-item @click="editObject">Edit</b-dropdown-item>
                                 <b-dropdown-item @click="deleteObject(objectID)">Delete</b-dropdown-item>
                                 <b-dropdown-item @click="duplicateObject(objectID)">Duplicate</b-dropdown-item>
-                                <b-dropdown-item @click="editObject">Load Data</b-dropdown-item>
+                                <b-dropdown-item @click="runFlow">Load Data</b-dropdown-item>
                             </b-dropdown>
                         </b-nav>
                     </div>
@@ -55,6 +55,7 @@
     import {mapActions, mapGetters, mapMutations} from "vuex";
     const R = require('ramda');
     import {getObjectSettings, getObjectSetting} from "../../../core/projectObjectParser";
+    import {createFlowRequest} from '@/core/projectManager';
 
     export default {
         name: 'ObjectSelector',
@@ -80,7 +81,7 @@
         },
         computed: {
             ...mapGetters('proj', [
-                'projectObjects', 'dataObjects', 'ProjectTree', 'projectObjectDataObjects',
+                'projectObjects', 'dataObjects', 'ProjectTree',
                 'dataObjectTypeMapping', 'dataObjectGroupMapping',
                 'processList', 'pageLists', 'nodeLists',
                 'activeProcess', 'activePage', 'activeNode'
@@ -159,7 +160,6 @@
             unblurObject() {
                 this.editedObject = null;
             },
-
             activateObject(objectID) {
                 this.setActivePO({
                         selectedProcess: this.objectGroup===1 ? objectID : null,
@@ -179,6 +179,13 @@
             },
             deleteObject(objectID) {
                 this.copyProjectObject({projectObjectID: objectID});
+            },
+            runFlow() {
+                let request = createFlowRequest(this.objectID);
+                this.request = request;
+                console.log(''.hashCode());
+                // this.$newRequest(request['request']['src_request_id'], request['request']['elements'].length);
+                this.$webSocketSend(request);
             }
         }
     };

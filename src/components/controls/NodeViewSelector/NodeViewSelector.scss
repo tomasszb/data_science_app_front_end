@@ -1,0 +1,17 @@
+@import '../../../styles/app';
+
+.node-view-selector {
+  margin-top: 2px;
+
+  .btn {
+    min-width: 100px;
+    color: $gray-600;
+  }
+  .btn.active{
+    color: $gray-800;
+    font-weight: 600!important;
+    //background-color: #7f3ddb!important;
+    box-shadow: none!important;
+    //border: none!important;
+  }
+}

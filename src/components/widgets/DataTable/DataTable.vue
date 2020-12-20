@@ -267,20 +267,11 @@
             displaySettings() {
                 return this.activeNodeSettings['display_settings']
             },
-            connectorElement() {
-                return this.nodeElements[this.activeNode]['connector']
-            },
-            tableSortElement() {
-                return this.nodeElements[this.activeNode]['table_sort']
-            },
-            tableFilterElement() {
-                return  this.nodeElements[this.activeNode]['table_filter']
-            },
             tableDisplaySettings() {
                 return (this.displaySettings['table_settings'] = this.displaySettings['table_settings'] || {})
             },
             tableFilterID() {
-                return this.projectObjects[this.nodeElements[this.activeNode]['table_filter']].parameters['action_id'];
+                return this.projectObjects[this.activeNode]['table_filter'].parameters['action_id'];
             },
             tableSortID() {
                 return this.projectObjects[this.nodeElements[this.activeNode]['table_sort']].parameters['action_id'];

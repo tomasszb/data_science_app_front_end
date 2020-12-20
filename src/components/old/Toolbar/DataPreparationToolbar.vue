@@ -209,7 +209,7 @@
 </template>
 
 <script>
-    import Header from "../../widgets/Header/Header"
+    import Header from "../../widgets/ToolHeader/ToolHeader"
     import Toolbox from "../../ui/Toolbox/Toolbox"
     export default {
         name: "DataPreparationToolbar",

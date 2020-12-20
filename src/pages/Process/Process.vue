@@ -8,6 +8,9 @@
                 </nav-sidebar>
                 <div class="flex-vertical">
                     <main-content>
+                        <template v-slot:node-view-selector>
+                            <node-view-selector/>
+                        </template>
 <!--                        <DataTable/>-->
 <!--                        <data-column-explorer/>-->
                     </main-content>
@@ -56,7 +59,6 @@
 <script>
 
 import NavSidebar from "../../components/layout/NavSidebar/NavSidebar"
-import ToolHeader from "../../components/layout/ToolHeader/ToolHeader"
 import ToolFooter from "../../components/layout/ToolFooter/ToolFooter"
 import MainContent from "../../components/layout/MainContent/MainContent"
 // import DataTable from "../../components/widgets/DataTable/DataTable"
@@ -64,6 +66,8 @@ import MainContent from "../../components/layout/MainContent/MainContent"
 import Sheetbar from "../../components/widgets/Sheetbar/Sheetbar"
 import Connectorbar from "../../components/widgets/Connectorbar/Connectorbar"
 // import Prepbar from "../../components/widgets/Prepbar/Prepbar"
+import NodeViewSelector from "../../components/controls/NodeViewSelector/NodeViewSelector";
+import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -76,7 +80,7 @@ export default {
         // NavSidebar, ToolHeader, ToolFooter,
         // DataTable, DataColumnExplorer, MainContent,
         // Sheetbar
-        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar
+        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector
     },
     data() {
         return {

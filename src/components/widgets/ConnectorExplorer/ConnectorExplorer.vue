@@ -77,7 +77,8 @@
                 'projectObjects', 'activePage', 'activeNode'
             ]),
             activeDataObjectID() {
-                return this.projectObjects[this.activePage]['data_object_tags']['connector'].toString();
+                let dataObjectTags = this.projectObjects[this.activePage]['data_object_tags'];
+                return dataObjectTags.hasOwnProperty('connector') ? dataObjectTags['connector'].toString() : null;
             }
         }
     };

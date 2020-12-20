@@ -118,4 +118,4 @@
     };
 </script>
 
-<style src="Header.scss" lang="scss"></style>
+<style src="./ToolHeader.scss" lang="scss"></style>

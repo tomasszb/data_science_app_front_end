@@ -1,5 +1,5 @@
 import { emptyProject } from './project_data_handling/empty_project';
-import {getProjectBranch, concatValues, get_selected_object, getObjectByRoute} from '../../core/projectManager'
+import {getProjectBranch, concatValues, get_selected_object, getObjectByRoute, calculateNodeSignature} from '../../core/projectManager'
 import api from './project_data_handling/api';
 import websocket from './project_data_handling/websocket';
 import object_manager from './project_data_handling/object_manager'
@@ -85,6 +85,17 @@ export default {
             }
         },
 
+        nodeSignatures: (state) => {
+            let result = {};
+            for (const projectObject of state.projectData['project_objects']) {
+                if (projectObject.group===3) {
+                    result[projectObject.id] = calculateNodeSignature(projectObject.id);
+                }
+            }
+            console.log('nodeSignatures', result);
+            return result
+        },
+
         dataObjectTypeMapping: (state, getters) => {
             let result = {};
             for (const [categoryName, category] of Object.entries(state.dataObjectDefinitions)) {
@@ -163,7 +174,7 @@ export default {
         UPDATE_PROJECT_OBJECT(state, {ObjectID, Object}) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
             if (index === null) {
-                state.projectData['project_objects'].push(Object)
+                state.projectData['project_objects'].push(Object);
             }
             else {
                 Vue.set(state.projectData['project_objects'], index, Object)

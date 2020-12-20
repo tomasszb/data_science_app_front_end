@@ -62,7 +62,7 @@
 </template>
 
 <script>
-    import Header from "../../widgets/Header/Header"
+    import Header from "../../widgets/ToolHeader/ToolHeader"
     import Toolbox from "../../ui/Toolbox/Toolbox"
     import { createFlowRequest } from '@/core/projectManager';
     import {mapGetters, mapState} from "vuex";

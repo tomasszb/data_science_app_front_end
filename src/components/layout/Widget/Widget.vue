@@ -8,8 +8,10 @@
   }" ref="widget">
     <h5 v-if="title && typeof title === 'string' && !customHeader" class="title">{{title}}</h5>
     <header v-if="title && customHeader" class="title" v-html="title"></header>
+
     <div v-if="!customControls && mainControls"
-      class="widgetControls widget-controls">
+      class="widgetControls widget-controls d-inline-flex">
+      <slot name="node-view-selector"></slot>
       <a v-if="settings || settingsInverse" href="#"><i class="la la-cog"></i></a>
       <a @click="loadWidgster($event)" v-if="refresh" href="#" :id="`reloadId-${randomId}`">
         <strong v-if="typeof refresh === 'string'" class="text-gray-light">{{refresh}}</strong>

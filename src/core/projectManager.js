@@ -1,5 +1,7 @@
 import store from '../store/index'
 import {mapGetters, mapState} from "vuex";
+const R = require('ramda');
+
 
 
 function comparePosition( a, b ) {
@@ -76,42 +78,130 @@ export function get_active_object(activeNew, activeOld, allList) {
 }
 
 
-export function createFlowRequest(elementCommands, parentElements, localElements) {
-  let elementLists = store.getters['proj/elementLists'];
+export function getUpstreamNodes(nodeID, upstreamNodes) {
+  let objects = store.getters['proj/projectObjects'];
+  let node = objects[nodeID];
+  let srcNodeID = node['parameters']['source_data_node'];
+  let secNodeIDs = node['parameters']['secondary_data_nodes'];
+  let parentPageID = node['parameters']['page_id'];
+  if (srcNodeID !== null) {
+    let upstreamNodeID = srcNodeID;
+    upstreamNodes.push(upstreamNodeID);
+    getUpstreamNodes(upstreamNodeID, upstreamNodes);
+  } else {
+    let nodes = R.clone(store.getters['proj/nodeLists'][parentPageID]);
+    let sortedNodes = nodes.sort((a, b) => (objects[a].relative_position < objects[b].relative_position ? 1 : -1));
+    let pageUpstreamNodes = sortedNodes.filter((a)=>{if(objects[a].relative_position<node.relative_position){return a}});
+    if (pageUpstreamNodes.length>0) {
+      let upstreamNodeID = objects[pageUpstreamNodes[0].id];
+      upstreamNodes.push(upstreamNodeID);
+      getUpstreamNodes(upstreamNodeID, upstreamNodes);
+    }
+  }
+  if (secNodeIDs) {
+    for (let secNodeID of secNodeIDs) {
+      let upstreamNodeID = secNodeID;
+      upstreamNodes.push(upstreamNodeID);
+      getUpstreamNodes(upstreamNodeID, upstreamNodes);
+    }
+  }
+  return upstreamNodes
+}
+
+export function calculateNodeSignature(parentNodeID) {
+  let projectObjects = store.getters['proj/projectObjects'];
+  let dataObjects = store.getters['proj/dataObjects'];
+  let nodeDataObjectTags = {};
+  let nodeDataObjects = {};
+  let nodeIDs = getUpstreamNodes(parentNodeID, []).reverse().concat([parentNodeID]);
+  for (const nodeID of nodeIDs) {
+    let node = projectObjects[nodeID];
+    let page = projectObjects[node.parameters['page_id']];
+    let tags = {...page['data_object_tags'], ...node['data_object_tags']};
+
+    console.log(nodeID, node, tags)
+    nodeDataObjects[nodeID] = [];
+    if (node.type===300) {
+      if (tags.hasOwnProperty('connector')) {
+        nodeDataObjects[nodeID].push(dataObjects[tags['connector'].toString()])
+      }
+    }
+    else if (node.type===301) {
+      if (tags.hasOwnProperty('action')) {
+        nodeDataObjects[nodeID].push(dataObjects[tags['action'].toString()])
+      }
+    }
+    if (node.id === parentNodeID) {
+      if (tags.hasOwnProperty('output_table_sort') && tags.hasOwnProperty('output_table_filter')) {
+        nodeDataObjects[nodeID].push(dataObjects[tags['output_table_sort'].toString()]);
+        nodeDataObjects[nodeID].push(dataObjects[tags['output_table_filter'].toString()]);
+      }
+    }
+  }
+  console.log({'nodes': nodeIDs, 'data_objects': nodeDataObjects});
+  return JSON.stringify({'nodes': nodeIDs, 'data_objects': nodeDataObjects}).hashCode();
+
+}
+
+
+export function createFlowRequest(parentNodeID, execution_commands=null) {
   let projectObjects = store.getters['proj/projectObjects'];
   let dataObjects = store.getters['proj/dataObjects'];
 
   let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
   let request = {"action": "run_flow"};
-  let elements = [];
-  let project_data_objects = [];
-  let filteredElementIDs = getUpstreamElements(projectObjects, elementLists, [], parentElements);
+  let nodeIDs = [];
+  let nodes = [];
+  let connDataObjectIDs = [];
+  let connDataObjects = [];
+  let nodeCommands = {};
+  let inheritedDataObjectTags = {};
   let projectID = localStorage.getItem('project_id');
+  let allUpstreamNodeIDs = getUpstreamNodes(parentNodeID,[]);
 
-  for (const [parent_node_id, element_ids] of Object.entries(elementLists)) {
-    for (let index in element_ids) {
-      let element_id = element_ids[index];
-      let element = projectObjects[element_id];
-      console.log(element);
-      if((filteredElementIDs.includes(element_id) && element['parameters']['local_execution'] === false) || localElements.includes(parseInt(element_id))) {
-        let parent_node = projectObjects[parent_node_id];
-        element['source_data_node_id'] = parent_node['parameters']['source_data_node_id'];
-        element['command']  = element_id in elementCommands ? elementCommands[element_id] : "run";
-        elements.push(element)
+  for (let nodeID of allUpstreamNodeIDs.reverse().concat([parentNodeID])) {
+    if (!allUpstreamNodeIDs.includes(nodeID)) {
+      nodeIDs.push(nodeID);
+      let pageID = projectObjects[nodeID]['parameters']['page_id'];
+      let pageDataObjectTags = projectObjects[pageID]['data_object_tags'];
+      inheritedDataObjectTags[nodeID] = pageDataObjectTags;
+
+      let nodeDataObjectTags = projectObjects[nodeID]['data_object_tags'];
+      let allDataObjectTags =  Object.values(pageDataObjectTags).concat(Object.values(nodeDataObjectTags));
+      for (let dataObjectID of allDataObjectTags) {
+        if (!connDataObjectIDs.includes(dataObjectID)) {
+          connDataObjectIDs.push(dataObjectID)
+        }
       }
 
+      switch(projectObjects[nodeID].type) {
+        case 300:
+          nodeCommands[nodeID] = ['run_connector'];
+          break;
+        case 301:
+          nodeCommands[nodeID] = ['run_data'];
+          break;
+        case 302:
+          nodeCommands[nodeID] = ['run_data'];
+          break;
+      }
     }
   }
-  for (const [id, project_data_object] of Object.entries(dataObjects)) {
-    project_data_objects.push(project_data_object);
+
+  if (execution_commands) {
+    nodeCommands[parentNodeID] = execution_commands;
   }
+
+  for (let id of connDataObjectIDs) connDataObjects.push(dataObjects[id]);
+  for (let id of nodeIDs) nodes.push(projectObjects[id]);
 
   request['request']={};
   request['request']['src_request_id'] = src_request_id;
   request['request']["project_id"] = projectID;
-  // request['request']["owner_id"] = ownerID;
-  request['request']['project_data_objects'] = project_data_objects;
-  request['request']['elements'] = elements;
+  request['request']["inherited_data_object_tags"] = inheritedDataObjectTags;
+  request['request']["nodes"] = nodes;
+  request['request']["node_commands"] = nodeCommands;
+  request['request']['data_objects'] = connDataObjects;
 
   console.log(request);
 
@@ -154,30 +244,6 @@ export function initProjectBranches(projectObjects) {
   return [processList, pageList, nodeList, elementList]
 }
 
-export function getUpstreamElements(projectObjects, elementList, elements, parentElements) {
-  let new_elements = [];
-  for( let elementID of parentElements ) {
-    let element = projectObjects[elementID];
-    let node_id = element.parameters.node_id;
-    let sec_data_node_id = element.parameters.sec_data_node_id;
-    let source_data_node_id = element.parameters.source_data_node_id;
-
-    new_elements = new_elements.concat(elementList[node_id]);
-    new_elements = new_elements.concat(elementList[sec_data_node_id]);
-    new_elements = new_elements.concat(elementList[source_data_node_id]);
-
-    new_elements = new_elements.filter(function (e) {
-      return e != null & !elements.includes(e);
-    });
-  }
-  elements = elements.concat(new_elements);
-  if (new_elements.length > 0) {
-    return getUpstreamElements(projectObjects, elementList, elements, new_elements)
-  } else {
-    return elements
-  }
-
-}
 
 export function getObjectByRoute(route, parentObject) {
   let output = parentObject;

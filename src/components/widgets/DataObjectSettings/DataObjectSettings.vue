@@ -60,7 +60,7 @@
         },
         computed: {
             ...mapGetters('proj', [
-                'dataObjects', 'dataObjectParameterMapping', 'projectObjectDataObjects'
+                'dataObjects', 'dataObjectParameterMapping'
             ]),
             dataObjectSettings() {
                 console.log(this.dataObjects[this.dataObjectID]);

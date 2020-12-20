@@ -1,7 +1,7 @@
 <template>
-    <div class="sheet-bar">
-        <div class="d-flex justify-content-start align-items-center">
-            <draggable v-model="objectList" class="d-flex justify-content-start">
+    <div class="sheet-bar r-100">
+        <div class="d-flex justify-content-start align-items-center r-100">
+            <draggable v-model="objectList" class="d-flex justify-content-start r-100">
                 <object-selector
                         v-for="objectID in objectList"
                         :key="'po-'+objectID"
