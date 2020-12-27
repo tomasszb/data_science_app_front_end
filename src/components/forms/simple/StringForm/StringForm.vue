@@ -49,7 +49,7 @@
                     return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
                 },
                 set(newValue) {
-                    this.UPDATE_DATA_OBJECT_PARAMETER({
+                    this.SET_DO_PARAMETER({
                         objectID: this.dataObjectID,
                         route: this.route,
                         parameterName: this.parameterIndex,
@@ -60,7 +60,7 @@
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_DATA_OBJECT_PARAMETER'
+                'SET_DO_PARAMETER'
             ]),
             formatter(value) {
                 let newValue = R.clone(value);

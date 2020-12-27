@@ -11,7 +11,9 @@
                         <template v-slot:node-view-selector>
                             <node-view-selector/>
                         </template>
-<!--                        <DataTable/>-->
+                        <DataTable
+                                :nodeID="activeNode"
+                        />
 <!--                        <data-column-explorer/>-->
                     </main-content>
                     <tool-footer>
@@ -61,7 +63,7 @@
 import NavSidebar from "../../components/layout/NavSidebar/NavSidebar"
 import ToolFooter from "../../components/layout/ToolFooter/ToolFooter"
 import MainContent from "../../components/layout/MainContent/MainContent"
-// import DataTable from "../../components/widgets/DataTable/DataTable"
+import DataTable from "../../components/data_widgets/DataTable/DataTable";
 // import DataColumnExplorer from "../../components/widgets/DataColumnExplorer/DataColumnExplorer"
 import Sheetbar from "../../components/widgets/Sheetbar/Sheetbar"
 import Connectorbar from "../../components/widgets/Connectorbar/Connectorbar"
@@ -80,7 +82,7 @@ export default {
         // NavSidebar, ToolHeader, ToolFooter,
         // DataTable, DataColumnExplorer, MainContent,
         // Sheetbar
-        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector
+        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, DataTable
     },
     data() {
         return {

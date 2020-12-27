@@ -63,12 +63,12 @@
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_DATA_OBJECT_PARAMETER'
+                'SET_DO_PARAMETER'
             ]),
         },
         created() {
             if (typeof this.localParameters === 'undefined') {
-                this.UPDATE_DATA_OBJECT_PARAMETER({
+                this.SET_DO_PARAMETER({
                     objectID: parseInt(this.dataObjectID),
                     route: this.route,
                     parameterName: this.parameterIndex,

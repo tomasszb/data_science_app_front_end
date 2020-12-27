@@ -5,7 +5,6 @@ webSocketService.install = function (Vue, store) {
 
     Vue.prototype.$webSocketConnect = (options) => {
         ws = new WebSocket(options.url);
-        console.log("connected");
         let reconnectInterval = options.reconnectInterval || 1000;
 
         ws.onopen = () => {
@@ -42,7 +41,6 @@ webSocketService.install = function (Vue, store) {
 
     Vue.prototype.$webSocketDisconnect = () => {
         // Our custom disconnect event
-        console.log("disconnected");
         ws.close()
     };
 
@@ -53,7 +51,6 @@ webSocketService.install = function (Vue, store) {
 
     Vue.prototype.$newRequest = (src_request_id, all_tasks) => {
         // Send data to the backend - use JSON.stringify(data)
-        console.log("prepare Request");
         let payload = {
             "src_request_id": src_request_id,
             "all_tasks": all_tasks,

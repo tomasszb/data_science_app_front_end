@@ -181,9 +181,8 @@
                 this.copyProjectObject({projectObjectID: objectID});
             },
             runFlow() {
-                let request = createFlowRequest(this.objectID);
+                let request = createFlowRequest(this.objectID, ['run_connector', 'get_output_table']);
                 this.request = request;
-                console.log(''.hashCode());
                 // this.$newRequest(request['request']['src_request_id'], request['request']['elements'].length);
                 this.$webSocketSend(request);
             }

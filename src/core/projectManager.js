@@ -1,5 +1,6 @@
 import store from '../store/index'
 import {mapGetters, mapState} from "vuex";
+import Vue from "vue";
 const R = require('ramda');
 
 
@@ -25,6 +26,10 @@ export function getEmptyDataObject(type) {
     'parameters': {}
   };
   return object
+}
+
+export function getResultObjectID(tags) {
+  return tags.join('_');
 }
 
 
@@ -119,7 +124,6 @@ export function calculateNodeSignature(parentNodeID) {
     let page = projectObjects[node.parameters['page_id']];
     let tags = {...page['data_object_tags'], ...node['data_object_tags']};
 
-    console.log(nodeID, node, tags)
     nodeDataObjects[nodeID] = [];
     if (node.type===300) {
       if (tags.hasOwnProperty('connector')) {
@@ -138,7 +142,6 @@ export function calculateNodeSignature(parentNodeID) {
       }
     }
   }
-  console.log({'nodes': nodeIDs, 'data_objects': nodeDataObjects});
   return JSON.stringify({'nodes': nodeIDs, 'data_objects': nodeDataObjects}).hashCode();
 
 }
@@ -147,6 +150,7 @@ export function calculateNodeSignature(parentNodeID) {
 export function createFlowRequest(parentNodeID, execution_commands=null) {
   let projectObjects = store.getters['proj/projectObjects'];
   let dataObjects = store.getters['proj/dataObjects'];
+  let nodeSignatures = store.getters['proj/nodeSignatures'];
 
   let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
   let request = {"action": "run_flow"};
@@ -200,10 +204,10 @@ export function createFlowRequest(parentNodeID, execution_commands=null) {
   request['request']["project_id"] = projectID;
   request['request']["inherited_data_object_tags"] = inheritedDataObjectTags;
   request['request']["nodes"] = nodes;
+  request['request']['node_signatures'] = nodeSignatures;
   request['request']["node_commands"] = nodeCommands;
   request['request']['data_objects'] = connDataObjects;
 
-  console.log(request);
 
   return request
 }
@@ -238,19 +242,21 @@ export function initProjectBranches(projectObjects) {
   let pageIDs = [].concat.apply([], Object.values(pageList));
   let nodeList = getProjectBranch(projectObjects, pageIDs, 'page_id', 3);
 
-  let nodeIDs = [].concat.apply([], Object.values(nodeList));
+  let nodeIDs = [].conrcat.apply([], Object.values(nodeList));
   let elementList = getProjectBranch(projectObjects, nodeIDs, 'node_id', 4);
 
   return [processList, pageList, nodeList, elementList]
 }
 
 
-export function getObjectByRoute(route, parentObject) {
-  let output = parentObject;
-  // console.log('route', route, parentObject);
+export function getObjectByRoute(route, parentObject, createIfNotExist= true) {
+  let output = R.clone(parentObject);
   for (let i = 0; i < route.length; i++) {
     if (output.hasOwnProperty(route[i])) {
       output = output[route[i]]
+    }
+    else if (createIfNotExist) {
+
     }
     else {
       return null

@@ -30,7 +30,7 @@ import webSocketService from './core/webSocketService'
 import VueNumericInput from 'vue-numeric-input';
 import FontPicker from 'font-picker-vue';
 
-
+const R = require('ramda');
 
 Object.defineProperty(String.prototype, 'hashCode', {
     value: function() {
@@ -44,7 +44,33 @@ Object.defineProperty(String.prototype, 'hashCode', {
     }
 });
 
+Object.defineProperty(Object.prototype, 'getPath', {
+    value: function(path, defaultValue = undefined) {
+        const travel = regexp =>
+            String.prototype.split
+                .call(path, regexp)
+                .filter(Boolean)
+                .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), this);
+        const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
+        return result === undefined || result === this ? defaultValue : result;
+    }
+});
 
+Object.defineProperty(Object.prototype, 'setPath', {
+    value: function(path, value) {
+        let newObj = R.clone(this);
+        if (Object(newObj) !== newObj) return undefined;
+        if (!Array.isArray(path)) path = path.toString().match(/[^.[\]]+/g) || [];
+        path.slice(0,-1).reduce((a, c, i) =>
+                Object(a[c]) === a[c]
+                    ? a[c]
+                    : a[c] = Math.abs(path[i+1])>>0 === +path[i+1]
+                    ? []
+                    : {},
+            newObj)[path[path.length-1]] = value;
+        return newObj;
+    }
+});
 
 axios.defaults.baseURL = config.baseURLApi;
 axios.defaults.headers.common['Content-Type'] = "application/json";

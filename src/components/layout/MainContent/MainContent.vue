@@ -2,7 +2,6 @@
     <div class="app-main-content flex-grow-1">
         <Widget
                 title=""
-                :class="{'data-table':true, 'flex-grow-1': true}"
                 refresh settings customHeader fullscreen
                 :showLoader="false">
             <template v-slot:node-view-selector>

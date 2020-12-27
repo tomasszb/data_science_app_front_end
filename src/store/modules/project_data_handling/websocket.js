@@ -37,12 +37,12 @@ export default {
         },
         addSuccessRun: (state, payload) => {
             let src_request_id = payload['src_request_id'];
-            let project_object_id = payload['project_object_id'];
+            let node_id = payload['node_id'];
             if (src_request_id) {
                 let orig_request = JSON.parse(JSON.stringify(state.requests[src_request_id]));
                 let request = {};
                 request[src_request_id] = orig_request;
-                request[src_request_id]['success_tasks'].push(project_object_id);
+                request[src_request_id]['success_tasks'].push(node_id);
                 request[src_request_id]['success_tasks_count']=request[src_request_id]['success_tasks_count']+1;
                 request[src_request_id]['finished']=request[src_request_id]['all_tasks_count']<=request[src_request_id]['success_tasks_count']+request[src_request_id]['failed_tasks_count'];
                 delete state.requests[src_request_id];
@@ -78,28 +78,34 @@ export default {
         processNotifications: ({commit}, payload) => {
             var timestamp = Number(new Date());
             var date = new Date(timestamp);
-            console.log(date,timestamp,payload);
-            let src_request_id = payload["result"]["src_request_id"];
-            let project_object_id = payload["result"]["project_object_id"];
-            let status = payload["result"]["status"];
             let action = payload["action"];
+            let src_request_id = payload["result"]["src_request_id"];
+            let nodeID = payload["result"]["node_id"];
+            let executionTemplate = payload["result"]["execution_template"];
+            let lastCommandTask = payload["result"]["last_command_task"];
+            let status = payload["result"]["status"];
+            let resultTag = payload["result"]["result_tag"];
+            let nodeSignature = payload["result"]["node_signature"];
 
-            if (status==='success') {
-                commit('addSuccessRun', {
-                    'src_request_id':src_request_id,
-                    'project_object_id':project_object_id});
-                commit("proj/UPDATE_PROJECT_OBJECT_STATUS", {ObjectId: project_object_id, status: status}, { root: true });
-            }
-            else if (status==='failed') {
-                commit('addFailedRun', {
-                    'src_request_id':src_request_id,
-                    'project_object_id':project_object_id});
-                commit("proj/UPDATE_PROJECT_OBJECT_STATUS", {ObjectId: project_object_id, status: status}, { root: true });
-            }
             if (action === 'report_data') {
-                let dataFrameID = src_request_id + '-id:' + project_object_id.toString();
                 let data = JSON.parse(payload["result"]["data"]);
-                commit("proj/UPDATE_DATAFRAME", {dataFrameID: dataFrameID, data: data}, { root: true });
+                commit(
+                    "proj/UPDATE_DATAFRAME",
+                    {nodeID: nodeID, resultTag: resultTag, data: data, nodeSignature: nodeSignature},
+                    { root: true });
+            }
+            else if(lastCommandTask && status!=='running') {
+                console.log('processNotifications', nodeID, executionTemplate, nodeSignature, status);
+                commit(
+                    "proj/UPDATE_NODE_EXECUTION_STATUS",
+                    {
+                        nodeID: nodeID,
+                        executionTemplate: executionTemplate,
+                        nodeSignature: nodeSignature,
+                        status: status
+                    },
+                    { root: true }
+                );
             }
         }
     },

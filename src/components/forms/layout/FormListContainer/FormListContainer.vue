@@ -52,12 +52,12 @@
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_DATA_OBJECT_PARAMETER'
+                'SET_DO_PARAMETER'
             ]),
             addListElement() {
                 let localParameters = R.clone(this.localParameters);
                 localParameters.push(null);
-                this.UPDATE_DATA_OBJECT_PARAMETER({
+                this.SET_DO_PARAMETER({
                     objectID: parseInt(this.dataObjectID),
                     route: this.route,
                     parameterName: this.parameterIndex,
@@ -68,7 +68,7 @@
                 let localParameters = R.clone(this.localParameters);
                 if (localParameters.length>1) {
                     localParameters.splice(i, 1);
-                    this.UPDATE_DATA_OBJECT_PARAMETER({
+                    this.SET_DO_PARAMETER({
                         objectID: parseInt(this.dataObjectID),
                         route: this.route,
                         parameterName: this.parameterIndex,
@@ -79,7 +79,7 @@
         },
         created() {
             if (typeof this.localParameters === 'undefined' || this.localParameters === null) {
-                this.UPDATE_DATA_OBJECT_PARAMETER({
+                this.SET_DO_PARAMETER({
                     objectID: parseInt(this.dataObjectID),
                     route: this.route,
                     parameterName: this.parameterIndex,

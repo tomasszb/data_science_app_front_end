@@ -1,5 +1,5 @@
 import { emptyProject } from './project_data_handling/empty_project';
-import {getProjectBranch, concatValues, get_selected_object, getObjectByRoute, calculateNodeSignature} from '../../core/projectManager'
+import {getProjectBranch, concatValues, get_selected_object, getObjectByRoute, calculateNodeSignature, getResultObjectID} from '../../core/projectManager'
 import api from './project_data_handling/api';
 import websocket from './project_data_handling/websocket';
 import object_manager from './project_data_handling/object_manager'
@@ -27,13 +27,13 @@ export default {
         dataObjectDefinitions: {},
 
         dataFrames: {},
-        dataFrameMapping: {},
+        dataFrameStatus: {},
+        nodeExecutionStatus: {},
+
 
         selectedProcess: null,
         selectedPages: {},
         selectedNodes: {},
-
-        projectObjectStatuses: {}
 
     },
     getters: {
@@ -92,7 +92,6 @@ export default {
                     result[projectObject.id] = calculateNodeSignature(projectObject.id);
                 }
             }
-            console.log('nodeSignatures', result);
             return result
         },
 
@@ -184,10 +183,8 @@ export default {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
             Vue.set(state.projectData['project_objects'][index], 'display_settings', displaySettings)
         },
-        UPDATE_DATAFRAME_MAPPING(state, {dataFrameID, settings}) {
-            Vue.set(state.dataFrameMapping, settings, dataFrameID);
-        },
-        UPDATE_DATAFRAME(state, {dataFrameID, data}) {
+        UPDATE_DATAFRAME(state, {nodeID, resultTag, nodeSignature, data}) {
+            let dataFrameID = getResultObjectID([nodeID,resultTag,nodeSignature])
             Vue.set(state.dataFrames, dataFrameID,  data);
         },
         DELETE_PROJECT_OBJECT(state, ObjectId) {
@@ -203,27 +200,27 @@ export default {
                 Vue.set(state.projectData['project_data_objects'], index, Object)
             }
         },
-        UPDATE_DATA_OBJECT_PARAMETER(state, {objectID, route, parameterName, parameterValue}) {
-            let index = getObjectIndex(state.projectData['project_data_objects'], objectID);
+        SET_DO_PARAMETER(state, {id, route, value}) {
+            let index = getObjectIndex(state.projectData['project_data_objects'], id);
 
             if (index !== null) {
-                if (route!=null) {
-                    let parameterObject = getObjectByRoute(route, state.projectData['project_data_objects'][index]['parameters']);
-                    if (parameterObject!=null) {
-                        Vue.set(parameterObject, parameterName, parameterValue)
-                    }
-                }
-                else {
-                    Vue.set(state.projectData['project_data_objects'][index]['parameters'], parameterName, parameterValue)
-                }
+                let projectObject = state.projectData['project_data_objects'][index];
+                let parameterObject = R.clone(projectObject['parameters']);
+                let newParameterObject = parameterObject.setPath(route, value);
+                Vue.set(projectObject, 'parameters', newParameterObject)
             }
         },
         DELETE_DATA_OBJECT(state, ObjectId) {
             let index = getObjectIndex(state.projectData['project_data_objects'], ObjectId);
             Vue.delete(state.projectData['project_data_objects'], index);
         },
-        UPDATE_PROJECT_OBJECT_STATUS(state, {ObjectId, status}) {
-            Vue.set(state.projectObjectStatuses, ObjectId, status)
+        UPDATE_DATAFRAME_STATUS(state, {nodeID, resultTag, nodeSignature, status}) {
+            let dataFrameID = getResultObjectID([nodeID, resultTag, nodeSignature]);
+            Vue.set(state.dataFrameStatus, dataFrameID,  status);
+        },
+        UPDATE_NODE_EXECUTION_STATUS(state, {nodeID, executionTemplate, nodeSignature, status}) {
+            let nodeExecutionID = getResultObjectID([nodeID, executionTemplate, nodeSignature]);
+            Vue.set(state.nodeExecutionStatus, nodeExecutionID,  status);
         },
     },
     modules: {

@@ -81,7 +81,7 @@
 
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_DATA_OBJECT_PARAMETERS'
+                'SET_DO_PARAMETERS'
             ]),
             editorInit() {
                 require('brace/ext/language_tools'); //language extension prerequsite...

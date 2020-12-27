@@ -38,7 +38,6 @@ export default {
         },
         wsConnect (projectID) {
             let url = "ws://127.0.0.1:8000/ws/dsw_engine/" + projectID + "/";
-            console.log(url);
             this.$webSocketConnect({"url": url})
         },
         wsDisconnect () {

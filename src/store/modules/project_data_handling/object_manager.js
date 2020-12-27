@@ -80,9 +80,7 @@ export default {
         deletePO({commit, dispatch, rootGetters}, ProjectObjectID) {
             console.log('deletePO', ProjectObjectID);
             let ProjectObject = rootGetters['proj/projectObjects'][ProjectObjectID];
-            console.log(ProjectObject);
             let dictTree = rootGetters['proj/ProjectTree'];
-            console.log(dictTree);
             let tree = new TreeModel();
             let ProjectTree = tree.parse(dictTree);
 
@@ -90,7 +88,6 @@ export default {
                 return obj.model.id === ProjectObjectID;
             });
             let childrenIDs = selectedPO.children;
-            console.log(childrenIDs);
 
             commit("proj/DELETE_PROJECT_OBJECT", ProjectObjectID, { root: true });
             dispatch("setActivePO", {selectedProcess:null, selectedPage:null, selectedNode:null});
@@ -127,7 +124,6 @@ export default {
                 },
                 "display_settings": {}
             };
-            console.log(emptyNode);
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID:nodeID, Object: emptyNode}, { root: true });
         },
         copyDataObject(

@@ -64,7 +64,6 @@
         },
         methods: {
             toggleAccordion(element) {
-                console.log(element);
                 if (this.openSettings.includes(element)) {
                     let index = this.openSettings.indexOf(element);
                     this.openSettings.splice(index, 1);
