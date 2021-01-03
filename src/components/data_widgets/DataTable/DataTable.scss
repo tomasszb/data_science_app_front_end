@@ -23,7 +23,7 @@
     padding: 0px;
 
     .widget-body {
-      padding: 30px 10px 30px 10px;
+      padding: 30px 30px 10px 30px;
     }
 
 
@@ -44,10 +44,9 @@
       }
 
       table {
-        height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 150px);
+        height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 200px);
         overflow: scroll!important;
         width: 100%;
-        padding: 30px;
         //width:500px;
         display: block;
         white-space: nowrap;

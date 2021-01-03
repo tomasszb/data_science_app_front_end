@@ -16,7 +16,7 @@
 
 <script>
     import { mapState, mapGetters, mapActions} from "vuex";
-    import Chartbar from "../../old/Chartbar/Chartbar"
+    import Chartbar from "../../widgets/Chartbar/Chartbar"
     import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
     import ECharts from 'vue-echarts/components/ECharts';
     import 'echarts/lib/chart/bar';

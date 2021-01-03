@@ -8,7 +8,7 @@
                         :horizontal="horizontal"
                         :parameterIndex="i"
                         :route="route.concat([parameterIndex])"
-                        :dataObjectID="dataObjectID"
+                        :objectID="objectID"
                         :showLabel="i===0"
                 />
             </div>
@@ -33,7 +33,7 @@
         },
         props: {
             typeSettings: {type: Object, default: function() {return {}} },
-            dataObjectID: { type: String, default: null },
+            objectID: { type: String, default: null },
             route: {type: Array, default: function() {return []}},
             parameterIndex: {type: [Number, String]},
             name: {type: String, default: ''},
@@ -44,7 +44,7 @@
                 'dataObjects'
             ]),
             parentParameters() {
-                return this.dataObjects[this.dataObjectID]['parameters']
+                return this.dataObjects[this.objectID]['parameters']
             },
             localParameters() {
                 return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
@@ -58,10 +58,9 @@
                 let localParameters = R.clone(this.localParameters);
                 localParameters.push(null);
                 this.SET_DO_PARAMETER({
-                    objectID: parseInt(this.dataObjectID),
-                    route: this.route,
-                    parameterName: this.parameterIndex,
-                    parameterValue: localParameters
+                    id: parseInt(this.objectID),
+                    route: this.route.concat(this.parameterIndex),
+                    value: localParameters
                 })
             },
             deleteListElement(i) {
@@ -69,10 +68,9 @@
                 if (localParameters.length>1) {
                     localParameters.splice(i, 1);
                     this.SET_DO_PARAMETER({
-                        objectID: parseInt(this.dataObjectID),
-                        route: this.route,
-                        parameterName: this.parameterIndex,
-                        parameterValue: localParameters
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: localParameters
                     })
                 }
             }
@@ -80,10 +78,9 @@
         created() {
             if (typeof this.localParameters === 'undefined' || this.localParameters === null) {
                 this.SET_DO_PARAMETER({
-                    objectID: parseInt(this.dataObjectID),
-                    route: this.route,
-                    parameterName: this.parameterIndex,
-                    parameterValue: []
+                    id: parseInt(this.objectID),
+                    route: this.route.join('.'),
+                    value: []
                 });
             }
             if (this.localParameters.length === 0) {

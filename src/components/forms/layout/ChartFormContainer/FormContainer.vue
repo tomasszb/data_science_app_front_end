@@ -21,18 +21,8 @@
                 :precision="2"
                 :step="0.01"
         />
-        <select-form
-                v-if="typeSettings.type === 'string' && typeSettings.options !== null"
-                :objectID="objectID"
-                :parameterIndex="parameterIndex"
-                :name="name"
-                :options="typeSettings.options"
-                :horizontal="horizontal"
-                :route="route"
-                :showLabel="showLabel"
-        />
         <string-form
-                v-if="typeSettings.type === 'string' && typeSettings.options === null"
+                v-if="typeSettings.type === 'string'"
                 :objectID="objectID"
                 :parameterIndex="parameterIndex"
                 :name="name"
@@ -99,6 +89,8 @@
 </template>
 
 <script>
+    import MergeForm from "../../../forms/MergeForm/MergeForm";
+    import MappingForm from "../../../forms/MappingForm/MappingForm";
     import NumericForm from "../../../forms/simple/NumericForm/NumericForm";
     import BooleanForm from "../../../forms/simple/BooleanForm/BooleanForm";
     import ConditionForm from "../../../forms/nested/ConditionForm/ConditionForm";
@@ -107,13 +99,12 @@
     import ColumnForm from "../../../forms/simple/ColumnForm/ColumnForm";
     import FormulaForm from "../../../forms/simple/FormulaForm/FormulaForm";
     import MergeColumnPairForm from "../../nested/MergeColumnPairForm/MergeColumnPairForm";
-    import SelectForm from "../../simple/SelectForm/SelectForm";
 
     export default {
         name: "FormContainer",
         components: {
-            ColumnForm, NumericForm, FormulaForm,
-            ConditionForm, BooleanForm, DictionaryForm, StringForm, SelectForm,
+            ColumnForm, MergeForm, MappingForm, NumericForm, FormulaForm,
+            ConditionForm, BooleanForm, DictionaryForm, StringForm,
             MergeColumnPairForm
         },
         props: {

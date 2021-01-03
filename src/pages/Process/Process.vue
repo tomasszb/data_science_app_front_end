@@ -12,6 +12,7 @@
                             <node-view-selector/>
                         </template>
                         <DataTable
+                                v-if="pageDisplayTag===0"
                                 :nodeID="activeNode"
                         />
 <!--                        <data-column-explorer/>-->
@@ -22,38 +23,42 @@
                 </div>
             </div>
         </div>
-<!--        <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="flex-vertical" :key="processKey">-->
-<!--            <tool-header></tool-header>-->
-<!--&lt;!&ndash;            <div class="flex-vertical">&ndash;&gt;-->
-<!--                <div class="flex-horizontal">-->
-<!--                    <nav-sidebar :defaultWidth="450" :minWidth="200" :maxWidth="700"  settingPrefix="prep">-->
-<!--                        <prepbar></prepbar>-->
-<!--                    </nav-sidebar>-->
-<!--                    <main-content>-->
-<!--                        <div>-->
-
-<!--                        <br><br>-->
-<!--                        </div>-->
-<!--                    </main-content>-->
-<!--                </div>-->
-<!--                <tool-footer>-->
-<!--                    <sheetbar objectType="node"></sheetbar>-->
-<!--                </tool-footer>-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--        </div>-->
-<!--        <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">-->
-<!--            <tool-header></tool-header>-->
+        <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="flex-vertical" :key="processKey">
+            <tool-header></tool-header>
 <!--            <div class="flex-vertical">-->
-<!--                <div class="flex-horizontal">-->
-<!--                    <nav-sidebar :defaultWidth="200" :minWidth="130" :maxWidth="700" settingPrefix="column"></nav-sidebar>-->
-<!--                    <nav-sidebar :defaultWidth="300" :minWidth="130" :maxWidth="700" settingPrefix="chart"></nav-sidebar>-->
-<!--                    <main-content></main-content>-->
-<!--                </div>-->
-<!--                <tool-footer>-->
-<!--                    <sheetbar objectType="node"></sheetbar>-->
-<!--                </tool-footer>-->
+                <div class="flex-horizontal">
+                    <nav-sidebar :defaultWidth="450" :minWidth="200" :maxWidth="700"  settingPrefix="prep">
+                        <prepbar></prepbar>
+                    </nav-sidebar>
+                    <main-content>
+                        <div>
+
+                        <br><br>
+                        </div>
+                    </main-content>
+                </div>
+                <tool-footer>
+                    <sheetbar objectType="node"></sheetbar>
+                </tool-footer>
 <!--            </div>-->
-<!--        </div>-->
+        </div>
+        <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">
+            <tool-header></tool-header>
+            <div class="flex-vertical">
+                <div class="flex-horizontal">
+                    <nav-sidebar :defaultWidth="200" :minWidth="130" :maxWidth="700" settingPrefix="column">
+                        <page-columnbar/>
+                    </nav-sidebar>
+                    <nav-sidebar :defaultWidth="400" :minWidth="130" :maxWidth="700" settingPrefix="chart">
+                        <chartbar/>
+                    </nav-sidebar>
+                    <main-content></main-content>
+                </div>
+                <tool-footer>
+                    <sheetbar objectType="node"></sheetbar>
+                </tool-footer>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -65,9 +70,11 @@ import ToolFooter from "../../components/layout/ToolFooter/ToolFooter"
 import MainContent from "../../components/layout/MainContent/MainContent"
 import DataTable from "../../components/data_widgets/DataTable/DataTable";
 // import DataColumnExplorer from "../../components/widgets/DataColumnExplorer/DataColumnExplorer"
+import Chartbar from "../../components/widgets/Chartbar/Chartbar";
 import Sheetbar from "../../components/widgets/Sheetbar/Sheetbar"
 import Connectorbar from "../../components/widgets/Connectorbar/Connectorbar"
-// import Prepbar from "../../components/widgets/Prepbar/Prepbar"
+import PageColumnbar from "../../components/widgets/PageColumnbar/PageColumnbar";
+import Prepbar from "../../components/widgets/Prepbar/Prepbar"
 import NodeViewSelector from "../../components/controls/NodeViewSelector/NodeViewSelector";
 import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 
@@ -82,7 +89,9 @@ export default {
         // NavSidebar, ToolHeader, ToolFooter,
         // DataTable, DataColumnExplorer, MainContent,
         // Sheetbar
-        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, DataTable
+        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, DataTable, Chartbar,
+        Prepbar,
+        PageColumnbar
     },
     data() {
         return {
@@ -111,6 +120,14 @@ export default {
         },
         dsw_config() {
             return dsw_config
+        },
+        activePageDisplaySettings() {
+            return this.projectObjects[this.activePage]['display_settings']
+        },
+        pageDisplayTag() {
+            let displayTag = this.activePageDisplaySettings['node_view'];
+            console.log('display tag', displayTag, this.projectObjects[this.activePage]);
+            return typeof displayTag!=='undefined' ? displayTag : 0
         }
     },
     directives: {

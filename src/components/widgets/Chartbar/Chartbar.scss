@@ -1,0 +1,149 @@
+@import '../../../styles/app';
+
+
+
+.chartbar-parameters {
+
+  .string-form {
+    input {
+      background-color: white;
+    }
+  }
+
+}
+
+.chartbar-parameters-form {
+  text-align:center;
+  border-bottom: $gray-200 1px solid;
+}
+
+
+
+.chart-column-container {
+  //border: solid 1px $gray-300;
+  background-color: $gray-100;
+  border-radius: 6px;
+  display: block;
+  //min-height: 30px;
+  overflow: scroll!important;
+  display: block;
+}
+
+.chart-area {
+  width: 70%;
+  margin: 0;
+  float: left;
+  height: calc(100vh - 100px);
+}
+.chart-bar {
+  //float:left;
+  //background-color: $gray-200;
+  width:100%;
+  float: left;
+  //border-right: solid 3px $gray-200;
+  padding: 1em;
+  overflow-y: scroll!important;
+  overflow-x: hidden;
+  height: calc(100vh - 100px);
+  //width: 230px;
+
+  .collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+  }
+
+  .chart-settings {
+    //overflow: scroll!important;
+    display: block;
+    background-color: white!important;
+
+    .card {
+      background-color: white!important;
+    }
+
+    .panel-header {
+      background-color: white!important;
+      font-weight: bolder;
+    }
+
+    .panel-header :hover {
+      text-decoration: none!important;
+    }
+
+    .separator {
+      background-color: $gray-100;
+      padding: 5px;
+      margin: 0 -25px 0 -25px;
+    }
+
+  }
+
+  .no-data {
+    display: none;
+  }
+  .running {
+    color: $teal;
+  }
+  .scheduled {
+    color: $blue;
+  }
+  .failed {
+    color: $danger;
+  }
+  .retry {
+    color: $orange;
+  }
+
+  .pill-delete-x {
+    float: right;
+  }
+  .pill-buttons {
+    width: 10%;
+    opacity:0;
+    float: left;
+  }
+  .po-page-text {
+    cursor: pointer;
+    width: 90%;
+    float: left;
+  }
+  .active-page {
+    //background-color: $teal !important;
+    background-color: var(--sidebar-item-active) !important;
+    color: $gray-900 !important;
+
+    input {
+      color: white;
+    }
+  }
+  .po-page-pill {
+    font-weight: 500;
+    font-size: 14px;
+    background-color: $gray-300;
+    color: $gray-800;
+    height: 50px;
+    border-radius: 5px;
+    padding: 5px 10px 3px 10px!important;
+    //border: solid 1px $gray-300;
+  }
+  .po-page-pill:hover .pill-buttons {
+    opacity: 1;
+  }
+  .page-add {
+    border: 0px!important;
+
+    button {
+      position: relative;
+      padding: 2px!important;
+      border: 0;
+      width: 60%;
+      left: 20%;
+      font-size: 18px;
+    }
+  }
+  input {
+    background-color: inherit;
+    border: 0;
+  }
+}

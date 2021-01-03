@@ -9,11 +9,11 @@
             </span>
         </div>
         <div class="flex-vertical">
-            <draggable v-model="elementList" handle=".drag-handle">
-                <div v-for="(elementID, position) in elementList">
+            <draggable v-model="nodeList" handle=".drag-handle">
+                <div v-for="(nodeID, position) in nodeList">
                     <object-selector
-                            :key="'po-'+elementID"
-                            :objectID="elementID"
+                            :key="'po-'+nodeID"
+                            :objectID="nodeID"
                             v-on:settings = "toggleSettings"
                             :position = "position+1"
                             class="drag-handle"
@@ -21,7 +21,7 @@
                             settingsButton
                             detailType="action_description"
                     />
-                    <prep-settings v-if="openSettings === elementID" :objectID="elementID"/>
+                    <prep-settings v-if="openSettings === nodeID" :nodeID="nodeID"/>
                 </div>
             </draggable>
         </div>
@@ -60,23 +60,23 @@
         computed: {
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects', 'ProjectTree',
-                'processList', 'pageLists', 'pageLists', 'elementLists',
-                'activeProcess', 'activePage', 'activeNode', 'activeElement'
+                'processList', 'pageLists', 'nodeLists',
+                'activeProcess', 'activePage', 'activeNode'
             ]),
             ...mapState('proj', [
-                'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements'
+                'selectedProcess', 'selectedPages', 'selectedNodes'
             ]),
 
-            elementList: {
+            nodeList: {
                 get() {
-                    return this.elementLists[this.activeNode]
+                    return this.nodeLists[this.activePage]
                 },
                 set(elementIDs) {
                     for (let i = 0; i < elementIDs.length ;i++) {
                         let elementID = elementIDs[i];
                         let element = R.clone(this.projectObjects[elementID]);
                         element.relative_position = i;
-                        this.UPDATE_PROJECT_OBJECT({ObjectId: elementID, Object: element})
+                        this.UPDATE_PROJECT_OBJECT({ObjectID: elementID, Object: element})
                     }
                 }
             }

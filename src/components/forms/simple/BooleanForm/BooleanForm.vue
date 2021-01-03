@@ -17,12 +17,12 @@
     const R = require('ramda');
 
     export default {
-        name: 'NumericForm',
+        name: 'BooleanForm',
         components: {
             vSelect
         },
         props: {
-            dataObjectID: {type: String, default: null},
+            objectID: {type: String, default: null},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},
             showLabel: {type: Boolean, default: true},
@@ -38,7 +38,7 @@
                 'dataObjects'
             ]),
             parentParameters() {
-                return this.dataObjects[this.dataObjectID]['parameters']
+                return this.dataObjects[this.objectID]['parameters']
             },
             value: {
                 get() {
@@ -46,10 +46,9 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        objectID: parseInt(this.dataObjectID),
-                        route: this.route,
-                        parameterName: this.parameterIndex,
-                        parameterValue: newValue
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: newValue
                     })
                 }
             }

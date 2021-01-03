@@ -55,10 +55,9 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        objectID: parseInt(this.objectID),
-                        route: this.route,
-                        parameterName: this.parameterIndex,
-                        parameterValue: newValue
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: newValue
                     })
                 }
             }

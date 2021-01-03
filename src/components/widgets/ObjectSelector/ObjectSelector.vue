@@ -3,12 +3,12 @@
             @click="activateObject(objectID)"
             class="object-selector"
             :class="{'active': activeObject===objectID}">
-        <div class="c-100">
+        <div class="c-100 d-inline-flex">
             <div v-if="position!==0" class="object-selector-position mt-2 mr-3">
                 <h4>#{{position}}</h4>
             </div>
-            <div class="d-inline-flex c-100">
-                    <div class="c-95">
+            <div class="d-inline-flex c-100 align-items-center">
+                    <div class="c-90 ">
                         <div
                                 v-if="objectID!==editedObject"
                                 class="object-selector-text"
@@ -26,7 +26,7 @@
                         </div>
                     </div>
 
-                    <div class="pill-buttons c-5">
+                    <div class="pill-buttons c-5 d-inline-flex align-items-center">
                         <i v-if="settingsButton" @click="emitEvent('settings', objectID)" class="la la-cog"  />
 <!--                        <i @click="deleteObject(objectID)" class="fa fa-sort-down"  />-->
                         <b-nav>

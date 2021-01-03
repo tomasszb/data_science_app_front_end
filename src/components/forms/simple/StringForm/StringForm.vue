@@ -25,7 +25,7 @@
             vSelect
         },
         props: {
-            dataObjectID: {type: String, default: null},
+            objectID: {type: String, default: null},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},
             showLabel: {type: Boolean, default: true},
@@ -41,8 +41,8 @@
                 'dataObjects'
             ]),
             parentParameters() {
-                console.log('parentParameters', this.dataObjectID, this.dataObjects[this.dataObjectID]);
-                return this.dataObjects[this.dataObjectID]['parameters']
+                console.log('parentParameters', this.objectID, this.dataObjects[this.objectID]);
+                return this.dataObjects[this.objectID]['parameters']
             },
             value: {
                 get() {
@@ -50,10 +50,9 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        objectID: this.dataObjectID,
-                        route: this.route,
-                        parameterName: this.parameterIndex,
-                        parameterValue: newValue
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: newValue
                     })
                 }
             }

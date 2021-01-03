@@ -8,14 +8,14 @@
         >
             <div class="flex-horizontal-no-scroll">
                 <select-form
-                        :dataObjectID="dataObjectID"
+                        :objectID="objectID"
                         class="c-30 flex-grow-1"
                         :route="extendedRoute"
                         :name="'condition'"
                         :options="['<=','<','>','=']"
                 />
                 <numeric-form
-                        :dataObjectID="dataObjectID"
+                        :objectID="objectID"
                         :precision="null"
                         class="c-70 flex-grow-1"
                         :route="extendedRoute"
@@ -41,7 +41,7 @@
             NumericForm, SelectForm
         },
         props: {
-            dataObjectID: {type: String, default: null},
+            objectID: {type: String, default: null},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},
             route: {type: Array, default: function() {return []}},
@@ -52,7 +52,7 @@
                 'dataObjects'
             ]),
             parameters() {
-                return this.dataObjects[this.dataObjectID]['parameters']
+                return this.dataObjects[this.objectID]['parameters']
             },
             localParameters() {
                 return this.parameters[this.name]
@@ -69,11 +69,10 @@
         created() {
             if (typeof this.localParameters === 'undefined') {
                 this.SET_DO_PARAMETER({
-                    objectID: parseInt(this.dataObjectID),
-                    route: this.route,
-                    parameterName: this.parameterIndex,
-                    parameterValue: {}
-                })
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: {}
+                    })
             }
         }
 

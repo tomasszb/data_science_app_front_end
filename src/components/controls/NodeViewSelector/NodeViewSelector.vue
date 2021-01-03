@@ -60,11 +60,9 @@
 
             mainDataObjectID() {
                 let tag = this.dataObjectTag[this.projectObject.type];
-                console.log(tag, this.projectObject, this.projectObject['data_object_tags']);
                 return this.projectObject['data_object_tags'][tag]
             },
             mainDataObject() {
-                console.log(this.mainDataObjectID, this.dataObjects[this.mainDataObjectID]);
                 return this.dataObjects[this.mainDataObjectID]
             },
             projectObject() {

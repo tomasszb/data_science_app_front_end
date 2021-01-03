@@ -32,7 +32,7 @@
     const R = require('ramda');
 
     export default {
-        name: 'ConditionForm',
+        name: 'MergeColumnPair',
         components: {
             NumericForm, ColumnForm
         },
@@ -61,10 +61,9 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        objectID: parseInt(this.objectID),
-                        route: this.route,
-                        parameterName: this.parameterIndex,
-                        parameterValue: newValue
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: newValue
                     })
                 }
             }
@@ -76,13 +75,12 @@
         },
         created() {
             if (typeof this.localParameters === 'undefined' || this.localParameters === null) {
-                console.log('merge column created');
+                console.log('merge column created', parseInt(this.objectID), this.route.concat(this.parameterIndex));
                 this.SET_DO_PARAMETER({
-                    objectID: parseInt(this.objectID),
-                    route: this.route,
-                    parameterName: this.parameterIndex,
-                    parameterValue: {}
-                })
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: {}
+                    })
             }
         }
 

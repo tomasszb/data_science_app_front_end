@@ -17,7 +17,7 @@
                 />
                 <form-list-container
                         v-if="p.dtype.type === 'list'"
-                        :dataObjectID="dataObjectID"
+                        :objectID="dataObjectID"
                         :typeSettings="p.dtype.variable"
                         :parameter-index="p.name"
                         :name="p.dtype.variable.type"
@@ -54,14 +54,17 @@
             vSelect, FormContainer, FormListContainer
         },
         props: {
-            dataObjectID: { type: String, default: '' },
+            nodeID: { type: String, default: '' },
             horizontal: {type: Boolean, default: false},
 
         },
         computed: {
             ...mapGetters('proj', [
-                'dataObjects', 'dataObjectParameterMapping'
+                'dataObjects', 'dataObjectParameterMapping', 'projectObjects'
             ]),
+            dataObjectID() {
+                return this.projectObjects[this.nodeID]['data_object_tags']['action'].toString()
+            },
             dataObjectSettings() {
                 console.log(this.dataObjects[this.dataObjectID]);
                 return this.dataObjects[this.dataObjectID]
