@@ -1,33 +1,75 @@
 <template>
-    <div class="chart-bar">
-<!--        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>-->
-        <ChartTypeSelector :chartsSettings="chartsSettings"/>
-        <ChartSettingSelector :chartLayoutSelectors="chartLayoutSelectors"/>
+    <div class="chartbar p-2">
+
+        <b-button-group class="c-100">
+            <b-button
+                    variant="default" @click="changeOpenSettings(0)"
+                    size="sm"
+                    class="c-50 border-0"
+                    :class="{ active: openSettings === 0 }"
+            >Layout & Data</b-button>
+            <b-button
+                    variant="default" @click="changeOpenSettings(1)"
+                    size="sm"
+                    class="c-50 border-0 "
+                    :class="{ active: openSettings === 1 }"
+            >Design</b-button>
+        </b-button-group>
+
+
+
+
+
+        <!--        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>-->
+        <ChartTypeSelector v-show="openSettings===0" :chartsSettings="chartsSettings"/>
+        <ChartDataCard v-show="openSettings===0" :chartDataFields="chartDataFields"/>
 <!--        <img :src="" />-->
-        <div class="p-4 chartbar-parameters">
+
+
+        <multiselect
+                v-show="openSettings===1"
+                v-model="settingsFilterChartParts"
+                :options="['title', 'y_axis', 'x_axis', 'label']"
+                :searchable="false"
+                :close-on-select="true"
+                :show-labels="false"
+                class="my-2"
+                placeholder="Filter Chart Parts"
+                :hideSelected="true"
+                :multiple="true"
+        />
+        <multiselect
+                v-show="openSettings===1"
+                v-model="settingsFilterParameterType"
+                :options="['name', 'font', 'color', 'show']"
+                :searchable="false"
+                :close-on-select="true"
+                :show-labels="false"
+                class="mb-4"
+                placeholder="Filter Parameter Type"
+                :hideSelected="true"
+                :multiple="true"
+        />
+        <div v-show="openSettings===1" class="p-2 chartbar-parameters">
             <div
-                    v-for="(prop, i) in chartProperties"
+                    v-for="(prop, i) in filteredChartProperties"
                     :key="'chart-form-container-'+i"
             >
-                {{prop.name}} {{prop.path.join('.')}}
-            </div>
-            <div
-                    v-for="(prop, i) in chartProperties"
-                    :key="'chart-form-container-'+i"
-            >
-                <div class="chartbar-parameters-form c-100 d-inline-flex align-content-center mb-3">
-                    <div class="c-40 mr-1 align-items-center">
-                        <FormContainer
-                                :route="prop.path"
-                                :parameterIndex="prop.name"
-                                :typeSettings="prop.type"
-                                :objectID="'17'"
-                                :showLabel="false"
-                        />
+                <div class="chartbar-parameters-form-container c-100 d-inline-flex pb-3 pt-3">
+                    <div class=" c-40 mr-3 d-flex align-items-center align-content-center">
+                        <div class="c-100 chartbar-parameters-form align-items-center align-content-center">
+                            <FormContainer
+                                    :route="prop.path"
+                                    :parameterIndex="prop.name"
+                                    :typeSettings="prop.type"
+                                    :objectID="'17'"
+                                    :showLabel="false"
+                            />
+                        </div>
                     </div>
                     <div class="c-60">
-                        <strong>{{prop.name}}</strong><br>
-                        {{prop.path.join('> ')}}
+                        <strong>{{prop.name.split('.').slice(-1)[0]}}</strong><br>
+                        {{prop.name.split('.').slice(0,-1).join(' > ')}}
                     </div>
                 </div>
 
@@ -67,10 +109,11 @@
 
 <script>
     import Vue from 'vue'
+    import Multiselect from 'vue-multiselect'
     const R = require('ramda');
     import {mapGetters, mapMutations, mapState} from "vuex";
     import draggable from 'vuedraggable';
-    import FormContainer from "../../forms/layout/FormContainer/FormContainer";
+    import FormContainer from "../../forms/container/FormContainer/FormContainer";
     import ChartLayoutCard from "./ChartLayoutCard/ChartLayoutCard"
     import ChartTypeSelector from "./ChartTypeSelector/ChartTypeSelector";
     import ChartDataCard from "./ChartDataCard/ChartDataCard";
@@ -93,7 +136,7 @@
     export default {
         name: 'Chartbar',
         components: {
-            ChartTypeSelector, ChartDataCard, ChartSettingSelector, ChartLayoutCard, FormContainer,
+            ChartTypeSelector, ChartDataCard, ChartSettingSelector, ChartLayoutCard, FormContainer, Multiselect,
             draggable
         },
         prop: {
@@ -103,13 +146,8 @@
             ...mapMutations('proj', [
                 'UPDATE_PROJECT_OBJECT'
             ]),
-            toggleAccordion(index) {
-                if (this.openSettings !== this.chartCards[index]) {
-                    Vue.set(this,'openSettings', this.chartCards[index]);
-                } else {
-                    index = (index + 1) % 2;
-                    Vue.set(this,'openSettings', this.chartCards[index]);
-                }
+            changeOpenSettings(value) {
+                Vue.set(this,'openSettings', value);
             },
         },
         data() {
@@ -119,7 +157,10 @@
                 chartLayoutPartPictures: chartLayoutPartPictures,
                 chartLayoutTypePictures: chartLayoutTypePictures,
                 chartCards: ['chart-data-card', 'chart-layout-card'],
-                openSettings: 'chart-data-card'
+                openSettings: 0,
+                settingsFilterChartParts: [],
+                settingsFilterParameterType: []
+
             }
         },
         computed: {
@@ -138,7 +179,40 @@
                 getNestedValues(this.dataObjectParameterMapping["310000"][0]["dtype"], result, []);
                 return result;
             },
+            filteredChartProperties() {
+                let result = [];
+                for (let prop of this.chartProperties) {
+                    let matchChartParts = false;
+                    let matchChartParameters = false;
 
+                    if (this.settingsFilterChartParts.length>0) {
+                        for (let partFilter of this.settingsFilterChartParts) {
+                            if (prop.name.includes(partFilter)) {
+                                matchChartParts = true;
+                            }
+                        }
+                    }
+                    else {
+                        matchChartParts=true;
+                    }
+
+                    if (this.settingsFilterParameterType.length>0) {
+                        for (let parameterFitler of this.settingsFilterParameterType) {
+                            if (prop.name.includes(parameterFitler)) {
+                                matchChartParameters = true;
+                            }
+                        }
+                    }
+                    else {
+                        matchChartParameters=true;
+                    }
+
+                    if (matchChartParameters && matchChartParts) {
+                        result.push(prop)
+                    }
+                }
+                return result
+            },
 
 
 

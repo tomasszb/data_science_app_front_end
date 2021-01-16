@@ -1,8 +1,40 @@
 @import '../../../styles/app';
 
 
+.chartbar {
+
+  .btn {
+    border-radius: 0;
+    background-color: $gray-100;
+    color: $gray-500;
+  }
+  .btn:focus,  .btn:hover{
+    background-color: white;
+  }
+  .btn.active {
+    background-color: white!important;
+    box-shadow: none!important;
+    font-weight: 600;
+  }
+
+  input {
+    background-color: inherit;
+    border: 0;
+  }
+
+  .multiselect__tag, .multiselect__option--highlight, .multiselect__tag-icon, .multiselect__tag-icon:after{
+    color: white!important;
+    background-color: $gray-700!important;
+  }
+}
 
 .chartbar-parameters {
+  overflow: scroll!important;
+  max-height: calc(100vh - 280px);
+
+  .form-group {
+    margin: 0;
+  }
 
   .string-form {
     input {
@@ -12,9 +44,18 @@
 
 }
 
+
+
+.chartbar-parameters-form-container {
+  border-bottom: $gray-200 1px solid;
+}
+
+
 .chartbar-parameters-form {
   text-align:center;
-  border-bottom: $gray-200 1px solid;
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
 }
 
 

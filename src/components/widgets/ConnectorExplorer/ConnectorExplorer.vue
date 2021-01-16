@@ -10,7 +10,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :dataObjectID="dataObjectID" type="new"/>
+            <connector-form :nodeID="dataObjectID" tag="connector" type="new"/>
         </b-modal>
         <b-modal
                 id="existing-connector-explorer"
@@ -21,7 +21,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :dataObjectID="activeDataObjectID" type="existing"/>
+            <connector-form :nodeID="activeDataObjectID" tag="connector" type="existing"/>
         </b-modal>
     </div>
 </template>

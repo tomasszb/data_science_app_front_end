@@ -3,7 +3,13 @@
         <div v-for="settings in chartDataFields" v-if="!inactiveChartSettings.includes(settings.selector)">
             <div class="chart-column mb-1">
                 <div class="chart-column-label mb-1">{{settings.name}} :</div>
-                <div class="chart-column-container p-3 pb-3 mb-2"></div>
+                <form-container
+                        :route="[]"
+                        :parameterIndex="settings.name"
+                        typeSettings="column_list"
+                        :objectID="'19'"
+                        :showLabel="false"
+                />
             </div>
         </div>
     </div>
@@ -11,15 +17,23 @@
 
 <script>
     import Vue from 'vue'
+    import draggable from 'vuedraggable';
     import {mapGetters} from "vuex";
+    import FormContainer from "../../../forms/container/FormContainer/FormContainer";
+
     export default {
         name: "ChartDataCard",
+        components: {
+            draggable, FormContainer
+        },
         props: {
             chartType: { type: String, default: '' },
             chartDataFields: { type: Array },
         },
         data() {
-            return {}
+            return {
+                columnList: []
+            }
         },
         computed: {
             ...mapGetters('proj', ['activeNode', 'dataObjects', 'projectObjects']),

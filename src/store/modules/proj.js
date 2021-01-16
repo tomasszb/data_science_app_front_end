@@ -206,7 +206,7 @@ export default {
             if (index !== null) {
                 let projectObject = state.projectData['project_data_objects'][index];
                 let parameterObject = R.clone(projectObject['parameters']);
-                console.log(parameterObject, route, value);
+                // console.log(parameterObject, route, value);
                 let newParameterObject = parameterObject.setPath(route, value);
                 Vue.set(projectObject, 'parameters', newParameterObject)
             }

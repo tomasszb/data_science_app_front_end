@@ -1,22 +1,18 @@
 <template>
-    <div class="numeric-form  pr-2">
-        <b-form-group
-                :label="name"
-                :label-sr-only="!showLabel"
-                label-class="pb-1"
-                :label-cols="horizontal ? 5 : 0"
-                :horizontal="horizontal">
-            <vue-numeric-input
-                    controls-type="updown"
-                    v-model="value"
-                    :precision="precision"
-                    :min="min"
-                    :max="max"
-                    :step="step"
-                    class="c-100"
-            />
-        </b-form-group>
-    </div>
+    <b-form-group class="column-list-form pr-2 mt-2">
+        <div class="chart-column-container p-3 pb-3 mb-2">
+            <draggable
+                    class="dragArea list-group"
+                    :v-model="columnList"
+                    group="columns"
+            >
+                <div v-for="column in columnList">
+                    {{column}}
+                </div>
+            </draggable>
+        </div>
+        <label>{{name}}</label>
+    </b-form-group>
 </template>
 
 <script>
@@ -27,22 +23,17 @@
     const R = require('ramda');
 
     export default {
-        name: 'NumericForm',
+        name: 'BooleanForm',
         components: {
             vSelect
         },
         props: {
             objectID: {type: String, default: null},
             name: {type: String, default: ''},
-            showLabel: {type: Boolean, default: true},
             horizontal: {type: Boolean, default: false},
+            showLabel: {type: Boolean, default: true},
             parameterIndex: {type: [Number, String]},
             route: {type: Array, default: function() {return []}},
-
-            min: {type: Number, default: -Infinity},
-            max: {type: Number, default: Infinity},
-            step: {type: Number, default: 0.01},
-            precision: {type: Number, default: 2}
         },
         data() {
             return {
@@ -55,16 +46,11 @@
             parentParameters() {
                 return this.dataObjects[this.objectID]['parameters']
             },
-            value: {
+            columnList: {
                 get() {
                     return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
                 },
                 set(newValue) {
-                    console.log({
-                        id: parseInt(this.objectID),
-                        route: this.route.concat(this.parameterIndex),
-                        value: newValue
-                    });
                     this.SET_DO_PARAMETER({
                         id: parseInt(this.objectID),
                         route: this.route.concat(this.parameterIndex),
@@ -77,9 +63,8 @@
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER'
             ]),
-
-        }
+        },
     };
 </script>
 
-<style src="./NumericForm.scss" lang="scss"></style>
+<style src="./ColumnListForm.scss" lang="scss"></style>

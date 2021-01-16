@@ -1,0 +1,36 @@
+@import '../../../styles/app';
+
+.page-columnbar-picker {
+  max-width: 100%!important;
+  width: 100%;
+  border-radius: 0!important;
+
+  .btn {
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--sidebar-item-active) !important;
+    border: 0!important;
+    max-width: 100%!important;
+    text-overflow: ellipsis!important;
+    white-space: nowrap!important;
+    display: inline-block!important;
+  }
+}
+.page-column-bar {
+  //float:left;
+  //background-color: $gray-200;
+  padding: 1em;
+  float: left;
+  height: calc(100vh - 100px);
+  overflow: scroll;
+
+
+  .page-column-button {
+    width: 100%;
+    text-align: left;
+    color: $gray-900;
+    font-weight: 500;
+    border: 0px;
+    background-color: $gray-200;
+  }
+}
