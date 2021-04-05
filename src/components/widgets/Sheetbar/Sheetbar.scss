@@ -1,5 +1,12 @@
 @import '../../../styles/app';
 
+.sheet-bar-sheet-area {
+  max-width: calc(100% - 150px)!important;
+  overflow-x: auto!important;
+  overflow-y: hidden!important;
+
+}
+
 
 .sheet-bar {
   flex-grow: 1;
@@ -7,10 +14,21 @@
   padding: 0;
   height: 100%;
 
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 0;
+    height: 0;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  }
 
   .object-selector {
     cursor: pointer;
     padding: 0 10px 0 15px;
+    margin: 0px 0px 0px 0px;
     display: flex;
     justify-content: center;
     align-items: center;

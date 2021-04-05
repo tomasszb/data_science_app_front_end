@@ -20,6 +20,10 @@ function getPosition(list) {
     return typeof list !== 'undefined' ? list.length + 1 : 1
 }
 
+function getPrevious(ObjectID) {
+    return typeof list !== 'undefined' ? list.length + 1 : 1
+}
+
 const defaultNames = {
     100: 'Load Data',
     101: 'Prepare Data',
@@ -56,6 +60,7 @@ export default {
     namespaced: true,
     actions: {
         setActivePO({state, commit, rootState, rootGetters}, {selectedProcess, selectedPage, selectedNode}) {
+
             let currentActiveProcess = rootState['proj']['selectedProcess'];
             let currentActivePages = rootState['proj']['selectedPages'];
             let currentActiveNodes = rootState['proj']['selectedNodes'];
@@ -154,6 +159,33 @@ export default {
             }
 
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: newProjectObjectID, Object: projectObject}, { root: true });
+        },
+        deleteProjectObject(
+            {commit, dispatch, rootGetters},
+            {
+                projectObjectID
+            }
+        ) {
+
+            let dictTree = rootGetters['proj/ProjectTree'];
+            let tree = new TreeModel();
+            let ProjectTree = tree.parse(dictTree);
+            let selectedPO = ProjectTree.first(function (obj) {
+                return obj.model.id.toString() === projectObjectID.toString();
+            });
+
+
+            let projectObject = R.clone(rootGetters['proj/projectObjects'][projectObjectID]);
+            for (const [tag, dataObjectID] of Object.entries(projectObject['data_object_tags'])) {
+                commit("proj/DELETE_DATA_OBJECT", {ObjectID: dataObjectID.toString()}, { root: true });
+            }
+            commit("proj/DELETE_PROJECT_OBJECT", {ObjectID: projectObjectID.toString()}, { root: true })
+            dispatch("setActivePO", {selectedProcess:null, selectedPage:null, selectedNode:null});
+
+            for (const child of selectedPO.children) {
+                // deleteProjectObject({projectObjectID: child.model.id})
+                dispatch("deleteProjectObject", {projectObjectID:child.model.id});
+            }
         },
         newPage(
             {commit, dispatch, rootGetters},

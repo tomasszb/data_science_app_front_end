@@ -40,7 +40,7 @@
 
     .table-resposive {
       height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 200px);
-      overflow: scroll!important;
+      overflow: auto!important;
     }
     table {
       width: 100%;

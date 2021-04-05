@@ -37,6 +37,7 @@
 
   position: relative;
   display: flex;
+  max-height: calc(100vh);
   flex-direction: column;
   flex-grow: 1;
   background-color: $body-bg;

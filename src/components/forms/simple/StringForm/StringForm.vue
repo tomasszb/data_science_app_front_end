@@ -42,6 +42,7 @@
             ]),
             parentParameters() {
                 // console.log('parentParameters', this.objectID, this.dataObjects[this.objectID]);
+                // console.log(this.dataObjects, this.objectID)
                 return this.dataObjects[this.objectID]['parameters']
             },
             value: {

@@ -44,9 +44,35 @@ webSocketService.install = function (Vue, store) {
         ws.close()
     };
 
+    function sendMessage(msg){
+        // Wait until the state of the socket is not ready and send the message when it is...
+        waitForSocketConnection(ws, function(){
+            console.log("message sent!!!");
+            ws.send(msg);
+        });
+    }
+
+// Make the function wait until the connection is made...
+    function waitForSocketConnection(socket, callback){
+        setTimeout(
+            function () {
+                if (socket.readyState === 1) {
+                    console.log("Connection is made")
+                    if (callback != null){
+                        callback();
+                    }
+                } else {
+                    console.log("wait for connection...")
+                    waitForSocketConnection(socket, callback);
+                }
+
+            }, 50); // wait 5 milisecond for the connection...
+    }
+
     Vue.prototype.$webSocketSend = (data) => {
-        // Send data to the backend - use JSON.stringify(data)
-        ws.send(JSON.stringify(data))
+        waitForSocketConnection(ws, function(){
+            ws.send(JSON.stringify(data));
+        });
     };
 
     Vue.prototype.$newRequest = (src_request_id, all_tasks) => {

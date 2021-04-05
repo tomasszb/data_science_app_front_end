@@ -1,7 +1,8 @@
 @import '../../../styles/app';
 
-  .prep-settings {
+  .data-object-settings {
     background-color: white;
+    font-size: 12px;
     //padding: 20px;
     margin-bottom: 20px;
     //margin-left: 7px;
@@ -12,6 +13,10 @@
     .col-form-label {
       border: none;
       color: $gray-700;
+    }
+
+    .form-control {
+      font-size: 12px;
     }
 
   }

@@ -129,7 +129,8 @@
     import MergeColumnPairForm from "../../nested/MergeColumnPairForm/MergeColumnPairForm";
     import SelectForm from "../../simple/SelectForm/SelectForm";
     import ColumnListForm from "../../simple/ColumnListForm/ColumnListForm";
-    import {mapMutations} from "vuex";
+    import {mapGetters, mapMutations} from "vuex";
+    import {getObjectByRoute} from "@/core/projectManager";
 
     export default {
         name: "FormContainer",
@@ -153,13 +154,22 @@
                 'SET_DO_PARAMETER'
             ])
         },
+        computed: {
+            ...mapGetters('proj', [
+                'dataObjects'
+            ]),
+        },
         created() {
             if (this.typeSettings.hasOwnProperty('default')) {
-                this.SET_DO_PARAMETER({
-                    id: parseInt(this.objectID),
-                    route: this.route.concat(this.parameterIndex),
-                    value: this.typeSettings['default']
-                })
+                let parentParameters = this.dataObjects[this.objectID]['parameters']
+                if (typeof getObjectByRoute(this.route, parentParameters)[this.parameterIndex] === 'undefined') {
+                    this.SET_DO_PARAMETER({
+                        id: parseInt(this.objectID),
+                        route: this.route.concat(this.parameterIndex),
+                        value: this.typeSettings['default']
+                    })
+                }
+
             }
         }
     }

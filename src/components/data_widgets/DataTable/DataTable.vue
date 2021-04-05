@@ -1,41 +1,56 @@
 <template>
-    <div class="data-table">
-        <Loader v-if="loading" :class="'widget-loader'" :size="40"></Loader>
-        <table>
-            <thead>
-                <tr>
-                    <th v-for="(columnName, i) in tableColumns">
-                        <div class="table-text">
-                            <column-control
-                                    :key="'column-control-' + i"
-                                    :columnName="columnName"
-                                    :sortID="tableSortID"
-                            />
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(row, i) in tableData">
-                    <td
-                            v-for="columnName in tableColumns"
-                            :class="{even: i%2==0, odd: i%2==1}"
-                    >
-                        <div class="table-text">
-                            {{row[columnName]}}
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div>
-            <div class="table-footer">
-                <table-page-control
-                        :nodeID="nodeID"
-                        :nodeSignature="activeNodeSignature"
-                        :filterID="tableFilterID"
-                />
+    <div class="flex-vertical-no-scroll">
+        <div class="data-table" v-if="['loading', 'ready'].includes(status)">
+            <Loader v-if="status==='loading'" :class="'widget-loader'" :size="40"></Loader>
+            <table>
+                <thead>
+                    <tr>
+                        <th v-for="(columnName, i) in tableColumns">
+                            <div class="table-text">
+                                <column-control
+                                        :key="'column-control-' + i"
+                                        :columnName="columnName"
+                                        :sortID="tableSortID"
+                                />
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(row, i) in tableData">
+                        <td
+                                v-for="columnName in tableColumns"
+                                :class="{even: i%2==0, odd: i%2==1}"
+                        >
+                            <div class="table-text">
+                                {{row[columnName]}}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <div class="table-footer">
+                    <table-page-control
+                            :nodeID="nodeID"
+                            :nodeSignature="activeNodeSignature"
+                            :filterID="tableFilterID"
+                    />
+                </div>
             </div>
+        </div>
+        <div v-if="status === 'not_requested'" class="load-data-area flex-vertical-no-scroll align-items-center">
+
+
+            <b-button type="button" size='lg' variant="gray" class="btn-rounded load-data-button" @click="requestTable()">
+                Load Data
+            </b-button>
+            <br>
+            <p>
+                 the requested data is not loaded yet
+            </p>
+
+
         </div>
     </div>
 </template>
@@ -97,7 +112,7 @@
             nodeSignature() {
                 return this.nodeSignatures[this.nodeID]
             },
-            loading() {
+            status() {
                 let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'get_output_table', this.nodeSignature]);
                 let outputTableID = getResultObjectID([this.nodeID, 'output_table', this.nodeSignature]);
                 let outputTableQuickInfoID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.nodeSignature]);
@@ -108,9 +123,13 @@
 
                 if (status==='success' && check1 && check2) {
                     this.activeNodeSignature = this.nodeSignature;
-                    return false
+                    return 'ready'
                 }
-                return true
+                else if (status==='requested' || this.activeNodeSignature !== null) {
+                    this.activeNodeSignature = this.nodeSignature;
+                    return 'loading'
+                }
+                return 'not_requested'
 
             },
             tableFilterID() {
@@ -131,7 +150,9 @@
         },
         watch: {
             nodeSignature: function () {
-                this.requestTable();
+                if (this.status !== 'not_requested') {
+                    this.requestTable();
+                }
             }
         }
     }

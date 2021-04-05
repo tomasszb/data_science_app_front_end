@@ -4,14 +4,8 @@
 .connector-bar {
   flex-grow: 1;
   background-color: $gray-100;
-  height: 100%;
+  height: calc(100vh - #{$navbar-height});
   padding: 10px 10px 20px 10px;
-
-  .page-list {
-    height: 90%;
-    overflow-y: scroll!important;
-    overflow-x: hidden!important;
-  }
 
   .title-bar {
     font-size: 13px;
@@ -39,7 +33,6 @@
 
 
   .object-selector {
-    margin-bottom: 7px;
     background-color: $gray-200;
     height: $connector-selector;
 

@@ -3,44 +3,44 @@
             @click="activateObject(objectID)"
             class="object-selector"
             :class="{'active': activeObject===objectID}">
-        <div class="c-100 d-inline-flex">
+        <div class="c-100 d-inline-flex ">
             <div v-if="position!==0" class="object-selector-position mt-2 mr-3">
                 <h4>#{{position}}</h4>
             </div>
-            <div class="d-inline-flex c-100 align-items-center">
-                    <div class="c-90 ">
+            <div class="d-inline-flex c-100 align-items-center justify-content-between" v-click-outside="unblurObject">
+                    <div>
                         <div
-                                v-if="objectID!==editedObject"
+                                v-show="objectID!==editedObject"
                                 class="object-selector-text"
                                 @dblclick="editObjectName(objectID)">
                             {{title}}
                         </div>
                         <div
-                                v-if="objectID===editedObject"
+                                v-show="objectID===editedObject"
                                 class="input object-selector-text"
                                 role="textbox">
-                            <span v-focus @keydown="onInput" @blur="unblurObject" contenteditable>{{title}}</span>
+                            <span v-focus @keydown="onInput" @blur="unblurObject" ref="object_selector_input" contenteditable>{{title}}</span>
                         </div>
                         <div class="object-selector-detail" v-if="showDetail">
                             {{detail}}
                         </div>
                     </div>
 
-                    <div class="pill-buttons c-5 d-inline-flex align-items-center">
-                        <i v-if="settingsButton" @click="emitEvent('settings', objectID)" class="la la-cog"  />
+                    <div class="pill-buttons  d-inline-flex align-items-center">
+                        <i v-if="settingsButton" @click="emitEvent('settings', objectID)" class="la la-cog mx-1"  />
 <!--                        <i @click="deleteObject(objectID)" class="fa fa-sort-down"  />-->
-                        <b-nav>
+                        <b-nav class="mx-1">
                             <b-dropdown
                                     text=""
                                     right
                                     boundary="testing-connector-bar"
                                     @show="activateObject(objectID)"
                             >
-                                <b-dropdown-item @click="editObject">Rename</b-dropdown-item>
+                                <b-dropdown-item @click="editObjectName(objectID)">Rename</b-dropdown-item>
                                 <b-dropdown-item @click="editObject">Edit</b-dropdown-item>
                                 <b-dropdown-item @click="deleteObject(objectID)">Delete</b-dropdown-item>
                                 <b-dropdown-item @click="duplicateObject(objectID)">Duplicate</b-dropdown-item>
-                                <b-dropdown-item @click="runFlow">Load Data</b-dropdown-item>
+                                <b-dropdown-item @click="runChildren(objectID)">Load Data</b-dropdown-item>
                             </b-dropdown>
                         </b-nav>
                     </div>
@@ -54,8 +54,10 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from "vuex";
     const R = require('ramda');
+    import ClickOutside from 'vue-click-outside'
     import {getObjectSettings, getObjectSetting} from "../../../core/projectObjectParser";
     import {createFlowRequest} from '@/core/projectManager';
+    import TreeModel from "tree-model";
 
     export default {
         name: 'ObjectSelector',
@@ -73,6 +75,7 @@
             }
         },
         directives: {
+            ClickOutside,
             focus: {
                 inserted (el) {
                     el.focus()
@@ -81,10 +84,11 @@
         },
         computed: {
             ...mapGetters('proj', [
-                'projectObjects', 'dataObjects', 'ProjectTree',
+                'projectObjects', 'dataObjects', 'ProjectTree', 'projectTreeModel',
                 'dataObjectTypeMapping', 'dataObjectGroupMapping',
                 'processList', 'pageLists', 'nodeLists',
-                'activeProcess', 'activePage', 'activeNode'
+                'activeProcess', 'activePage', 'activeNode',
+                'nodeSignatures'
             ]),
             activeObjectMapping() {
                 return {
@@ -131,15 +135,14 @@
         },
         methods: {
             ...mapActions('proj/object_manager', [
-                'setActivePO', 'copyProjectObject'
+                'setActivePO', 'copyProjectObject', 'deleteProjectObject'
             ]),
             ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT'
+                'UPDATE_PROJECT_OBJECT', 'UPDATE_NODE_EXECUTION_STATUS'
             ]),
             updateName(name) {
                 let object = R.clone(this.projectObjects[this.objectID]);
                 object.name = name;
-                console.log(object);
                 this.UPDATE_PROJECT_OBJECT({ObjectID: this.objectID, Object:object})
             },
             onInput(e) {
@@ -154,8 +157,28 @@
                     e.preventDefault();
                 }
             },
+            runChildren(objectID) {
+
+                let projectObject = this.projectTreeModel.first(function (obj) {
+                    return obj.model.id === objectID;
+                });
+                for (const child of projectObject.children) {
+                    let childID = child.model.id;
+                    if (this.projectObjects[childID].group === 3) {
+                        let request = createFlowRequest(childID, ['run_connector', 'get_output_table']);
+
+                        this.UPDATE_NODE_EXECUTION_STATUS({
+                            nodeID: childID,
+                            executionTemplate: "get_output_table",
+                            nodeSignature: this.nodeSignatures[childID],
+                            status: 'requested'});
+                        this.$webSocketSend(request);
+                    }
+                }
+            },
             editObjectName(objectID) {
-                this.editedObject = objectID;
+              this.editedObject = objectID;
+              this.$refs.object_selector_input.focus();
             },
             unblurObject() {
                 this.editedObject = null;
@@ -174,17 +197,14 @@
             duplicateObject(objectID) {
                 this.copyProjectObject({projectObjectID: objectID});
             },
+            renameObject() {
+              this.$bvModal.show('existing-connector-explorer');
+            },
             editObject() {
                 this.$bvModal.show('existing-connector-explorer');
             },
             deleteObject(objectID) {
-                this.copyProjectObject({projectObjectID: objectID});
-            },
-            runFlow() {
-                let request = createFlowRequest(this.objectID, ['run_connector', 'get_output_table']);
-                this.request = request;
-                // this.$newRequest(request['request']['src_request_id'], request['request']['elements'].length);
-                this.$webSocketSend(request);
+                this.deleteProjectObject({projectObjectID: objectID});
             }
         }
     };

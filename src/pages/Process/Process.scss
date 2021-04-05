@@ -7,7 +7,7 @@ html, body {
 .testing {
   width:100%;
   background-color: #7f3ddb;
-  overflow: scroll!important;
+  overflow: auto!important;
 }
 
 .r-5 {
@@ -126,7 +126,7 @@ html, body {
   min-height: 100%;
   max-width: 100%;
   flex:1;
-  overflow-x: scroll!important;
+  overflow-x: auto!important;
   overflow-y: hidden!important;
 
 }
@@ -136,7 +136,7 @@ html, body {
   max-height: 100%;
   width: 100%;
   flex: 1;
-  overflow-y: scroll!important;
+  overflow-y: auto!important;
   overflow-x: hidden!important;
 }
 
@@ -148,6 +148,17 @@ html, body {
   flex: 1;
   overflow-y: hidden!important;
   overflow-x: hidden!important;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
 /* Panes */

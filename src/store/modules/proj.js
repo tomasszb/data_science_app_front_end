@@ -135,10 +135,6 @@ export default {
                     let page = {'id': PageID, 'children': []};
                     for (let NodeID of getters.nodeLists[PageID]) {
                         let node = {'id': NodeID, 'children': []};
-                        for (let ElementID of getters.elementLists[NodeID]) {
-                            let element = {'id': ElementID, 'children': []};
-                            node['children'].push(element);
-                        }
                         page['children'].push(node);
                     }
                     process['children'].push(page);
@@ -147,6 +143,10 @@ export default {
             }
             // console.log(ProjectDict);
             return ProjectDict
+        },
+        projectTreeModel: (state, getters) => {
+            let tree = new TreeModel();
+            return tree.parse(getters.ProjectTree)
         }
     },
     mutations: {
@@ -187,8 +187,9 @@ export default {
             let dataFrameID = getResultObjectID([nodeID,resultTag,nodeSignature])
             Vue.set(state.dataFrames, dataFrameID,  data);
         },
-        DELETE_PROJECT_OBJECT(state, ObjectId) {
-            let index = getObjectIndex(state.projectData['project_objects'], ObjectId);
+        DELETE_PROJECT_OBJECT(state, {ObjectID}) {
+            let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
+            console.log(index, ObjectID, state.projectData['project_objects'])
             Vue.delete(state.projectData['project_objects'], index);
         },
         UPDATE_DATA_OBJECT(state, {ObjectID, Object}) {
@@ -211,8 +212,9 @@ export default {
                 Vue.set(projectObject, 'parameters', newParameterObject)
             }
         },
-        DELETE_DATA_OBJECT(state, ObjectId) {
-            let index = getObjectIndex(state.projectData['project_data_objects'], ObjectId);
+        DELETE_DATA_OBJECT(state, {ObjectID}) {
+            let index = getObjectIndex(state.projectData['project_data_objects'], ObjectID);
+            console.log(index, ObjectID)
             Vue.delete(state.projectData['project_data_objects'], index);
         },
         UPDATE_DATAFRAME_STATUS(state, {nodeID, resultTag, nodeSignature, status}) {

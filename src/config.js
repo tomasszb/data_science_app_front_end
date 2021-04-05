@@ -2,11 +2,13 @@ const hostApi = process.env.NODE_ENV === "development" ? "http://localhost" : "h
 const portApi = process.env.NODE_ENV === "development" ? 3000 : "";
 const baseURLApi = "http://127.0.0.1:8000/api/v1.0";
 
+
 export default {
   hostApi,
   portApi,
   baseURLApi,
   debug: true,
+  mock: true,
   remote: "https://flatlogic-node-backend.herokuapp.com",
   isBackend: process.env.VUE_APP_BACKEND,
   auth: {

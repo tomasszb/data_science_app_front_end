@@ -1,5 +1,5 @@
 <template>
-    <div class="prep-bar flex-vertical-no-scroll">
+    <div class="prep-bar">
         <div class="title-bar">
             <span class="title">Preparation</span>
             <span
@@ -21,7 +21,7 @@
                             settingsButton
                             detailType="action_description"
                     />
-                    <prep-settings v-if="openSettings === nodeID" :nodeID="nodeID"/>
+                    <data-object-settings v-if="openSettings === nodeID" :objectID="nodeID" tag="action"/>
                 </div>
             </draggable>
         </div>
@@ -31,14 +31,14 @@
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
     import ObjectSelector from "../ObjectSelector/ObjectSelector"
-    import PrepSettings from "../DataObjectSettings/DataObjectSettings"
+    import DataObjectSettings from "../../layout/DataObjectSettings/DataObjectSettings"
     import draggable from 'vuedraggable';
     const R = require('ramda');
 
     export default {
         name: 'Prepbar',
         components: {
-            PrepSettings,
+          DataObjectSettings,
             ObjectSelector, draggable
         },
         data() {

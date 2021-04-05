@@ -1,7 +1,7 @@
 <template>
     <div class="sheet-bar r-100">
-        <div class="d-flex justify-content-start align-items-center r-100">
-            <draggable v-model="objectList" class="d-flex justify-content-start r-100">
+        <div class="d-flex align-items-center r-100  justify-content-start">
+            <draggable v-model="objectList" class=" d-flex r-100  sheet-bar-sheet-area">
                 <object-selector
                         v-for="objectID in objectList"
                         :key="'po-'+objectID"
@@ -10,7 +10,9 @@
                         :objectType="objectType"
                 />
             </draggable>
-            <i class="fa fa-plus ml-3 list-element node-add" @click="addNode()"/>
+            <i class="fa fa-plus ml-5 mr-1 node-add" @click="addNode()"/>
+            <i class="fa fa-arrow-left ml-4 node-add" @click="scroll_left()"/>
+            <i class="fa fa-arrow-right ml-3 node-add" @click="scroll_right()"/>
         </div>
     </div>
 </template>
@@ -42,7 +44,14 @@
                     typeCD: 300,
                     dataObjectTags: {'query': null}
                 });
-
+            },
+            scroll_left() {
+                let content = document.querySelector(".sheet-bar-sheet-area");
+                content.scrollLeft -= 50;
+            },
+            scroll_right() {
+                let content = document.querySelector(".sheet-bar-sheet-area");
+                content.scrollLeft += 40;
             }
         },
         computed: {

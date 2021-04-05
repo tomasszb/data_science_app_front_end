@@ -67,7 +67,7 @@
 
 <script>
     import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
-    import DataObjectSettings from "../DataObjectSettings/DataObjectSettings";
+    import DataObjectSettings from "../../layout/DataObjectSettings/DataObjectSettings";
     import draggable from 'vuedraggable';
     const R = require('ramda');
 

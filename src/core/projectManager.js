@@ -77,6 +77,9 @@ export function get_active_object(activeNew, activeOld, allList) {
   else if(activeOld ==null && allList.length>0) {
     return allList[0];
   }
+  else if(!allList.includes(activeOld) && allList.length>0) {
+    return allList[0];
+  }
   else {
     return activeOld
   }

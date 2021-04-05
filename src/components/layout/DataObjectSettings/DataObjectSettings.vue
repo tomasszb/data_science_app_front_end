@@ -1,5 +1,5 @@
 <template>
-    <div class="prep-settings flex-vertical-no-scroll">
+    <div class="data-object-settings flex-vertical-no-scroll p-3">
         <div class="flex-vertical">
             <div
                     v-for="p in requiredParameters"
@@ -11,7 +11,7 @@
                         :name="p.name"
                         :horizontal="horizontal"
                         :parameter-index="p.name"
-                        :dataObjectID="dataObjectID"
+                        :objectID="dataObjectID"
                         :showTitle="true"
                         class="mb-2"
                 />
@@ -68,7 +68,7 @@
             vSelect, FormContainer, FormListContainer
         },
         props: {
-            nodeID: { type: String, default: '' },
+            objectID: { type: String, default: '' },
             tag: { type: String, default: 'action' },
             horizontal: {type: Boolean, default: false},
 
@@ -78,7 +78,8 @@
                 'dataObjects', 'dataObjectParameterMapping', 'projectObjects'
             ]),
             dataObjectID() {
-                return this.projectObjects[this.nodeID]['data_object_tags'][this.tag].toString()
+                console.log(this.projectObjects[this.objectID]['data_object_tags'], this.tag, this.projectObjects[this.objectID]['data_object_tags'][this.tag].toString())
+                return this.projectObjects[this.objectID]['data_object_tags'][this.tag].toString()
             },
             dataObjectSettings() {
                 return this.dataObjects[this.dataObjectID]

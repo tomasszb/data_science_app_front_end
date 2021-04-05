@@ -12,12 +12,15 @@
                             <node-view-selector/>
                         </template>
                         <DataTable
-                                v-if="pageDisplayTag===0"
-                                :nodeID="activeNode"
+                            v-if="pageDisplayTag===0"
+                            :nodeID="activeNode"
                         />
-<!--                        <data-column-explorer/>-->
+                        <DataColumnExplorer
+                            v-if="pageDisplayTag===1"
+                            :nodeID="activeNode"
+                        />
                     </main-content>
-                    <tool-footer>
+                    <tool-footer v-show="activeConnectorGroup === 1000">
                         <sheetbar objectType="node"></sheetbar>
                     </tool-footer>
                 </div>
@@ -69,13 +72,13 @@ import NavSidebar from "../../components/layout/NavSidebar/NavSidebar"
 import ToolFooter from "../../components/layout/ToolFooter/ToolFooter"
 import MainContent from "../../components/layout/MainContent/MainContent"
 import DataTable from "../../components/data_widgets/DataTable/DataTable";
-// import DataColumnExplorer from "../../components/widgets/DataColumnExplorer/DataColumnExplorer"
+import DataColumnExplorer from "../../components/data_widgets/DataColumnExplorer/DataColumnExplorer"
 import Chartbar from "../../components/widgets/Chartbar/Chartbar";
 import Sheetbar from "../../components/widgets/Sheetbar/Sheetbar"
 import Connectorbar from "../../components/widgets/Connectorbar/Connectorbar"
 import PageColumnbar from "../../components/widgets/PageColumnbar/PageColumnbar";
 import Prepbar from "../../components/widgets/Prepbar/Prepbar"
-import NodeViewSelector from "../../components/controls/NodeViewSelector/NodeViewSelector";
+import NodeViewSelector from "../../components/ui/NodeViewSelector/NodeViewSelector";
 import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 
 import { mapState, mapGetters, mapActions} from "vuex";
@@ -87,9 +90,10 @@ export default {
     components: {
         // Connectorbar, Prepbar,
         // NavSidebar, ToolHeader, ToolFooter,
-        // DataTable, DataColumnExplorer, MainContent,
+        // DataTable, DataColumnExplorer_old, MainContent,
         // Sheetbar
-        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, DataTable, Chartbar,
+        DataColumnExplorer, DataTable,
+        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, Chartbar,
         Prepbar,
         PageColumnbar
     },
@@ -128,6 +132,10 @@ export default {
             let displayTag = this.activePageDisplaySettings['node_view'];
             console.log('display tag', displayTag, this.projectObjects[this.activePage]);
             return typeof displayTag!=='undefined' ? displayTag : 0
+        },
+        activeConnectorGroup() {
+            let dataObjectTags = this.projectObjects[this.activePage]['data_object_tags'];
+            return dataObjectTags.hasOwnProperty('connector') ? this.dataObjects[dataObjectTags['connector']].group : null
         }
     },
     directives: {

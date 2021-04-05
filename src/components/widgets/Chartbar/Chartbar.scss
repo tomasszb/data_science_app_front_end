@@ -29,7 +29,7 @@
 }
 
 .chartbar-parameters {
-  overflow: scroll!important;
+  overflow: auto!important;
   max-height: calc(100vh - 280px);
 
   .form-group {
@@ -66,7 +66,7 @@
   border-radius: 6px;
   display: block;
   //min-height: 30px;
-  overflow: scroll!important;
+  overflow: auto!important;
   display: block;
 }
 
@@ -83,7 +83,7 @@
   float: left;
   //border-right: solid 3px $gray-200;
   padding: 1em;
-  overflow-y: scroll!important;
+  overflow-y: auto!important;
   overflow-x: hidden;
   height: calc(100vh - 100px);
   //width: 230px;
@@ -95,7 +95,7 @@
   }
 
   .chart-settings {
-    //overflow: scroll!important;
+    //overflow: auto!important;
     display: block;
     background-color: white!important;
 

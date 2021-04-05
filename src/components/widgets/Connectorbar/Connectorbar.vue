@@ -10,15 +10,18 @@
             </span>
             <connector-explorer/>
         </div>
-        <draggable id="testing-connector-bar" class="justify-content-start align-items-center page-list" v-model="pageList">
+        <draggable id="testing-connector-bar" class="flex-vertical r-95" v-model="pageList">
+            <div v-for="(pageID, position) in pageList">
                 <object-selector
-                        v-for="pageID in pageList"
-                        :key="'po-'+pageID"
-                        :objectID="pageID"
-                        showDetail
-                        detailType="connector_type"
+                  v-on:settings = "toggleSettings"
+                  :key="'po-'+pageID"
+                  :objectID="pageID"
+                  showDetail
+                  settingsButton
+                  detailType="connector_type"
                 />
-
+                <data-object-settings v-if="openSettings === pageID" :objectID="pageID" tag="connector"/>
+            </div>
         </draggable>
     </div>
 </template>
@@ -27,19 +30,30 @@
     import {mapGetters, mapMutations, mapState} from "vuex";
     import ObjectSelector from "../ObjectSelector/ObjectSelector"
     import ConnectorExplorer from "../ConnectorExplorer/ConnectorExplorer"
+    import DataObjectSettings from "../../layout/DataObjectSettings/DataObjectSettings"
     import draggable from 'vuedraggable';
     const R = require('ramda');
 
     export default {
         name: 'Connectorbar',
+        data() {
+            return {
+              openSettings: null
+            }
+        },
         components: {
-            ObjectSelector, ConnectorExplorer, draggable
+            ObjectSelector, ConnectorExplorer, draggable, DataObjectSettings
         },
         props: {
             objectType: { type: String, default: null },
         },
         methods: {
-            ...mapMutations('proj', ['UPDATE_PROJECT_OBJECT']),
+            ...mapMutations('proj', [
+                'UPDATE_PROJECT_OBJECT'
+            ]),
+            toggleSettings(objectID) {
+                this.openSettings!==objectID ? this.openSettings = objectID : this.openSettings = null
+            },
         },
         computed: {
             ...mapGetters('proj', ['projectObjects', 'pageLists', 'activeProcess']),
