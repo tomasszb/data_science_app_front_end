@@ -69,6 +69,7 @@
         },
         props: {
             objectID: { type: String, default: '' },
+            providedDataObjectID: {type: String, default: '' },
             tag: { type: String, default: 'action' },
             horizontal: {type: Boolean, default: false},
 
@@ -78,8 +79,12 @@
                 'dataObjects', 'dataObjectParameterMapping', 'projectObjects'
             ]),
             dataObjectID() {
-                console.log(this.projectObjects[this.objectID]['data_object_tags'], this.tag, this.projectObjects[this.objectID]['data_object_tags'][this.tag].toString())
-                return this.projectObjects[this.objectID]['data_object_tags'][this.tag].toString()
+                if (this.providedDataObjectID!=='') {
+                    return this.providedDataObjectID
+                }
+                else {
+                    return this.projectObjects[this.objectID]['data_object_tags'][this.tag].toString()
+                }
             },
             dataObjectSettings() {
                 return this.dataObjects[this.dataObjectID]

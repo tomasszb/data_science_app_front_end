@@ -21,7 +21,7 @@
       .connector-explorer-panel {
         padding: 15px 10px 10px 15px;
         border-radius: 0;
-        width: 40%;
+        max-width: 40%;
         background-color: #151921 !important;
 
         .connector-type-picker {
@@ -69,7 +69,8 @@
       }
 
       .hidden {
-        visibility:hidden;
+        //visibility:hidden;
+        display:none;
       }
 
       .connector-explorer-form {

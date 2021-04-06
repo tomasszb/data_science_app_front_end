@@ -1,12 +1,27 @@
 @import '../../../styles/app';
 
 .sheet-bar-sheet-area {
-  max-width: calc(100% - 150px)!important;
+  //max-width: calc(100% - 150px)!important;
   overflow-x: auto!important;
   overflow-y: hidden!important;
+  flex-grow: 1;
+  border-right: solid 5px $gray-300;
 
 }
 
+.sheet-bar-button-area {
+  height: $toolfooter-height!important;
+  background-color: $gray-400;
+}
+
+.sheet-bar-button {
+  color: $gray-600;
+  cursor: pointer;
+}
+
+.sheet-bar-button:hover {
+  color: $gray-500;
+}
 
 .sheet-bar {
   flex-grow: 1;

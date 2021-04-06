@@ -10,7 +10,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :nodeID="dataObjectID" tag="connector" type="new"/>
+            <connector-form :dataObjectID="dataObjectID" tag="connector" type="new"/>
         </b-modal>
         <b-modal
                 id="existing-connector-explorer"
@@ -21,7 +21,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :nodeID="activeDataObjectID" tag="connector" type="existing"/>
+            <connector-form :dataObjectID="activeDataObjectID" tag="connector" type="existing"/>
         </b-modal>
     </div>
 </template>
@@ -77,6 +77,7 @@
                 'projectObjects', 'activePage', 'activeNode'
             ]),
             activeDataObjectID() {
+                console.log('activeDataObjectID', this.dataObjectID)
                 let dataObjectTags = this.projectObjects[this.activePage]['data_object_tags'];
                 return dataObjectTags.hasOwnProperty('connector') ? dataObjectTags['connector'].toString() : null;
             }

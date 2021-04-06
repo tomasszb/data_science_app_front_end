@@ -21,7 +21,7 @@
                         />
                     </main-content>
                     <tool-footer v-show="activeConnectorGroup === 1000">
-                        <sheetbar objectType="node"></sheetbar>
+                        <sheetbar objectType="node" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="conn"></sheetbar>
                     </tool-footer>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     </main-content>
                 </div>
                 <tool-footer>
-                    <sheetbar objectType="node"></sheetbar>
+                    <sheetbar objectType="page" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="prep"></sheetbar>
                 </tool-footer>
 <!--            </div>-->
         </div>
@@ -58,7 +58,7 @@
                     <main-content></main-content>
                 </div>
                 <tool-footer>
-                    <sheetbar objectType="node"></sheetbar>
+                    <sheetbar objectType="node" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="vis"></sheetbar>
                 </tool-footer>
             </div>
         </div>

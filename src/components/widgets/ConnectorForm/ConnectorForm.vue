@@ -50,7 +50,7 @@
                             class="bg-gray-lighter"/>
                 </b-form-group>
                 <data-object-settings
-                        :dataObjectID="dataObjectID"
+                        :providedDataObjectID="dataObjectID"
                         :horizontal="true"
                 />
 
