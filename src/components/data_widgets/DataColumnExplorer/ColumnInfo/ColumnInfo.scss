@@ -1,0 +1,39 @@
+@import '../../../../styles/app';
+
+.col-explorer-col-info .echarts {
+  width: 400px;
+  height: 180px;
+  padding-left: 20%;
+}
+
+.col-explorer-col-info-display-value {
+  font-weight: 600;
+  padding-right: 5px;
+}
+
+.col-explorer-col-info tr {
+  //border-bottom: 1px solid $gray-300;
+  border-top: 1px solid $gray-200;
+  font-size: 13px;
+  line-height: 27px;
+}
+
+.col-explorer-col-info .card-header {
+  padding: 0;
+  background-color: transparent!important;
+}
+
+.col-explorer-col-info .card-body {
+  padding: 15px 0 0 0;
+}
+
+.col-explorer-col-info-accordion-toggle {
+  border-bottom: 1px solid $gray-400;
+}
+
+.col-explorer-col-info-accordion-toggle h5{
+  font-weight: 600!important;
+  font-size: 14px;
+  color: $gray-900;
+
+}

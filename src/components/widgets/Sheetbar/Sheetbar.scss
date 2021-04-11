@@ -5,7 +5,7 @@
   overflow-x: auto!important;
   overflow-y: hidden!important;
   flex-grow: 1;
-  border-right: solid 5px $gray-300;
+  border-right: double 5px $gray-100;
 
 }
 
@@ -50,7 +50,7 @@
     font-size: 14px;
     background-color: $gray-300;
     height: calc(#{$toolfooter-height} - 3px);
-    border-right: $body-bg solid 2px;
+    border-right: $gray-200 solid 2px;
 
     .pill-buttons {
       font-size: 18px;

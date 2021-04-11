@@ -211,7 +211,7 @@ export function createFlowRequest(parentNodeID, execution_commands=null) {
   request['request']["node_commands"] = nodeCommands;
   request['request']['data_objects'] = connDataObjects;
 
-
+  console.log('request', request);
   return request
 }
 

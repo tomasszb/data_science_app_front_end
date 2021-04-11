@@ -89,6 +89,7 @@ export default {
 
             if (action === 'report_data') {
                 let data = JSON.parse(payload["result"]["data"]);
+                console.log('processNotifications - data', data);
                 commit(
                     "proj/UPDATE_DATAFRAME",
                     {nodeID: nodeID, resultTag: resultTag, data: data, nodeSignature: nodeSignature},

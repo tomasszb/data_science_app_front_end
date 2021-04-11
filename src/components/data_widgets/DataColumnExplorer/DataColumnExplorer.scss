@@ -1,0 +1,27 @@
+@import '../../../styles/app';
+
+.col-explorer h4 {
+  font-weight: 500;
+  color: $gray-700;
+  font-size: 24px;
+}
+
+.col-explorer-accordion-toggle {
+  font-weight: 500;
+  font-size: 14px;
+  color: $gray-600;
+}
+
+.col-explorer-accordion-toggle-text {
+  font-weight: 600;
+  color: $gray-700;
+}
+
+.col-explorer .row {
+  margin: 0!important;
+}
+
+.col-explorer .badge-pill {
+  border-radius: 4px;
+  opacity: 0.5;
+}

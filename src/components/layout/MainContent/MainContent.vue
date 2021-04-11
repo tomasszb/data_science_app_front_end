@@ -1,6 +1,8 @@
 <template>
-    <div class="app-main-content flex-grow-1">
+    <div class="app-main-content flex-grow-1 flex-vertical-no-scroll">
         <Widget
+                class="flex-vertical-no-scroll"
+                body-class="flex-vertical-no-scroll"
                 title=""
                 refresh settings customHeader fullscreen
                 :showLoader="false">

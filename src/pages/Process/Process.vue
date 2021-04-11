@@ -6,24 +6,26 @@
                 <nav-sidebar :defaultWidth="250" :minWidth="130" :maxWidth="500" settingPrefix="conn">
                     <connectorbar></connectorbar>
                 </nav-sidebar>
-                <div class="flex-vertical">
                     <main-content>
                         <template v-slot:node-view-selector>
                             <node-view-selector/>
                         </template>
                         <DataTable
                             v-if="pageDisplayTag===0"
+                            :key="processKey + '-data-table'"
                             :nodeID="activeNode"
                         />
                         <DataColumnExplorer
                             v-if="pageDisplayTag===1"
+                            :key="processKey  + '-data-column-explorer'"
                             :nodeID="activeNode"
                         />
+
                     </main-content>
                     <tool-footer v-show="activeConnectorGroup === 1000">
                         <sheetbar objectType="node" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="conn"></sheetbar>
                     </tool-footer>
-                </div>
+
             </div>
         </div>
         <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="flex-vertical" :key="processKey">

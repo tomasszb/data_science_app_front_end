@@ -1,0 +1,13 @@
+@import '../../../../styles/app';
+
+.info-section-table-display-value {
+  font-weight: 600;
+  padding-right: 5px;
+}
+
+.info-section-table tr {
+  //border-bottom: 1px solid $gray-300;
+  border-top: 1px solid $gray-200;
+  font-size: 13px;
+  line-height: 27px;
+}

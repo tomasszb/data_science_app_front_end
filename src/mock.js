@@ -81,6 +81,19 @@ export default {
           }
         },
         {
+          "id": 8,
+          "category": 2,
+          "group": 2100,
+          "type": 210000,
+          "category_text": "Data Action",
+          "group_text": "Describe",
+          "type_text": "Describe Columns",
+          "name": "Describe Columns",
+          "owner_id": 1,
+          "tag": "column_stats",
+          "parameters": {}
+        },
+        {
           "id": 15,
           "category": 1,
           "group": 1001,
@@ -191,6 +204,7 @@ export default {
           "data_object_tags": {
             "output_table_filter": 4,
             "output_table_sort": 5,
+            "column_stats": 8,
             "output_table_quick_info": 16
           },
           "front_end_tag": "",
@@ -210,6 +224,7 @@ export default {
           "type": 300,
           "data_object_tags": {
             "output_table_filter": 4,
+            "column_stats": 8,
             "output_table_sort": 5,
             "output_table_quick_info": 16
           },

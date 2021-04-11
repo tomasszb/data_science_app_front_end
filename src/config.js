@@ -20,7 +20,7 @@ export default {
     colors: {
       sidebar: "#002B49",
       navbar: "#ffffff",
-      primary: "#005792",
+      primary: "#ffe778",
       secondary: "#798892",
       success: "#21AE8C",
       info: "#1A86D0",
@@ -28,7 +28,8 @@ export default {
       danger: "#FD5F00",
       inverse: "#002B49",
       textColor: "#495057",
-      gray: "#D7DFE6"
+      gray: "#D7DFE6",
+      yellow: "#ffce31"
     },
     themeColors: [
       ['default','#002B49'],

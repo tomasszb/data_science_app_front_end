@@ -136,10 +136,10 @@
 
             activeObject() {
                 if (this.objectType==='page') {
-                    return this.activePage
+                    return this.activeProcess
                 }
                 if (this.objectType==='node') {
-                    return this.activeNode
+                    return this.activeProcess
                 }
             },
 
