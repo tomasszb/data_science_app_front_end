@@ -57,6 +57,10 @@
       color: $gray-600;
     }
 
+    .object-selector-text-area {
+      max-width: calc(300px - 15px);
+    }
+
     .object-selector-text {
       margin-right: 5px;
       padding: 3px 12px 3px 8px;

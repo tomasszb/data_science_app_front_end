@@ -1,0 +1,14 @@
+@import '../../../../styles/app';
+
+.script-form .ace_gutter {
+  background-color: $gray-100  !important;
+  color: $gray-500 !important;;
+}
+
+.script-form .ace_gutter-active-line {
+  background-color: $gray-200  !important;
+}
+
+.script-form .ace_active-line {
+  background-color: $gray-100  !important;
+}

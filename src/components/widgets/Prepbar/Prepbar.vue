@@ -9,14 +9,15 @@
             </span>
         </div>
         <div class="flex-vertical">
-            <draggable v-model="nodeList" handle=".drag-handle">
+            <source-node-selector></source-node-selector>
+            <draggable v-model="nodeList" handle=".handle">
                 <div v-for="(nodeID, position) in nodeList">
                     <object-selector
                             :key="'po-'+nodeID"
                             :objectID="nodeID"
+                            class="handle"
                             v-on:settings = "toggleSettings"
                             :position = "position+1"
-                            class="drag-handle"
                             showDetail
                             settingsButton
                             detailType="action_description"
@@ -33,13 +34,14 @@
     import ObjectSelector from "../ObjectSelector/ObjectSelector"
     import DataObjectSettings from "../../layout/DataObjectSettings/DataObjectSettings"
     import draggable from 'vuedraggable';
+    import SourceNodeSelector from "@/components/widgets/SourceNodeSelector/SourceNodeSelector";
     const R = require('ramda');
 
     export default {
         name: 'Prepbar',
         components: {
           DataObjectSettings,
-            ObjectSelector, draggable
+            ObjectSelector, SourceNodeSelector, draggable
         },
         data() {
             return {

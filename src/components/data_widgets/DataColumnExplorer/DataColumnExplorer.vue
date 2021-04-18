@@ -7,34 +7,46 @@
                 <h4><strong>table</strong> details</h4><br>
                 <table-info :tableStats="columnStatsData['table']"></table-info><br><br>
                 <h4 class="mt-4"><strong>column</strong> details</h4><br>
-                <div
-                    v-for="(column, index) in columnStatsData['columns']"
-                    class="card panel mb-xs" :key="`accord-one-${index.toString()}`">
+                <div ref="column-list-container" id="column-list-container">
                     <div
-                        class="card-header panel-header bg-light" role="button"
-                        @click="toggleAccordion(index)"
-                    >
-                        <div class="mb-0">
-                            <div class="accordion-toggle col-explorer-accordion-toggle" role="button">
-                                <div class="justify-content-start d-flex">
-                                    {{typeMapping[column["type"]]}} &nbsp;&nbsp;&nbsp;
-                                    <div class="col-explorer-accordion-toggle-text mr-4">
-                                        {{column['column_name']}}
+                        v-for="(column, index) in columnStatsData['columns']"
+                        class="card panel mb-xs" :key="`accord-one-${index.toString()}`">
+                        <div
+                            class="card-header panel-header bg-light" role="button"
+                            @click="toggleAccordion(index)"
+                        >
+                            <div class="mb-0">
+                                <div class="accordion-toggle col-explorer-accordion-toggle" role="button">
+                                    <div class="justify-content-start d-flex">
+                                        {{typeMapping[column["type"]]}} &nbsp;&nbsp;&nbsp;
+                                        <div class="col-explorer-accordion-toggle-text mr-4">
+                                            {{column['column_name']}}
+                                        </div>
+                                        <b-badge
+                                            v-for="(message, mi ) in column['warnings']"
+                                            :key="'data-column-explorer-warning-' + index + mi"
+                                            class="mr-2"
+                                            variant="danger"
+                                            pill
+                                        >
+                                            {{message}}
+                                        </b-badge>
                                     </div>
-                                    <b-badge v-for="message in column['warnings']" class="mr-2" variant="danger" pill>{{message}}</b-badge>
+                                    <i :class="`fa fa-angle-down ${openedColumns.indexOf(index) >= 0 ? 'expanded' : ''}`" />
                                 </div>
-                                <i :class="`fa fa-angle-down ${openedColumns.indexOf(index) >= 0 ? 'expanded' : ''}`" />
                             </div>
                         </div>
+                        <b-collapse id="accordion-first" class="panel-body" v-if="columnsReady" :visible="openedColumns.indexOf(index) >= 0">
+                            <div class="card-body">
+                                <column-info
+                                    :columnsReady="columnsReady"
+                                    :columnStats="column"
+                                />
+                            </div>
+                        </b-collapse>
                     </div>
-                    <b-collapse id="accordion-first" class="panel-body" :visible="openedColumns.indexOf(index) >= 0">
-                        <div class="card-body">
-                            <column-info
-                                :columnStats="column"
-                            />
-                        </div>
-                    </b-collapse>
                 </div>
+
                 <!--            <column-info-->
                 <!--                v-for="column in columnStatsData['columns']"-->
                 <!--                :key="'data-column-'+nodeID+'-col-'+column['column_name']"-->
@@ -66,7 +78,7 @@
 
 
     export default {
-        name: "DataTable",
+        name: "DataColumnExplorer",
         components: {
             draggable, Loader, TableInfo, ColumnInfo
         },
@@ -77,6 +89,7 @@
             return {
                 activeNodeSignature: null,
                 openedColumns: [],
+                columnsReady: false,
                 typeMapping: {
                     "Numeric": "123",
                     "Categorical": "abc",
@@ -110,6 +123,14 @@
                 } else {
                     this.openedColumns.push(index)
                 }
+            },
+            updateColumnsReady() {
+                setTimeout(function(){
+                    if (this.status === 'ready') {
+                        console.log('updateColumnsReady', status)
+                        this.columnsReady=true;
+                    }
+                }.bind(this), 500);
             }
         },
         computed: {
@@ -137,7 +158,7 @@
                     this.activeNodeSignature = this.nodeSignature;
                     return 'ready'
                 }
-                else if (status==='requested' || this.activeNodeSignature !== null) {
+                else if (status==='requested') {
                     this.activeNodeSignature = this.nodeSignature;
                     return 'loading'
                 }
@@ -149,12 +170,13 @@
                 return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
             },
         },
-        watch: {
-            nodeSignature: function () {
-                if (this.status !== 'not_requested') {
-                    this.requestColumnStats();
-                }
-            }
+        updated() {
+            this.updateColumnsReady()
+        },
+        mounted() {
+            this.$nextTick(function () {
+                this.updateColumnsReady()
+            })
         }
     }
 </script>

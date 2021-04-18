@@ -4,7 +4,6 @@ import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import VueTouch from 'vue-touch';
 import Trend from 'vuetrend';
-
 import { ClientTable, ServerTable } from 'vue-tables-2';
 import VueTextareaAutosize from 'vue-textarea-autosize';
 import mavonEditor from 'mavon-editor';
@@ -29,7 +28,7 @@ import webSocketService from './core/webSocketService'
 
 import VueNumericInput from 'vue-numeric-input';
 import FontPicker from 'font-picker-vue';
-
+import VueFormulate from '@braid/vue-formulate'
 const R = require('ramda');
 
 Object.defineProperty(String.prototype, 'hashCode', {
@@ -111,8 +110,8 @@ Vue.use(VueNumericInput);
 Vue.use(FontPicker);
 
 Vue.use(webSocketService, store);
-
 Vue.config.productionTip = false;
+Vue.use(VueFormulate)
 
 /* eslint-disable no-new */
 new Vue({

@@ -12,6 +12,7 @@
   "dependencies": {
     "@amcharts/amcharts4": "^4.6.1",
     "@amcharts/amcharts4-geodata": "^4.1.7",
+    "@braid/vue-formulate": "^2.5.2",
     "@ckeditor/ckeditor5-build-classic": "^12.4.0",
     "@ckeditor/ckeditor5-vue": "^1.0.0",
     "@fullcalendar/core": "^4.3.1",
@@ -19,6 +20,7 @@
     "@fullcalendar/interaction": "^4.3.0",
     "@fullcalendar/timegrid": "^4.3.0",
     "@fullcalendar/vue": "^4.3.1",
+    "@myena/advanced-select": "^1.0.0",
     "@popperjs/core": "^2.5.4",
     "animate.css": "^3.6.1",
     "animated-number-vue": "^1.0.0",

@@ -71,6 +71,7 @@
             objectID: { type: String, default: '' },
             providedDataObjectID: {type: String, default: '' },
             tag: { type: String, default: 'action' },
+            method: { type: String, default: '__init__' },
             horizontal: {type: Boolean, default: false},
 
         },
@@ -93,7 +94,7 @@
                 return this.dataObjectSettings['parameters']
             },
             requiredParameters() {
-                return this.dataObjectSettings['type']!==null ? this.dataObjectParameterMapping[this.dataObjectSettings['type']]: []
+                return this.dataObjectSettings['type']!==null ? this.dataObjectParameterMapping[this.dataObjectSettings['type']][this.method]: []
             },
         }
     };

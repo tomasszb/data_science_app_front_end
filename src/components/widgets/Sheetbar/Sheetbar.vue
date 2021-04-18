@@ -11,7 +11,7 @@
                 class="d-inline-block r-100"
                 @resize:end="storeWidth"
             >
-                <div class="sheet-bar-sheet-area">
+                <div class="sheet-bar-sheet-area r-100">
                     <draggable v-model="objectList" class=" d-flex r-100  ">
                         <object-selector
                             v-for="objectID in objectList"

@@ -111,6 +111,36 @@ export default {
           }
         },
         {
+          "id": 151,
+          "category": 1,
+          "group": 1000,
+          "type": 100000,
+          "category_text": "Data Connector",
+          "group_text": "SQL",
+          "type_text": "MySQL",
+          "name": "SQL Connector 1",
+          "owner_id": 1,
+          "tag": "connector",
+          "parameters": {
+            "username": "example_username"
+          }
+        },
+        {
+          "id": 152,
+          "category": 1,
+          "group": 1000,
+          "type": 100000,
+          "category_text": "Data Connector",
+          "group_text": "SQL",
+          "type_text": "MySQL",
+          "name": "SQL Connector 1",
+          "owner_id": 1,
+          "tag": "run_query",
+          "parameters": {
+            "queries": "SELECT * FROM table"
+          }
+        },
+        {
           "id": 16,
           "category": 2,
           "group": 2100,
@@ -237,6 +267,28 @@ export default {
           "display_settings": {}
         },
         {
+          "id": 51,
+          "project_id": 1,
+          "relative_position": 1,
+          "name": "Data Load Node 3",
+          "group": 3,
+          "type": 300,
+          "data_object_tags": {
+            "output_table_filter": 4,
+            "column_stats": 8,
+            "output_table_sort": 5,
+            "output_table_quick_info": 16,
+            "run_query": 152
+          },
+          "front_end_tag": "",
+          "parameters": {
+            "page_id": 81,
+            "source_data_node": null,
+            "secondary_data_nodes": []
+          },
+          "display_settings": {}
+        },
+        {
           "id": 7,
           "project_id": 1,
           "relative_position": 2,
@@ -267,6 +319,22 @@ export default {
           "display_settings": {}
         },
         {
+          "id": 81,
+          "project_id": 1,
+          "relative_position": 3,
+          "name": "Data Load  - Sheet 3",
+          "group": 2,
+          "type": 200,
+          "data_object_tags": {
+            "connector": 151
+          },
+          "front_end_tag": "",
+          "parameters": {
+            "process_id": 1
+          },
+          "display_settings": {}
+        },
+        {
           "id": 9,
           "project_id": 1,
           "relative_position": 1,
@@ -279,7 +347,7 @@ export default {
           "front_end_tag": "",
           "parameters": {
             "page_id": 11,
-            "source_data_node": null,
+            "source_data_node": 3,
             "secondary_data_nodes": []
           },
           "display_settings": {}
@@ -442,7 +510,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -452,7 +522,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -462,47 +534,71 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "queries",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "query",
+                        "default": null,
+                        "min_length": null,
+                        "max_length": null,
+                        "regex": null,
+                        "options": null,
+                        "allow_null": true
+                      }
                     },
                     {
                       "name": "query_vars",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "new_conn",
                       "default": false,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "limit",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "index_col",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "coerce_float",
                       "default": true,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "parse_dates",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "skip_on_error",
                       "default": false,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -512,7 +608,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -600,7 +698,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -610,7 +710,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -620,47 +722,71 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "queries",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "query",
+                        "default": null,
+                        "min_length": null,
+                        "max_length": null,
+                        "regex": null,
+                        "options": null,
+                        "allow_null": true
+                      }
                     },
                     {
                       "name": "query_vars",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "new_conn",
                       "default": false,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "limit",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "index_col",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "coerce_float",
                       "default": true,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "parse_dates",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "skip_on_error",
                       "default": false,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -670,7 +796,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -707,7 +835,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -770,7 +900,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -780,7 +912,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -798,7 +932,9 @@ export default {
                 {
                   "name": "filename",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 }
               ],
               "type": "class",
@@ -809,7 +945,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -819,7 +957,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -1139,12 +1279,16 @@ export default {
                 {
                   "name": "lower",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "upper",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 }
               ],
               "type": "function"
@@ -1309,7 +1453,9 @@ export default {
                 {
                   "name": "column",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "dictionary",
@@ -1353,7 +1499,9 @@ export default {
                 {
                   "name": "column",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "new_column_name",
@@ -1455,7 +1603,9 @@ export default {
                 {
                   "name": "column",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "new_column_name",
@@ -1611,7 +1761,9 @@ export default {
                 {
                   "name": "column",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "new_column_name",
@@ -1852,7 +2004,9 @@ export default {
                 {
                   "name": "new_column_name",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "groupby_columns",
@@ -2100,22 +2254,30 @@ export default {
                 {
                   "name": "data",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "xaxis",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "yaxis",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "value_axis",
                   "default": null,
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 },
                 {
                   "name": "values_coordinates",
@@ -2123,7 +2285,9 @@ export default {
                     0,
                     0
                   ],
-                  "dtype": null
+                  "dtype": {
+                    "type": "undefined"
+                  }
                 }
               ],
               "type": "class",
@@ -2134,7 +2298,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2144,7 +2310,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2154,7 +2322,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2164,7 +2334,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2174,7 +2346,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2184,7 +2358,9 @@ export default {
                     {
                       "name": "df",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2194,12 +2370,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "pivot",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2209,12 +2389,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "pivot",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2224,12 +2408,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "value_axis",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2239,17 +2427,23 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "columns",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "agg",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2259,17 +2453,23 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "name",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "formula",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2279,22 +2479,30 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "levels",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "agg",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "axes",
                       "default": 0,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2304,7 +2512,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2314,7 +2524,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -2392,7 +2604,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2402,7 +2616,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2412,7 +2628,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2422,7 +2640,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2432,7 +2652,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2442,7 +2664,9 @@ export default {
                     {
                       "name": "df",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2452,12 +2676,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "pivot",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2467,12 +2695,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "pivot",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2482,12 +2714,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "value_axis",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2497,17 +2733,23 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "columns",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "agg",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2517,17 +2759,23 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "name",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "formula",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2537,22 +2785,30 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "levels",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "agg",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "axes",
                       "default": 0,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2562,7 +2818,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -2572,7 +2830,9 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }
@@ -3296,17 +3556,23 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "d",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "u",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -3316,17 +3582,23 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "data",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "front_end",
                       "default": "echarts.py",
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -3336,12 +3608,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "template",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -3351,12 +3627,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "path",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -3366,17 +3646,23 @@ export default {
                     {
                       "name": "obj",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "path",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "value",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 },
@@ -3386,12 +3672,16 @@ export default {
                     {
                       "name": "self",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     },
                     {
                       "name": "second_template",
                       "default": null,
-                      "dtype": null
+                      "dtype": {
+                        "type": "undefined"
+                      }
                     }
                   ]
                 }

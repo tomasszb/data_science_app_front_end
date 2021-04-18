@@ -1,5 +1,5 @@
 <template>
-    <b-row class="col-explorer-col-info">
+    <b-row class="col-explorer-col-info" v-show="columnsReady">
         <div class="c-40 pt-3">
             <info-section-table
                 :sectionData="columnStats['eda']['general-page1']"
@@ -9,7 +9,7 @@
             <echart v-if="columnStats['type'] === 'Numeric'" :options="horizontalBar" :init-options="initOptions"></echart>
             <echart v-if="columnStats['type'] === 'Categorical'" :options="verticalBar" :init-options="initOptions"></echart>
         </div>
-        <div class="c-100">
+        <div class="c-40">
             <div
                 v-for="(section, index) in sections"
                 class="card panel mb-xs mt-4" :key="`accord-one-${index.toString()}`">
@@ -57,7 +57,8 @@
             InfoSectionTable, echart: ECharts
         },
         props: {
-            columnStats: {type: Object, default: function() {return {}}}
+            columnStats: {type: Object, default: function() {return {}}},
+            columnsReady: { type: Boolean, default: false }
         },
         data() {
             return {
@@ -117,7 +118,7 @@
                     grid: {
                         show: false,
                         top: '10',
-                        left: '50%',
+                        left: 'center',
                         bottom: '20'
                     },
                     yAxis: {

@@ -10,11 +10,12 @@
             </span>
             <connector-explorer/>
         </div>
-        <draggable id="testing-connector-bar" class="flex-vertical r-95" v-model="pageList">
+        <draggable id="testing-connector-bar" class="flex-vertical r-95" v-model="pageList" handle=".handle">
             <div v-for="(pageID, position) in pageList">
                 <object-selector
                   v-on:settings = "toggleSettings"
                   :key="'po-'+pageID"
+                  class="handle"
                   :objectID="pageID"
                   showDetail
                   settingsButton

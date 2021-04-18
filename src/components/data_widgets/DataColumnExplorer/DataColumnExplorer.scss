@@ -1,4 +1,7 @@
 @import '../../../styles/app';
+.col-explorer {
+  padding: 15px 25px 15px 25px;
+}
 
 .col-explorer h4 {
   font-weight: 500;
@@ -18,7 +21,7 @@
 }
 
 .col-explorer .row {
-  margin: 0!important;
+  margin: 10px 0 10px 0!important;
 }
 
 .col-explorer .badge-pill {

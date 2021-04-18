@@ -119,7 +119,16 @@ export default {
             let result = {};
             for (const [categoryName, category] of Object.entries(state.dataObjectDefinitions)) {
                 for (let child  of category["children"]) {
-                    if (child["type_cd"]!==null) result[child["type_cd"]] = child["function"]["parameters"]
+                    if (child["type_cd"]!==null) {
+                        result[child["type_cd"]] = {
+                            '__init__': child["function"]["parameters"]
+                        }
+                        if (child["function"]["type"] === "class") {
+                            for (let method of child["function"]["methods"]) {
+                                result[child["type_cd"]][method["name"]] = method["parameters"]
+                            }
+                        }
+                    }
                 }
             }
             return result

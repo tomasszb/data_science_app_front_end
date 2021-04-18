@@ -125,7 +125,7 @@
                     this.activeNodeSignature = this.nodeSignature;
                     return 'ready'
                 }
-                else if (status==='requested' || this.activeNodeSignature !== null) {
+                else if (status==='requested') {
                     this.activeNodeSignature = this.nodeSignature;
                     return 'loading'
                 }
@@ -146,13 +146,6 @@
                 let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.activeNodeSignature]);
                 let dataFrame = this.dataFrames[dataFrameID];
                 return typeof dataFrame!== "undefined" ? dataFrame['columns'] : []
-            }
-        },
-        watch: {
-            nodeSignature: function () {
-                if (this.status !== 'not_requested') {
-                    this.requestTable();
-                }
             }
         }
     }

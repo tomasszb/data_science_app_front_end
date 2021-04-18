@@ -114,6 +114,15 @@
                 :showLabel="showLabel"
                 :conditionTypes="['<','<=','=','>','>=']"
         />
+        <script-form
+                v-if="typeSettings.type === 'query'"
+                :objectID="objectID"
+                :parameterIndex="parameterIndex"
+                :name="name"
+                :horizontal="horizontal"
+                :route="route"
+                :showLabel="showLabel"
+        />
     </div>
 </template>
 
@@ -128,6 +137,7 @@
     import FormulaForm from "../../../forms/simple/FormulaForm/FormulaForm";
     import MergeColumnPairForm from "../../nested/MergeColumnPairForm/MergeColumnPairForm";
     import SelectForm from "../../simple/SelectForm/SelectForm";
+    import ScriptForm from "../../simple/ScriptForm/ScriptForm";
     import ColumnListForm from "../../simple/ColumnListForm/ColumnListForm";
     import {mapGetters, mapMutations} from "vuex";
     import {getObjectByRoute} from "@/core/projectManager";
@@ -137,7 +147,7 @@
         components: {
             ColumnForm, NumericForm, FormulaForm, ColorForm,
             ConditionForm, BooleanForm, DictionaryForm, StringForm, SelectForm,
-            MergeColumnPairForm, ColumnListForm
+            MergeColumnPairForm, ColumnListForm, ScriptForm
         },
         props: {
             route: {type: Array, default: function() {return []}},

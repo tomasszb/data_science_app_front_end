@@ -30,7 +30,7 @@
 
   .data-table {
     margin: 0;
-    padding: 0px;
+    padding: 15px 25px 15px 25px;
 
     .widget-body {
       padding: 30px 30px 10px 30px;
@@ -54,7 +54,7 @@
       }
 
       table {
-        height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 150px);
+        height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 175px);
         overflow: auto!important;
         width: 100%;
         //width:500px;

@@ -3,12 +3,12 @@
             @click="activateObject(objectID)"
             class="object-selector"
             :class="{'active': activeObject===objectID}">
-        <div class="c-100 d-inline-flex ">
+        <div class="c-100 d-inline-flex">
             <div v-if="position!==0" class="object-selector-position mt-2 mr-3">
                 <h4>#{{position}}</h4>
             </div>
-            <div class="d-inline-flex c-100 align-items-center justify-content-between" v-click-outside="unblurObject">
-                    <div>
+            <div class="d-inline-flex c-100 align-items-center justify-content-between">
+                    <div class="object-selector-text-area">
                         <div
                                 v-show="objectID!==editedObject"
                                 class="object-selector-text"
@@ -19,7 +19,14 @@
                                 v-show="objectID===editedObject"
                                 class="input object-selector-text"
                                 role="textbox">
-                            <span v-focus @keydown="onInput" @blur="unblurObject" ref="object_selector_input" contenteditable>{{title}}</span>
+                            <span
+                                v-focus
+                                @keydown="onInput"
+                                v-click-outside="unblurObject"
+                                :ref="'object_selector_input'+objectID"
+                                contenteditable>
+                                {{title}}
+                            </span>
                         </div>
                         <div class="object-selector-detail" v-if="showDetail">
                             {{detail}}
@@ -147,11 +154,12 @@
             },
             onInput(e) {
                 if(e.key=='Escape') {
-                    this.unblurObject();
+                    e.target.innerText = this.title
+                    this.editedObject = null;
                 }
                 else if(e.key=='Enter') {
-                    this.unblurObject();
                     this.updateName(e.target.innerText);
+                    this.editedObject = null;
                 }
                 else if(e.target.innerText.length>=this.maxInputTextLen && e.key!=='Backspace' && e.key!=='Delete') {
                     e.preventDefault();
@@ -178,10 +186,18 @@
             },
             editObjectName(objectID) {
               this.editedObject = objectID;
-              this.$refs.object_selector_input.focus();
+              // this.$refs.object_selector_input.focus();
+              // this.$refs.object_selector_input.select();
+              // document.execCommand('selectAll',false,null)
+              // this.$refs.object_selector_input.setSelectionRange(0, this.$refs.object_selector_input.value.length)
             },
             unblurObject() {
+                if (this.editedObject === this.objectID) {
+                    // console.log(this.$refs["object_selector_input"+this.objectID])
+                    this.updateName(this.$refs["object_selector_input"+this.objectID].innerText);
+                }
                 this.editedObject = null;
+
             },
             activateObject(objectID) {
                 this.setActivePO({

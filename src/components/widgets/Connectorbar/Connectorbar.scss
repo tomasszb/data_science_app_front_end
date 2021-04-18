@@ -47,8 +47,8 @@
     }
 
     .input {
-      background-color: var(--sidebar-item-active-faded)!important;
-      box-shadow: none;
+      background-color: $gray-100!important;
+      //box-shadow: 0 0 0 2px white;
 
       span {
         outline: none;
