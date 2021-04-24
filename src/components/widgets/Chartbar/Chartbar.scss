@@ -2,6 +2,7 @@
 
 
 .chartbar {
+  height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 50px);
 
   .btn {
     border-radius: 0;
@@ -56,18 +57,6 @@
   //display: flex;
   //justify-content: center;
   //align-items: center;
-}
-
-
-
-.chart-column-container {
-  //border: solid 1px $gray-300;
-  background-color: $gray-100;
-  border-radius: 6px;
-  display: block;
-  //min-height: 30px;
-  overflow: auto!important;
-  display: block;
 }
 
 .chart-area {

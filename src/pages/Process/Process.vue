@@ -62,10 +62,18 @@
                     <nav-sidebar :defaultWidth="200" :minWidth="130" :maxWidth="700" settingPrefix="column">
                         <page-columnbar/>
                     </nav-sidebar>
-                    <nav-sidebar :defaultWidth="400" :minWidth="130" :maxWidth="700" settingPrefix="chart">
+                    <nav-sidebar :defaultWidth="400" :minWidth="130" :maxWidth="700" settingPrefix="chart" class="vis-sidebar-2">
                         <chartbar/>
                     </nav-sidebar>
-                    <main-content></main-content>
+                    <main-content>
+                        <template v-slot:node-view-selector>
+                            <node-view-selector/>
+                        </template>
+<!--                        <toolbox-dashboard></toolbox-dashboard>-->
+                        <dashboard></dashboard>
+<!--                        {{dataObjects[projectObjects[activePage]["data_object_tags"]["dashboard"]]}}-->
+                        <toolbox-dashboard></toolbox-dashboard>
+                    </main-content>
                 </div>
                 <tool-footer>
                     <sheetbar objectType="node" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="vis"></sheetbar>
@@ -91,6 +99,8 @@ import Prepbar from "../../components/widgets/Prepbar/Prepbar"
 import NodeViewSelector from "../../components/ui/NodeViewSelector/NodeViewSelector";
 import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 import QueryEditor from "@/components/widgets/QueryEditor/QueryEditor";
+import Dashboard from "@/components/widgets/Dashboard/Dashboard";
+import ToolboxDashboard from "@/components/widgets/ToolboxDashboard/ToolboxDashboard";
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -106,7 +116,8 @@ export default {
         DataColumnExplorer, DataTable, QueryEditor,
         NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, Chartbar,
         Prepbar,
-        PageColumnbar
+        PageColumnbar,
+        Dashboard, ToolboxDashboard
     },
     data() {
         return {

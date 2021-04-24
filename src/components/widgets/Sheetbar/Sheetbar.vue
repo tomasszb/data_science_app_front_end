@@ -1,6 +1,6 @@
 <template>
-    <div class="sheet-bar r-100">
-        <div class="align-items-center r-100 d-flex">
+    <div class="sheet-bar">
+        <div class=" d-flex">
             <vue-resizable
                 :width="width"
                 :min-width="minWidth"

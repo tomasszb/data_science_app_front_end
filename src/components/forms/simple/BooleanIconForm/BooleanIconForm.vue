@@ -1,22 +1,9 @@
 <template>
-    <div class="numeric-form  pr-2">
-        <b-form-group
-                :label="name"
-                :label-sr-only="!showLabel"
-                label-class="pb-1"
-                :label-cols="horizontal ? 5 : 0"
-                :horizontal="horizontal">
-            <vue-numeric-input
-                    controls-type="updown"
-                    v-model="value"
-                    :precision="precision"
-                    :min="min"
-                    :max="max"
-                    :step="step"
-                    class="c-100"
-            />
-        </b-form-group>
-    </div>
+    <b-nav-item id="v-step-0" class="align-items-center d-flex" :class="[value ? '' : 'inactive']">
+        <a class="d-md-down-none p-0" href="#" @click="value=!value">
+            <i :class="iconClassName" />
+        </a>
+    </b-nav-item>
 </template>
 
 <script>
@@ -27,22 +14,18 @@
     const R = require('ramda');
 
     export default {
-        name: 'NumericForm',
+        name: 'BooleanIconForm',
         components: {
             vSelect
         },
         props: {
             objectID: {type: String, default: null},
+            iconClassName: {type: String, default: null},
             name: {type: String, default: ''},
-            showLabel: {type: Boolean, default: true},
             horizontal: {type: Boolean, default: false},
+            showLabel: {type: Boolean, default: true},
             parameterIndex: {type: [Number, String]},
             route: {type: Array, default: function() {return []}},
-
-            min: {type: Number, default: -Infinity},
-            max: {type: Number, default: Infinity},
-            step: {type: Number, default: 0.01},
-            precision: {type: Number, default: 2}
         },
         data() {
             return {
@@ -72,9 +55,8 @@
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER'
             ]),
-
-        }
+        },
     };
 </script>
 
-<style src="./NumericForm.scss" lang="scss"></style>
+<style src="./BooleanIconForm.scss" lang="scss"></style>

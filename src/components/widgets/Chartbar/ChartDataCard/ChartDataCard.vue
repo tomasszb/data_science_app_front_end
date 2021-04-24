@@ -1,14 +1,15 @@
 <template>
-    <div class="mb-2 chart-data-card p-2">
+    <div class="mb-2 chart-data-card p-3 flex-vertical">
         <div v-for="settings in chartDataFields" v-if="!inactiveChartSettings.includes(settings.selector)">
             <div class="chart-column mb-1">
-                <div class="chart-column-label mb-1">{{settings.name}} :</div>
                 <form-container
                         :route="[]"
                         :parameterIndex="settings.name"
-                        typeSettings="column_list"
+                        :horizontal="false"
+                        :typeSettings="{type: 'column_list'}"
                         :objectID="'19'"
-                        :showLabel="false"
+                        :name="settings.name"
+                        :showLabel="true"
                 />
             </div>
         </div>

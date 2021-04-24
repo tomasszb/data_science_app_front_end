@@ -32,12 +32,14 @@
                 dataObjectTag : {
                     200: 'connector',
                     201: 'action',
-                    202: 'chart'
+                    203: 'dashboard'
                 },
                 nodeViewMapping : {
                     1000: ['SQL', 'Data', 'Detail'],
                     1001: ['Data', 'Detail'],
                     1002: ['Data', 'Detail'],
+                    1003: ['Data', 'Detail'],
+                    3200: ['Data', 'Detail'],
                 },
                 nodeViewNameCodes : {
                     'SQL': 3,

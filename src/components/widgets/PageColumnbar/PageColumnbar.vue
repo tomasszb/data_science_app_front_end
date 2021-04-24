@@ -10,7 +10,12 @@
             </b-dropdown-item-button>
         </b-dropdown>
         <br>
-        <draggable v-model="columnList" :group="{ name: 'columns', pull: 'clone', put: false }">
+        <draggable
+            v-model="columnList"
+            :group="{ name: 'columns', pull: 'clone', put: false }"
+            ghost-class="ghost"
+            animation="200"
+        >
             <ColumnButton
                     v-for="column in columnList"
                     :key="'po-column-'+column.name"
@@ -33,6 +38,7 @@
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
     import ColumnButton from "./ColumnButton/ColumnButton"
+    import { getResultObjectID } from '@/core/projectManager';
     import draggable from 'vuedraggable';
 
     export default {
@@ -42,15 +48,7 @@
         },
         data() {
             return {
-                selectedInputNodeID: null,
-                columnList: [
-                    {name: "year", type: "date"},
-                    {name: "player", type: "abc"},
-                    {name: "pos", type: "abc"},
-                    {name: "age", type: "int"},
-                    {name: "g", type: "abc"},
-                    {name: "gs", type: "abc"}
-                ]
+                selectedInputNodeID: null
             }
         },
         prop: {
@@ -68,10 +66,11 @@
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects', 'ProjectTree',
                 'processList', 'pageLists', 'nodeLists', 'elementLists',
-                'activeProcess', 'activePage', 'activeNode', 'activeElement'
+                'activeProcess', 'activePage', 'activeNode', 'activeElement',
+                'nodeSignatures'
             ]),
             ...mapState('proj', [
-                'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements'
+                'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements', 'dataFrames'
             ]),
             inputNodeIDs() {
                 let processIndex = this.processList.indexOf(this.activeProcess);
@@ -85,12 +84,24 @@
                     }
                 }
                 return previousNodeIDs
+            },
+            resultObjectID() {
+                return getResultObjectID([this.selectedInputNodeID, 'output_table_quick_info', this.nodeSignatures[this.selectedInputNodeID]])
+            },
+            columnList() {
+                let result = []
+                let columns = this.dataFrames[this.resultObjectID]["columns"];
+                let types = this.dataFrames[this.resultObjectID]["column_types"];
+                for (let i = 0; i < columns.length ;i++) {
+                    result.push({'name': columns[i], 'type': types[columns[i]]})
+                }
+                return result
             }
-
         },
         watch: {
             activeNode: function(activeNodeID) {
                 this.selectedInputNodeID = this.projectObjects[activeNodeID].parameters.source_data_node.toString()
+
             }
         },
         created() {

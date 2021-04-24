@@ -1,0 +1,88 @@
+@import '../../../styles/app';
+
+.toolbox-dashboard.navbar {
+  height: 50px;
+  z-index: 100;
+  padding: 10px 0 10px 0;
+  border-top: 1px solid $gray-200;
+  //border-bottom: 1px solid $gray-200;
+  //background-color: $gray-200;
+  transition: $transition-base;
+  font-weight: 500;
+  justify-content: flex-start;
+
+  .nav {
+    overflow: hidden;
+    max-height: 27px;
+  }
+
+  .nav-item {
+    margin-left: 10px;
+    height: 27px;
+    text-align: center;
+    padding: 0 5px 0 5px;
+    background-color: $gray-100;
+    border: 1px solid $gray-200;
+
+    .nav-link {
+      padding: 0!important;
+    }
+
+    .fa {
+      color: $gray-700;
+      font-size: 14px;
+      width:40px;
+      padding: 0;
+    }
+    a {
+      float: left;
+    }
+  }
+
+  .nav-item:hover {
+    background-color: white;
+    .fa {
+      color: $gray-900;
+
+    }
+  }
+
+  .nav-item.inactive {
+    background-color: $gray-300;
+    opacity: 70%;
+    .fa {
+      color: $gray-500;
+    }
+  }
+
+  .form-group {
+    margin: 0
+  }
+  .numeric-form {
+    padding: 0!important;
+
+    .btn {
+      border: none!important;
+      background-color: inherit!important;
+    }
+
+    .btn-decrement .btn-icon {
+      top: 40%;
+      border-width: .40rem .40rem!important;
+    }
+
+    .btn-increment .btn-icon {
+      top: 60%;
+      border-width: 0 .40rem .40rem!important;
+    }
+
+    .vue-numeric-input input {
+      border: none;
+      background-color: inherit;
+      width: 70px;
+      font-size: 13px;
+    }
+
+  }
+
+}

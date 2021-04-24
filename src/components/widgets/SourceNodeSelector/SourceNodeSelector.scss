@@ -1,17 +1,15 @@
 @import '../../../styles/app';
 
-
-.object-selector {
+.source-node-selector {
   cursor: pointer;
   padding: 10px 10px 10px 15px;
   margin: 3px 3px 3px 3px;
   display: flex;
   align-items: center;
   font-size: 12px;
-  background-color: $gray-300;
-
-  .object-selector-position {
-  }
+  background-color: var(--sidebar-item-active);
+  border-left: 7px solid var(--sidebar-item-active);
+  height: $prep-selector;
 
   .pill-buttons {
     font-size: 14px;
@@ -38,67 +36,54 @@
     border: none;
   }
 
-  .object-selector-text-area {
-    max-width: calc(80% - 15px);
+
+  .source-node-selector-text {
+    line-height: 17px;
   }
 
-  .object-selector-text {
+  .source-node-selector-detail {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 5px;
+  }
+
+  .source-node-selector-text {
     margin-right: 5px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     padding: 0 12px 0 8px;
-    color: $gray-600;
+    color: $gray-800;
     font-size: 12px;
     line-height: 15px;
     font-weight: 600;
     width: 100%;
   }
 
-  .object-selector-detail {
+  .source-node-selector-detail {
     padding: 0 12px 0 8px;
     font-size: 10px;
     line-height: 13px;
   }
+
 }
 
-.object-selector:last-of-type {
-  border-right: 0;
-}
+.source-node-selector.active {
+  //border-left: solid var(--sidebar-item-active) 5px;
+  background-color: white!important;
+  border-left: 7px solid var(--sidebar-item-active);
 
-.object-selector.active {
-  background-color: white !important;
-
-  .object-selector-text {
-    color: $gray-900;
+  .pill-buttons, .source-node-selector-text {
+    color: $gray-700;
   }
 
   .input {
-    outline: none;
-    border-radius: 3px;
-    box-shadow: 0 0 0 2px var(--sidebar-item-active);
-    color: $gray-700;
+    background-color: var(--sidebar-item-active-faded)!important;
+    box-shadow: none;
 
     span {
-      cursor: text;
-      display: inline-block;
-      width: 100%;
       outline: none;
     }
 
   }
 }
-
-
-.node-add {
-  cursor: pointer;
-  color: $gray-600;
-  font-size: 14px!important;
-}
-
-.node-add:hover {
-  color: $gray-500;
-}
-
-
-

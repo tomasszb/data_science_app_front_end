@@ -1,18 +1,49 @@
 <template>
-    <FormulateInput
-        type="select"
-        placeholder="Choose a time"
-        :option-groups="{
-            Morning: {
-              10: '10am',
-              11: '11am'
-            },
-            Afternoon: {
-              15: '3pm',
-              17: '5pm'
-            }
-        }"
-    />
+    <div class="source-node-selector mb-4">
+        <div class="c-100 d-inline-flex">
+            <div class="source-node-selector-position mt-2 mr-3">
+                <h4>#0</h4>
+            </div>
+            <div class="d-inline-flex c-100 align-items-center justify-content-between">
+                <div class="source-node-selector-text-area">
+                    <div
+                        class="source-node-selector-text">
+                        {{projectObjects[selectedInputNodeID]["name"]}}
+                    </div>
+                    <div class="source-node-selector-detail">
+                        Select Source Data
+                    </div>
+                </div>
+
+                <div class="pill-buttons  d-inline-flex align-items-center">
+                    <b-nav class="mx-1">
+                        <b-dropdown
+                            text=""
+                            block
+                            right
+                            offset="15"
+                            menu-class="c-95 mt-4"
+                            boundary="testing-connector-bar"
+                        >
+                            <div v-for="(nodes, processName) in inputNodeIDs">
+                                <b-dropdown-item disabled> <strong>{{processName}}</strong></b-dropdown-item>
+                                <b-dropdown-item
+                                    @click="selectedInputNodeID=nodeID"
+                                    v-for="(nodeName, nodeID) in nodes"
+                                >
+                                    {{nodeName}}
+                                </b-dropdown-item>
+                            </div>
+
+                        </b-dropdown>
+                    </b-nav>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
 
 <!--    <advanced-select-->
 <!--        v-model="value"-->
@@ -25,8 +56,11 @@
 <script>
     import {mapActions, mapGetters, mapMutations} from "vuex";
     const R = require('ramda');
+    import Vue from "vue";
     // import AdvancedSelect from '@myena/advanced-select';
     import VueFormulate from '@braid/vue-formulate'
+    import VeeValidate from "vee-validate";
+    Vue.use(VeeValidate, { inject: false });
 
 
     export default {
@@ -43,26 +77,6 @@
         },
         data() {
             return {
-                selectedInputNodeID: null,
-                options: [
-                    { value: 1, text: 'One' },
-                    {
-                        label: 'Group 1',
-                        options: [
-                            { value: 3, text: 'Three' },
-                            { value: 4, text: 'Four', disabled: true },
-                            { value: 5, text: 'Five' },
-                        ],
-                    },
-                    {
-                        label: 'Group 2',
-                        options: [
-                            { value: 6, text: 'Six' },
-                            { value: 7, text: 'Seven' },
-                            { value: 8, text: 'Eight' },
-                        ],
-                    },
-                ],
                 value: [1],
             }
         },
@@ -81,15 +95,47 @@
                 'activeProcess', 'activePage', 'activeNode',
                 'nodeSignatures'
             ]),
+            selectedInputNodeID: {
+                get() {
+                    return this.projectObjects[this.activeNode].parameters.source_data_node.toString()
+                },
+                set(newValue) {
+                    console.log('setting new value selectedInputNodeID', newValue);
+                    let obj = R.clone(this.projectObjects[this.activeNode]);
+                    obj.parameters.source_data_node = newValue;
+                    this.UPDATE_PROJECT_OBJECT({ObjectID: this.activeNode, Object: obj})
+                }
+            },
             inputNodeIDs() {
                 let processIndex = this.processList.indexOf(this.activeProcess);
-                let previousNodeIDs = [];
+                let pageIndex = this.pageLists[this.activeProcess].indexOf(this.activeProcess);
+                let previousNodeIDs = {};
 
-                for (let i=0; i<processIndex; i++) {
+                for (let i=0; i<=processIndex; i++) {
                     let previousProcessId = this.processList[i];
-                    let previousPageIDs = this.pageLists[previousProcessId];
-                    for (let pageID of previousPageIDs) {
-                        previousNodeIDs = previousNodeIDs.concat(this.nodeLists[pageID])
+                    let previousPageIDs = [];
+
+                    if (i === processIndex) {
+                        previousPageIDs = this.pageLists[previousProcessId].slice(0, pageIndex-1);
+                    } else {
+                        previousPageIDs = this.pageLists[previousProcessId];
+                    }
+                    let processName = this.projectObjects[previousProcessId]["name"];
+                    let processGroup = this.projectObjects[previousProcessId]["group"];
+
+                    if (previousPageIDs.length>0) {
+                        previousNodeIDs[processName] = {}
+                        for (let pageID of previousPageIDs) {
+                            if (processGroup === 1) {
+                                for (let nodeID of this.nodeLists[pageID]) {
+                                    previousNodeIDs[processName][nodeID] = this.projectObjects[nodeID]["name"];
+                                }
+                            }
+                            if (processGroup === 2) {
+                                let nodeID = this.nodeLists[pageID][-1];
+                                previousNodeIDs[processName][nodeID] = this.projectObjects[nodeID]["name"];
+                            }
+                        }
                     }
                 }
                 return previousNodeIDs
@@ -101,18 +147,7 @@
             ]),
             ...mapMutations('proj', [
                 'UPDATE_PROJECT_OBJECT', 'UPDATE_NODE_EXECUTION_STATUS'
-            ]),
-            selectInputNodeID(inputNodeID) {
-                this.selectedInputNodeID = inputNodeID
-            }
-        },
-        watch: {
-            activeNode: function(activeNodeID) {
-                this.selectedInputNodeID = this.projectObjects[activeNodeID].parameters.source_data_node.toString()
-            }
-        },
-        created() {
-            this.selectedInputNodeID = this.projectObjects[this.activeNode].parameters.source_data_node.toString()
+            ])
         }
     };
 </script>

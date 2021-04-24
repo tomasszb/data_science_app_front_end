@@ -176,7 +176,8 @@
 
             chartProperties() {
                 let result = [];
-                getNestedValues(this.dataObjectParameterMapping["310000"][0]["dtype"], result, []);
+                console.log(this.dataObjectParameterMapping["300000"])
+                getNestedValues(this.dataObjectParameterMapping["300000"]['__init__'][0]["dtype"], result, []);
                 return result;
             },
             filteredChartProperties() {

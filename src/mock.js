@@ -191,6 +191,32 @@ export default {
           "owner_id": 1,
           "tag": "chart_pivot",
           "parameters": {}
+        },
+        {
+          "id": 191,
+          "category": 2,
+          "group": 2006,
+          "type": 200601,
+          "category_text": "Data Action",
+          "group_text": "Pivot",
+          "type_text": "Chart Pivot",
+          "name": "Chart Pivot",
+          "owner_id": 1,
+          "tag": "chart_pivot",
+          "parameters": {}
+        },
+        {
+          "id": 192,
+          "category": 2,
+          "group": 3200,
+          "type": 320000,
+          "category_text": "Visualization",
+          "group_text": "Dashboard",
+          "type_text": "Dashboard",
+          "name": "Dashboard",
+          "owner_id": 1,
+          "tag": "dashboard",
+          "parameters": {}
         }
       ],
       "project_objects": [
@@ -385,7 +411,9 @@ export default {
           "name": "Data Vis Page 1",
           "group": 2,
           "type": 203,
-          "data_object_tags": {},
+          "data_object_tags": {
+            "dashboard": 192
+          },
           "front_end_tag": "",
           "parameters": {
             "process_id": 25
@@ -2850,6 +2878,100 @@ export default {
         "children": [
           {
             "function": {
+              "name": "Dashboard",
+              "parameters": [
+                {
+                  "name": "main_axis",
+                  "default": null,
+                  "dtype": {
+                    "type": "list",
+                    "max_len": null,
+                    "list_key": null,
+                    "variable": {
+                      "type": "column",
+                      "data_index": null,
+                      "allow_multiple": true,
+                      "allow_null": true
+                    }
+                  }
+                },
+                {
+                  "name": "edit",
+                  "default": null,
+                  "dtype": {
+                    "type": "boolean",
+                    "default": true,
+                    "allow_null": true
+                  }
+                },
+                {
+                  "name": "vertical_align",
+                  "default": null,
+                  "dtype": {
+                    "type": "boolean",
+                    "default": false,
+                    "allow_null": true
+                  }
+                },
+                {
+                  "name": "width",
+                  "default": null,
+                  "dtype": {
+                    "type": "integer",
+                    "default": 800,
+                    "min_value": null,
+                    "max_value": null,
+                    "options": null,
+                    "allow_null": true
+                  }
+                },
+                {
+                  "name": "height",
+                  "default": null,
+                  "dtype": {
+                    "type": "integer",
+                    "default": 800,
+                    "min_value": null,
+                    "max_value": null,
+                    "options": null,
+                    "allow_null": true
+                  }
+                },
+                {
+                  "name": "child_width",
+                  "default": null,
+                  "dtype": {
+                    "type": "integer",
+                    "default": 400,
+                    "min_value": null,
+                    "max_value": null,
+                    "options": null,
+                    "allow_null": true
+                  }
+                },
+                {
+                  "name": "child_height",
+                  "default": null,
+                  "dtype": {
+                    "type": "integer",
+                    "default": 300,
+                    "min_value": null,
+                    "max_value": null,
+                    "options": null,
+                    "allow_null": true
+                  }
+                }
+              ],
+              "type": "class",
+              "methods": []
+            },
+            "group_name": "Dashboard",
+            "group_cd": 3200,
+            "type_cd": 330000,
+            "type_name": "Dashboard Object"
+          },
+          {
+            "function": {
               "name": "ChartTemplate",
               "parameters": [
                 {
@@ -3689,7 +3811,7 @@ export default {
             },
             "group_name": "Template",
             "group_cd": 3000,
-            "type_cd": 310000,
+            "type_cd": 300000,
             "type_name": "Template"
           }
         ]

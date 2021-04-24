@@ -1,0 +1,25 @@
+@import '../../../styles/app';
+.chart-dashboard .chart-dashboard-grid-container {
+  overflow-y: auto;
+  overflow-x: auto;
+  width:100%;
+  height:100%;
+}
+
+.chart-dashboard .grid-stack-item-content:hover {
+  background-color: $gray-200;
+}
+
+.chart-dashboard .grid-stack {
+  background-color: #4d90fe;
+  background-color: white;
+  min-height: 100%;
+}
+
+.chart-dashboard .grid-stack-item-content {
+  background-color: $gray-100;
+}
+
+.chart-dashboard .ui-resizable-se, .chart-dashboard .ui-resizable-sw {
+  opacity: 0;
+}

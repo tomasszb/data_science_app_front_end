@@ -1,31 +1,46 @@
 <template>
-    <b-form-group class="column-list-form pr-2 mt-2">
-        <div class="chart-column-container p-3 pb-3 mb-2">
-            <draggable
-                    class="dragArea list-group"
-                    :v-model="columnList"
-                    group="columns"
-            >
-                <div v-for="column in columnList">
-                    {{column}}
-                </div>
-            </draggable>
+    <b-form-group
+        class="column-list-form"
+        :label="name"
+        :label-sr-only="!showLabel"
+        :label-cols="horizontal ? 3 : 0"
+        :horizontal="horizontal"
+    >
+        <div class="chart-column-container-outer p-3 pb-3 mb-3">
+            <div class="chart-column-container ">
+                <draggable
+                        class="dragArea list-group"
+                        v-model="columnList"
+                        group="columns"
+                        ghost-class="ghost"
+                        animation="200"
+                >
+                    <ColumnButton
+                        v-for="column in columnList"
+                        :key="'po-column-form-'+column.name"
+                        :name="column.name"
+                        :type="column.type"
+                    />
+                </draggable>
+            </div>
         </div>
-        <label>{{name}}</label>
+
     </b-form-group>
 </template>
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
+    import draggable from "vuedraggable";
     import vSelect from 'vue-select';
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
+    import ColumnButton from "@/components/widgets/PageColumnbar/ColumnButton/ColumnButton";
     const R = require('ramda');
 
     export default {
-        name: 'BooleanForm',
+        name: 'ColumnListForm',
         components: {
-            vSelect
+            vSelect, draggable, ColumnButton
         },
         props: {
             objectID: {type: String, default: null},
@@ -37,6 +52,7 @@
         },
         data() {
             return {
+                columnList:[]
             }
         },
         computed: {
@@ -46,18 +62,18 @@
             parentParameters() {
                 return this.dataObjects[this.objectID]['parameters']
             },
-            columnList: {
-                get() {
-                    return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
-                },
-                set(newValue) {
-                    this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
-                        route: this.route.concat(this.parameterIndex),
-                        value: newValue
-                    })
-                }
-            }
+            // columnList: {
+            //     get() {
+            //         return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
+            //     },
+            //     set(newValue) {
+            //         this.SET_DO_PARAMETER({
+            //             id: parseInt(this.objectID),
+            //             route: this.route.concat(this.parameterIndex),
+            //             value: newValue
+            //         })
+            //     }
+            // }
         },
         methods: {
             ...mapMutations('proj', [

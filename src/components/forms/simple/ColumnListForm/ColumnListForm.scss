@@ -1,5 +1,25 @@
 @import '../../../../styles/app';
 
 .column-list-form {
+  margin-bottom: 0!important;
+}
+
+.column-list-form legend {
+  border-bottom: none;
+  color: $gray-600;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.column-list-form .chart-column-container-outer {
+  width: 100%;
+  background-color: $gray-100;
+  display: flex;
+}
+
+.column-list-form .chart-column-container {
+  width: 100%;
+  //max-height: 300px;
+  overflow-y: auto;
 
 }
