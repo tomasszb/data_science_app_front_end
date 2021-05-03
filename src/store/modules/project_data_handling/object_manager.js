@@ -106,15 +106,16 @@ export default {
                 typeCD,
                 selName=null,
                 existNodeID=null,
-                selPage=null,
+                params=null,
                 selPosition=null,
                 dataObjectTags=null
             }
         ) {
             let rg = rootGetters;
             let nodeID = getOrDefault(existNodeID, genProjectObjectID());
-            let pageID = getOrDefault(selPage, rg['proj/activePage']);
-            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/nodeLists'][pageID]));
+            // let pageID = getOrDefault(selPage, rg['proj/activePage']);
+            let parameters = getOrDefault(params, {'page_id': rg['proj/activePage']});
+            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/nodeLists'][params.page_id]));
             let name = getOrDefault(selName, defaultNames[typeCD]);
 
             let emptyNode = {
@@ -124,9 +125,7 @@ export default {
                 'type': typeCD,
                 "project_id": localStorage.getItem('project_id'),
                 "relative_position": relativePosition,
-                'parameters': {
-                    'page_id': pageID,
-                },
+                'parameters': parameters,
                 "display_settings": {}
             };
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID:nodeID, Object: emptyNode}, { root: true });

@@ -5,7 +5,7 @@
         <b-nav>
             <b-nav-item id="v-step-0" class="align-items-center d-flex" >
                 <a class="d-md-down-none p-0  " href="#" @click="">
-                    <i class='fa fa-plus ' />
+                    <i class='fa fa-plus' @click="emitEvent('add-dashboard-item')" />
                 </a>
             </b-nav-item>
             <BooleanIconForm
@@ -58,7 +58,7 @@
 
 <script>
 import {mapState, mapActions, mapGetters} from 'vuex';
-import {getObjectSettings, getObjectSetting} from "../../../core/projectObjectParser";
+import {getObjectSettings, getObjectSetting} from "../../../../core/projectObjectParser";
 import FormContainer from "@/components/forms/container/FormContainer/FormContainer";
 import BooleanIconForm from "@/components/forms/simple/BooleanIconForm/BooleanIconForm";
 
@@ -69,7 +69,6 @@ import BooleanIconForm from "@/components/forms/simple/BooleanIconForm/BooleanIc
         },
         data() {
             return {
-                user: localStorage.getItem('user')
             }
         },
         computed: {
@@ -80,6 +79,9 @@ import BooleanIconForm from "@/components/forms/simple/BooleanIconForm/BooleanIc
             },
         },
         methods: {
+            emitEvent(eventName) {
+                this.$emit(eventName)
+            },
         },
 
     };

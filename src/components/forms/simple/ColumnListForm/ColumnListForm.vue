@@ -16,8 +16,8 @@
                         animation="200"
                 >
                     <ColumnButton
-                        v-for="column in columnList"
-                        :key="'po-column-form-'+column.name"
+                        v-for="(column, index) in columnList"
+                        :key="'po-column-form-'+column.name+index"
                         :name="column.name"
                         :type="column.type"
                     />

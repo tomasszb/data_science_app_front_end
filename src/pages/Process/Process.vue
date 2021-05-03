@@ -72,11 +72,11 @@
 <!--                        <toolbox-dashboard></toolbox-dashboard>-->
                         <dashboard></dashboard>
 <!--                        {{dataObjects[projectObjects[activePage]["data_object_tags"]["dashboard"]]}}-->
-                        <toolbox-dashboard></toolbox-dashboard>
+
                     </main-content>
                 </div>
                 <tool-footer>
-                    <sheetbar objectType="node" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="vis"></sheetbar>
+                    <sheetbar objectType="page" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="vis"></sheetbar>
                 </tool-footer>
             </div>
         </div>
@@ -100,7 +100,6 @@ import NodeViewSelector from "../../components/ui/NodeViewSelector/NodeViewSelec
 import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 import QueryEditor from "@/components/widgets/QueryEditor/QueryEditor";
 import Dashboard from "@/components/widgets/Dashboard/Dashboard";
-import ToolboxDashboard from "@/components/widgets/ToolboxDashboard/ToolboxDashboard";
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -117,7 +116,7 @@ export default {
         NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, Chartbar,
         Prepbar,
         PageColumnbar,
-        Dashboard, ToolboxDashboard
+        Dashboard
     },
     data() {
         return {

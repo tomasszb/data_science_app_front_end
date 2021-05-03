@@ -218,6 +218,7 @@ export default {
                 let parameterObject = R.clone(projectObject['parameters']);
                 // console.log(parameterObject, route, value);
                 let newParameterObject = parameterObject.setPath(route, value);
+                console.log(projectObject);
                 Vue.set(projectObject, 'parameters', newParameterObject)
             }
         },
