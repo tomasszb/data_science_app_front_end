@@ -25,6 +25,7 @@
     import {getObjectByRoute} from "../../../../core/projectManager";
     import 'vue-select/dist/vue-select.css';
     const R = require('ramda');
+    import Vue from 'vue'
 
     export default {
         name: 'ColumnForm',
@@ -60,7 +61,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -72,6 +73,11 @@
                 'SET_DO_PARAMETER'
             ]),
         },
+        mounted() {
+            if (typeof this.value==='undefined') {
+                Vue.set(this, 'value', this.defaultValue);
+            }
+        }
     };
 </script>
 

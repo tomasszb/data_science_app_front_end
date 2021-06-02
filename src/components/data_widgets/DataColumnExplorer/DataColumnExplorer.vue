@@ -127,7 +127,7 @@
             updateColumnsReady() {
                 setTimeout(function(){
                     if (this.status === 'ready') {
-                        console.log('updateColumnsReady', status)
+                        // console.log('updateColumnsReady', status)
                         this.columnsReady=true;
                     }
                 }.bind(this), 500);

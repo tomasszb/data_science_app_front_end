@@ -16,6 +16,7 @@
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
+    import Vue from 'vue'
 
     export default {
         name: 'ColorForm',
@@ -28,11 +29,14 @@
             horizontal: {type: Boolean, default: false},
             showLabel: {type: Boolean, default: true},
             parameterIndex: {type: [Number, String]},
-            route: {type: Array, default: function() {return []}},
+            route: {
+                type: Array, default: function () {
+                    return []
+                }
+            },
         },
         data() {
-            return {
-            }
+            return {}
         },
         computed: {
             ...mapGetters('proj', [
@@ -47,7 +51,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -59,7 +63,12 @@
                 'SET_DO_PARAMETER'
             ]),
         },
-    };
+        mounted() {
+            if (typeof this.value==='undefined') {
+                Vue.set(this, 'value', this.defaultValue);
+            }
+        }
+    }
 </script>
 
 <style src="./ColorForm.scss" lang="scss"></style>

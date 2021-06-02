@@ -24,6 +24,7 @@
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
+    import Vue from 'vue'
 
     export default {
         name: 'DictionaryForm',
@@ -55,7 +56,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -73,7 +74,7 @@
                 return newValue
             },
             validate() {
-                console.log(this.value)
+                // console.log(this.value)
                 let matches = this.value.match(/\s*[^\s]+\s*:\s*[^\s]+\s*/gi);
                 let lines = this.value.match(/.+\n*/gi);
                 let matchCount = matches !== null ? matches.length : [];

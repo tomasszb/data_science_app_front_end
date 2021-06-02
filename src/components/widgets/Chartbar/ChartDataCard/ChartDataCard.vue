@@ -3,11 +3,11 @@
         <div v-for="settings in chartDataFields" v-if="!inactiveChartSettings.includes(settings.selector)">
             <div class="chart-column mb-1">
                 <form-container
-                        :route="[]"
-                        :parameterIndex="settings.name"
+                        :route="['fields']"
+                        :parameterIndex="settings.alias"
                         :horizontal="false"
                         :typeSettings="{type: 'column_list'}"
-                        :objectID="'19'"
+                        :objectID="activeNodeSettings['data_object_tags']['visualization_pivot']"
                         :name="settings.name"
                         :showLabel="true"
                 />
@@ -19,7 +19,7 @@
 <script>
     import Vue from 'vue'
     import draggable from 'vuedraggable';
-    import {mapGetters} from "vuex";
+    import {mapGetters, mapMutations} from "vuex";
     import FormContainer from "../../../forms/container/FormContainer/FormContainer";
 
     export default {
@@ -29,6 +29,7 @@
         },
         props: {
             chartType: { type: String, default: '' },
+            dataObjectId: { type: String, default: '' },
             chartDataFields: { type: Array },
         },
         data() {
@@ -49,9 +50,32 @@
             }
         },
         methods: {
-            // toggleActive(settingIndex) {
-            //     Vue.set(this.chartDataSettings[settingIndex], 'active', !this.chartDataSettings[settingIndex].active);
-            // }
+            ...mapMutations('proj', [
+                'SET_DO_PARAMETER'
+            ]),
+        },
+        watch: {
+            chartDataFields() {
+                // console.log('chartDataFields changed');
+                let pivotID = this.activeNodeSettings['data_object_tags']['visualization_pivot'];
+                let pivotSettings = this.dataObjects[pivotID]['parameters']['fields'];
+                let filteredPivotSettings = {};
+
+                for (let field of this.chartDataFields) {
+                    filteredPivotSettings[field.alias] = [];
+
+                    if (typeof pivotSettings[field.alias] !== 'undefined') {
+                        filteredPivotSettings[field.alias] = pivotSettings[field.alias];
+                    } else if(this.displaySettings['pivot_columns'][field.alias] !== 'undefined') {
+                        filteredPivotSettings[field.alias] = this.displaySettings['pivot_columns'][field.alias];
+                    }
+                    this.SET_DO_PARAMETER({
+                        id: pivotID,
+                        route: ['fields'],
+                        value: filteredPivotSettings
+                    });
+                }
+            }
         }
     }
 </script>

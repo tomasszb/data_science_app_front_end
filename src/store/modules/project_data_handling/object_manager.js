@@ -70,7 +70,7 @@ export default {
             let nodeLists = rootGetters['proj/nodeLists'];
 
             let activeProcess = get_active_object(selectedProcess, currentActiveProcess, processList);
-            // console.log(selectedPage, currentActivePages[activeProcess], pageLists[activeProcess]);
+            // // console.log(selectedPage, currentActivePages[activeProcess], pageLists[activeProcess]);
             let activePage = get_active_object(selectedPage, currentActivePages[activeProcess], pageLists[activeProcess]);
             let activeNode = get_active_object(selectedNode, currentActiveNodes[activePage], nodeLists[activePage]);
 
@@ -83,7 +83,7 @@ export default {
             commit("proj/UPDATE_PROJECT_OBJECT", {ProjectObjectID, ProjectObject}, { root: true });
         },
         deletePO({commit, dispatch, rootGetters}, ProjectObjectID) {
-            console.log('deletePO', ProjectObjectID);
+            // // console.log('deletePO', ProjectObjectID);
             let ProjectObject = rootGetters['proj/projectObjects'][ProjectObjectID];
             let dictTree = rootGetters['proj/ProjectTree'];
             let tree = new TreeModel();
@@ -124,6 +124,7 @@ export default {
                 'group': 3,
                 'type': typeCD,
                 "project_id": localStorage.getItem('project_id'),
+                "data_object_tags": dataObjectTags,
                 "relative_position": relativePosition,
                 'parameters': parameters,
                 "display_settings": {}

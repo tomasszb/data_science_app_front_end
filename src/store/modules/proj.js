@@ -150,7 +150,7 @@ export default {
                 }
                 ProjectDict['children'].push(process);
             }
-            // console.log(ProjectDict);
+            // // console.log(ProjectDict);
             return ProjectDict
         },
         projectTreeModel: (state, getters) => {
@@ -198,7 +198,6 @@ export default {
         },
         DELETE_PROJECT_OBJECT(state, {ObjectID}) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
-            console.log(index, ObjectID, state.projectData['project_objects'])
             Vue.delete(state.projectData['project_objects'], index);
         },
         UPDATE_DATA_OBJECT(state, {ObjectID, Object}) {
@@ -212,19 +211,16 @@ export default {
         },
         SET_DO_PARAMETER(state, {id, route, value}) {
             let index = getObjectIndex(state.projectData['project_data_objects'], id);
-
             if (index !== null) {
                 let projectObject = state.projectData['project_data_objects'][index];
                 let parameterObject = R.clone(projectObject['parameters']);
-                // console.log(parameterObject, route, value);
+                // // console.log(parameterObject, route, value);
                 let newParameterObject = parameterObject.setPath(route, value);
-                console.log(projectObject);
                 Vue.set(projectObject, 'parameters', newParameterObject)
             }
         },
         DELETE_DATA_OBJECT(state, {ObjectID}) {
             let index = getObjectIndex(state.projectData['project_data_objects'], ObjectID);
-            console.log(index, ObjectID)
             Vue.delete(state.projectData['project_data_objects'], index);
         },
         UPDATE_DATAFRAME_STATUS(state, {nodeID, resultTag, nodeSignature, status}) {

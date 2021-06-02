@@ -41,7 +41,7 @@
         computed: {
             ...mapGetters('proj', ['activeProcess', 'projectObjects']),
             displaySettings() {
-                console.log('displaySettings', getObjectSetting(this.projectObjects, this.activeProcess, 'display_settings', {}));
+                // console.log('displaySettings', getObjectSetting(this.projectObjects, this.activeProcess, 'display_settings', {}));
                 return getObjectSetting(
                     this.projectObjects,
                     this.activeProcess,
@@ -73,7 +73,7 @@
             }
         },
         created() {
-          console.log('created')
+          // console.log('created')
         }
     }
 </script>

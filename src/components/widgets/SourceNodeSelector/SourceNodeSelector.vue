@@ -100,7 +100,7 @@
                     return this.projectObjects[this.activeNode].parameters.source_data_node.toString()
                 },
                 set(newValue) {
-                    console.log('setting new value selectedInputNodeID', newValue);
+                    // console.log('setting new value selectedInputNodeID', newValue);
                     let obj = R.clone(this.projectObjects[this.activeNode]);
                     obj.parameters.source_data_node = newValue;
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activeNode, Object: obj})

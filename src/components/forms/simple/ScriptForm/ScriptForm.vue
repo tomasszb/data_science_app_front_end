@@ -72,6 +72,11 @@ export default {
             });
         }
 
+    },
+    mounted() {
+        if (typeof this.value==='undefined') {
+            Vue.set(this, 'value', this.defaultValue);
+        }
     }
 };
 </script>

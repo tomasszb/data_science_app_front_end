@@ -12,6 +12,7 @@
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
+    import Vue from 'vue'
 
     export default {
         name: 'BooleanIconForm',
@@ -44,7 +45,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -55,6 +56,10 @@
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER'
             ]),
+        },
+        mounted() {
+
+            Vue.set(this, 'value', typeof this.value!=='undefined' ? this.value : this.defaultValue);
         },
     };
 </script>

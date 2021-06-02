@@ -25,6 +25,7 @@
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
+    import Vue from 'vue'
 
     export default {
         name: 'NumericForm',
@@ -38,6 +39,7 @@
             horizontal: {type: Boolean, default: false},
             parameterIndex: {type: [Number, String]},
             route: {type: Array, default: function() {return []}},
+            defaultValue: {},
 
             min: {type: Number, default: -Infinity},
             max: {type: Number, default: Infinity},
@@ -57,11 +59,11 @@
             },
             value: {
                 get() {
-                    return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
+                    return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex];
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -72,7 +74,11 @@
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER'
             ]),
-
+        },
+        mounted() {
+            if (typeof this.value==='undefined') {
+                Vue.set(this, 'value', this.defaultValue);
+            }
         }
     };
 </script>

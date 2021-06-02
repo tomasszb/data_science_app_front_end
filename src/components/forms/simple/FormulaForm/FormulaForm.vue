@@ -24,6 +24,7 @@
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
+    import Vue from 'vue'
 
     export default {
         name: 'FormulaForm',
@@ -55,7 +56,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })

@@ -84,7 +84,7 @@
                 });
             }
             if (this.localParameters.length === 0) {
-                console.log('here');
+                // console.log('here');
                 this.addListElement()
             }
         }

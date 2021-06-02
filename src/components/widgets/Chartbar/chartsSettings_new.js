@@ -28,65 +28,68 @@ export let chartsSettings = {
         'name': 'lineChart',
         'chartPicture': lineChart,
         'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'markerS', 'tooltip'] },
+        'data_fields': ['main axis', 'category', 'values']},
     'lineA': {
         'name': 'lineAreaChart',
         'chartPicture': lineAreaChart,
         'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'markerS', 'tooltip']},
+        'data_fields': ['main axis', 'category', 'values']},
     'lineSA': {
         'name': 'lineStackedAreaChart',
         'chartPicture': lineStackedAreaChart,
         'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'markerS', 'tooltip']},
+        'data_fields': ['main axis', 'category', 'values']},
     'bar': {
         'name': 'barChart',
         'chartPicture': barChart,
         'layout_elements': ['general', 'title', 'legend', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'tooltip']},
+        'data_fields': ['main axis', 'category', 'values']},
     'barS': {
         'name': 'barStackedChart',
         'chartPicture': barStackedChart,
         'layout_elements': ['general', 'title', 'legend', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'main', 'value', 'category', 'tooltip']},
+        'data_fields': ['main axis', 'category', 'values']},
     'scatter': {
         'name': 'scatterChart',
         'chartPicture': scatterChart,
         'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'xaxis', 'yaxis', 'color', 'size', 'tooltip']},
+        'data_fields': ['x axis', 'y axis', 'color', 'size']},
     'treemap': {
         'name': 'treeMapChart',
         'chartPicture': treeMapChart,
         'layout_elements': ['general', 'title', 'legend', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'xaxis', 'yaxis', 'color', 'size', 'tooltip']},
+        'data_fields': ['x axis', 'y axis', 'color', 'size']},
     'map': {
         'name': 'mapChart',
         'chartPicture': mapChart,
         'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'latitude', 'longitude', 'tooltip']},
+        'data_fields': ['lat', 'long', 'color', 'size']},
     'pivot': {
         'name': 'pivotTable',
         'chartPicture': pivotTable,
         'layout_elements': ['general', 'title', 'legend', 'marker', 'xaxis', 'yaxis', 'tooltip'],
-        'data_fields': ['xgrid', 'ygrid', 'columns', 'rows', 'values', 'color', 'tooltip']}
+        'data_fields': ['columns', 'rows', 'values']}
 };
 
 
 export let chartsDataFields = [
         {'name': 'x grid', 'alias': 'xgrid', 'selector': 'grid'},
         {'name': 'y grid', 'alias': 'ygrid', 'selector': 'grid'},
-        {'name': 'main axis', 'alias': 'main', 'selector': null},
-        {'name': 'values', 'alias': 'value', 'selector': null},
-        {'name': 'category', 'alias': 'category', 'selector': null},
-        {'name': 'marker size', 'alias': 'markerS', 'selector': 'marker'},
-        {'name': 'marker color', 'alias': 'markerC', 'selector': 'marker'},
-        {'name': 'tooltip', 'alias': 'tooltip', 'selector': 'tooltip'},
-        {'name': 'x axis', 'alias': 'x', 'selector': null},
-        {'name': 'y axis', 'alias': 'y', 'selector': null},
-        {'name': 'long', 'alias': 'x', 'selector': null},
-        {'name': 'lat', 'alias': 'y', 'selector': null},
-        {'name': 'columns', 'alias': 'column', 'selector': null},
+
+        {'name': 'main axis', 'alias': 'row', 'selector': null},
+        {'name': 'x axis', 'alias': 'row', 'selector': null},
         {'name': 'rows', 'alias': 'row', 'selector': null},
+        {'name': 'long', 'alias': 'row', 'selector': null},
+
+        {'name': 'category', 'alias': 'col', 'selector': null},
+        {'name': 'y axis', 'alias': 'col', 'selector': null},
+        {'name': 'columns', 'alias': 'col', 'selector': null},
+        {'name': 'lat', 'alias': 'col', 'selector': null},
+
+        {'name': 'values', 'alias': 'value', 'selector': null},
+        {'name': 'marker color', 'alias': 'markerC', 'selector': 'marker'},
+        {'name': 'marker size', 'alias': 'markerS', 'selector': 'marker'},
+        {'name': 'tooltip', 'alias': 'tooltip', 'selector': 'tooltip'},
         {'name': 'color', 'alias': 'color', 'selector': null},
         {'name': 'size', 'alias': 'size', 'selector': null}
     ];

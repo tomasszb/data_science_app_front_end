@@ -1,0 +1,23 @@
+@import '../../../../styles/app';
+
+.grid-stack-item-content:hover {
+  background-color: $gray-200;
+}
+
+.grid-stack {
+  background-color: white;
+  min-height: 100%;
+}
+
+.grid-stack-item-content {
+  background-color: $gray-100;
+}
+
+.grid-stack-item {
+  border: 3px solid transparent;
+  padding: 0;
+}
+
+.grid-stack-item.active {
+  border: 3px solid $gray-300;
+}

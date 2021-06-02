@@ -18,6 +18,7 @@
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
+    import Vue from 'vue';
 
     export default {
         name: 'StringForm',
@@ -41,8 +42,8 @@
                 'dataObjects'
             ]),
             parentParameters() {
-                // console.log('parentParameters', this.objectID, this.dataObjects[this.objectID]);
-                // console.log(this.dataObjects, this.objectID)
+                // // console.log('parentParameters', this.objectID, this.dataObjects[this.objectID]);
+                // // console.log(this.dataObjects, this.objectID)
                 return this.dataObjects[this.objectID]['parameters']
             },
             value: {
@@ -51,7 +52,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -77,6 +78,12 @@
                 return validation===false ? validation : null
             },
         },
+        mounted() {
+            if (typeof this.value==='undefined') {
+                Vue.set(this, 'value', this.defaultValue);
+            }
+        }
+
     };
 </script>
 

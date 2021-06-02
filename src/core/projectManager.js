@@ -93,7 +93,7 @@ export function getUpstreamNodes(nodeID, upstreamNodes) {
   let secNodeIDs = node['parameters']['secondary_data_nodes'];
   let parentPageID = node['parameters']['page_id'];
   if (srcNodeID !== null) {
-    let upstreamNodeID = srcNodeID;
+    let upstreamNodeID = srcNodeID.toString();
     upstreamNodes.push(upstreamNodeID);
     getUpstreamNodes(upstreamNodeID, upstreamNodes);
   } else {
@@ -101,14 +101,14 @@ export function getUpstreamNodes(nodeID, upstreamNodes) {
     let sortedNodes = nodes.sort((a, b) => (objects[a].relative_position < objects[b].relative_position ? 1 : -1));
     let pageUpstreamNodes = sortedNodes.filter((a)=>{if(objects[a].relative_position<node.relative_position){return a}});
     if (pageUpstreamNodes.length>0) {
-      let upstreamNodeID = objects[pageUpstreamNodes[0].id];
+      let upstreamNodeID = objects[pageUpstreamNodes[0].id].toString();
       upstreamNodes.push(upstreamNodeID);
       getUpstreamNodes(upstreamNodeID, upstreamNodes);
     }
   }
   if (secNodeIDs) {
     for (let secNodeID of secNodeIDs) {
-      let upstreamNodeID = secNodeID;
+      let upstreamNodeID = secNodeID.toString();
       upstreamNodes.push(upstreamNodeID);
       getUpstreamNodes(upstreamNodeID, upstreamNodes);
     }
@@ -167,7 +167,7 @@ export function createFlowRequest(parentNodeID, execution_commands=null) {
   let allUpstreamNodeIDs = getUpstreamNodes(parentNodeID,[]);
 
   for (let nodeID of allUpstreamNodeIDs.reverse().concat([parentNodeID])) {
-    if (!allUpstreamNodeIDs.includes(nodeID)) {
+    if (!nodeIDs.includes(nodeID)) {
       nodeIDs.push(nodeID);
       let pageID = projectObjects[nodeID]['parameters']['page_id'];
       let pageDataObjectTags = projectObjects[pageID]['data_object_tags'];
@@ -198,6 +198,13 @@ export function createFlowRequest(parentNodeID, execution_commands=null) {
   if (execution_commands) {
     nodeCommands[parentNodeID] = execution_commands;
   }
+  // console.log(nodeIDs.includes('3'), nodeIDs.includes(3));
+  let filtNodeSignatures = Object.keys(nodeSignatures)
+      .filter(key => nodeIDs.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = nodeSignatures[key];
+        return obj;
+      }, {});
 
   for (let id of connDataObjectIDs) connDataObjects.push(dataObjects[id]);
   for (let id of nodeIDs) nodes.push(projectObjects[id]);
@@ -207,11 +214,10 @@ export function createFlowRequest(parentNodeID, execution_commands=null) {
   request['request']["project_id"] = projectID;
   request['request']["inherited_data_object_tags"] = inheritedDataObjectTags;
   request['request']["nodes"] = nodes;
-  request['request']['node_signatures'] = nodeSignatures;
+  request['request']['node_signatures'] = filtNodeSignatures;
   request['request']["node_commands"] = nodeCommands;
   request['request']['data_objects'] = connDataObjects;
-
-  console.log('request', request);
+  // console.log(request)
   return request
 }
 

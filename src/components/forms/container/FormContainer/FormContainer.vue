@@ -7,6 +7,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
                 :precision="null"
                 :step="1"
@@ -18,6 +19,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
                 :precision="2"
                 :step="0.01"
@@ -29,6 +31,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <select-form
@@ -39,6 +42,7 @@
                 :options="typeSettings.options"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <string-form
@@ -48,6 +52,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <boolean-form
@@ -57,6 +62,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <column-form
@@ -66,6 +72,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <column-list-form
@@ -75,6 +82,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <merge-column-pair-form
@@ -84,6 +92,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <formula-form
@@ -93,6 +102,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <dictionary-form
@@ -102,6 +112,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
         <condition-form
@@ -111,6 +122,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
                 :conditionTypes="['<','<=','=','>','>=']"
         />
@@ -121,6 +133,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
     </div>

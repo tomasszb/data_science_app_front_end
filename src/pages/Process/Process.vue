@@ -151,7 +151,7 @@ export default {
         },
         pageDisplayTag() {
             let displayTag = this.activePageDisplaySettings['node_view'];
-            console.log('display tag', displayTag, this.projectObjects[this.activePage]);
+            // console.log('display tag', displayTag, this.projectObjects[this.activePage]);
             return typeof displayTag!=='undefined' ? displayTag : 0
         },
         activeConnectorGroup() {

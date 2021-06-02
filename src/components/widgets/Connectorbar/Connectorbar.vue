@@ -68,7 +68,7 @@
                         let pageID = pageIDs[i];
                         let page = R.clone(this.projectObjects[pageID]);
                         page.relative_position = i+1;
-                        console.log(pageID, pageIDs, page);
+                        // console.log(pageID, pageIDs, page);
                         this.UPDATE_PROJECT_OBJECT({ObjectID: pageID, Object: page})
                     }
                 }

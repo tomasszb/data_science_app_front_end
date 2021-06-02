@@ -1,18 +1,21 @@
 <template>
     <div class="chart-dashboard r-100 c-100">
         <div class="chart-dashboard-grid-container r-95">
-            {{nodeLists}}
-            <br>
-            {{activeSourceNode}}
+            {{activeNodeSettings['data_object_tags']}}
             <section class="grid-stack">
                 <dashboard-item
-                    v-for="(dashboardItemSettings, index) in dashboardItems"
+                    v-for="(nodeID, index) in nodeLists[activePage]"
+                    v-if="getDataVisID(nodeID) !== '' "
+                    @activate-node="activateNode(nodeID)"
+                    :class="nodeID===activeNode ? 'active' : ''"
                     :grid="grid"
                     :dataObjectID="dataObjectID"
-                    :key="'dashboard-item-'+dashboardItemSettings.id"
-                    :index="index"
+                    :key="'dashboard-item-node-'+nodeID"
+                    :index="getDataVisID(nodeID)"
                 >
-                    hello
+                    <data-visualization
+                        :nodeID="nodeID"
+                    />
                 </dashboard-item>
             </section>
         </div>
@@ -29,7 +32,8 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import { GridStack } from 'gridstack';
     // THEN to get HTML5 drag&drop
     import 'gridstack/dist/h5/gridstack-dd-native';
-    import DashboardItem from "@/components/widgets/Dashboard/ColumnButton/DashboardItem";
+    import DashboardItem from "@/components/widgets/Dashboard/DashboardItem/DashboardItem";
+    import DataVisualization from "@/components/data_widgets/DataVisualization/DataVisualization";
     import ToolboxDashboard from "@/components/widgets/Dashboard/ToolboxDashboard/ToolboxDashboard";
     import {getObjectSetting} from "@/core/projectObjectParser";
     const R = require('ramda');
@@ -38,7 +42,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     export default {
         name: 'Dashboard',
         components: {
-            DashboardItem, ToolboxDashboard
+            DashboardItem, ToolboxDashboard, DataVisualization
         },
         prop: {
 
@@ -48,7 +52,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                 'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT', 'SET_DO_PARAMETER'
             ]),
             ...mapActions('proj/object_manager', [
-                'newNode'
+                'newNode', 'setActivePO'
             ]),
             newDataObject(type, existDataObjectID=null) {
                 let newDataObjectID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
@@ -57,14 +61,25 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                     ObjectID: dataObjectID,
                     Object: {
                         'id': dataObjectID,
-                        'type': this.activeConnectorType,
+                        'type': type,
+                        'name': '',
                         'parameters': {}
                     }
                 });
                 return dataObjectID;
             },
+            activateNode(nodeID) {
+                // console.log('activating node')
+                this.setActivePO({
+                    selectedProcess:null,
+                    selectedPage:null,
+                    selectedNode:nodeID
+                });
+            },
             addNewWidget: function () {
-                let visID = this.newDataObject(310000)
+                let visID = this.newDataObject(310000);
+                let pivotID = this.newDataObject(200601);
+                let temlateID = this.newDataObject(300000);
                 let newDashboardItem = {
                     id: 'do-vis-'+visID,
                     visualization_object: visID,
@@ -78,18 +93,27 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                 // let dashSettings = {type: 320000}
                 let newProjectObjectSettings = {
                     typeCD: 303,
-                    dataObjectTags: {'data_visualization': visID},
+                    name: '',
+                    dataObjectTags: {
+                        'data_visualization': visID,
+                        'visualization_pivot': pivotID,
+                        'chart_template': temlateID
+                    },
                     params: {'page_id': this.activePage, source_data_node: this.activeSourceNode}
                 }
                 this.newNode(newProjectObjectSettings)
                 let charts = R.clone(this.dashboardItems);
-                charts.push(newDashboardItem);
+                charts[visID] = (newDashboardItem);
                 Vue.set(this, 'dashboardItems', charts);
 
                 this.$nextTick(() => {
                     this.grid.makeWidget('do-vis-'+visID);
                 });
             },
+            getDataVisID(nodeID) {
+                let dataObjectTags = this.projectObjects[nodeID]['data_object_tags'];
+                return 'data_visualization' in dataObjectTags ? dataObjectTags['data_visualization'] : ''
+            }
         },
         data() {
             return {
@@ -118,9 +142,12 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
             activeSourceNode() {
                 return this.projectObjects[this.activeNode]['parameters']['source_data_node']
             },
+            activeNodeSettings() {
+                return this.projectObjects[this.activeNode]
+            },
             dashboardItems: {
                 get() {
-                    return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'] : []
+                    return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'] : {}
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
@@ -162,7 +189,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                         }
                     }
                 });
-                console.log(dashboardItems)
+                // console.log(dashboardItems)
                 Vue.set(this, 'dashboardItems', dashboardItems);
             })
         },

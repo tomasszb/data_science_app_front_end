@@ -105,7 +105,7 @@
             ]),
 
             displaySettings() {
-                console.log('displaySettings', getObjectSetting(this.projectObjects, this.activeObject, 'display_settings', {}));
+                // console.log('displaySettings', getObjectSetting(this.projectObjects, this.activeObject, 'display_settings', {}));
                 return getObjectSetting(
                     this.projectObjects,
                     this.activeObject,

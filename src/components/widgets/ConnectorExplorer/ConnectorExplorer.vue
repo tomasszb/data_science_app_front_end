@@ -77,7 +77,7 @@
                 'projectObjects', 'activePage', 'activeNode'
             ]),
             activeDataObjectID() {
-                console.log('activeDataObjectID', this.dataObjectID)
+                // console.log('activeDataObjectID', this.dataObjectID)
                 let dataObjectTags = this.projectObjects[this.activePage]['data_object_tags'];
                 return dataObjectTags.hasOwnProperty('connector') ? dataObjectTags['connector'].toString() : null;
             }

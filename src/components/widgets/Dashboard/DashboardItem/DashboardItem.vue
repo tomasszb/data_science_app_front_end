@@ -1,6 +1,5 @@
 <template>
-    <div class="grid-stack-item" v-bind="gridStackAttributes">
-
+    <div class="grid-stack-item" v-bind="gridStackAttributes" @click="emitEvent('activate-node')">
         <div class="grid-stack-item-content">
             <slot></slot>
         </div>
@@ -43,9 +42,12 @@
             ...mapActions('proj/object_manager', [
                 'setActivePO', 'deletePO'
             ]),
+            emitEvent(eventName) {
+                this.$emit(eventName)
+            },
         },
         mounted() {
-            console.log('gridStackAttributes', this.gridStackAttributes);
+            // console.log('gridStackAttributes', this.gridStackAttributes);
             // this.grid.makeWidget(this.gridStackAttributes["gs-id"]);
         }
     };

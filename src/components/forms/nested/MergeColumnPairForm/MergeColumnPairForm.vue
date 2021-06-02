@@ -61,7 +61,7 @@
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
+                        id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     })
@@ -75,7 +75,7 @@
         },
         created() {
             if (typeof this.localParameters === 'undefined' || this.localParameters === null) {
-                console.log('merge column created', parseInt(this.objectID), this.route.concat(this.parameterIndex));
+                // console.log('merge column created', parseInt(this.objectID), this.route.concat(this.parameterIndex));
                 this.SET_DO_PARAMETER({
                         id: parseInt(this.objectID),
                         route: this.route.concat(this.parameterIndex),

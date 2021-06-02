@@ -25,7 +25,7 @@ export default {
             });
             promise.then(res => {
                 let data = res.data['Response'];
-                console.log('hello', data);
+                // console.log('hello', data);
                 commit("proj/LOAD_PROJECT_DATA", data, { root: true });
                 let selectedProcess = null;
                 let selectedPage = null;

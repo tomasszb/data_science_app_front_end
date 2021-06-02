@@ -5,12 +5,15 @@
                 <span class="m-0">{{type}}</span>
             </div>
             <div class="c-100">
-                    <div class="column-selector-text">
-                        {{name}}
-                    </div>
-                    <div class="column-selector-text">
-<!--                        {{name}}-->
-                    </div>
+                <div class="column-selector-text">
+                    <strong v-if="agrFunction!==null" class="column-selector-text">
+                        {{agrFunction}}(
+                    </strong>
+                    {{name}}
+                    <strong v-if="agrFunction!==null" class="column-selector-text">
+                        )
+                    </strong>
+                </div>
             </div>
 
         </div>
@@ -24,6 +27,7 @@
         name: 'ColumnButton',
         props: {
             name: { type: String, default: null },
+            agrFunction: {type: String, default: null},
             type: { type: String, default: null },
         },
         directives: {

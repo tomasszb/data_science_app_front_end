@@ -193,7 +193,7 @@
             },
             unblurObject() {
                 if (this.editedObject === this.objectID) {
-                    // console.log(this.$refs["object_selector_input"+this.objectID])
+                    // // console.log(this.$refs["object_selector_input"+this.objectID])
                     this.updateName(this.$refs["object_selector_input"+this.objectID].innerText);
                 }
                 this.editedObject = null;

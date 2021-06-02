@@ -30,7 +30,7 @@
         },
         computed: {
             options() {
-                console.log(this.setting, this.setting['form_detail']);
+                // console.log(this.setting, this.setting['form_detail']);
                 if (this.setting['form_detail']==="marker") {
                     return this.markerOptions
                 }

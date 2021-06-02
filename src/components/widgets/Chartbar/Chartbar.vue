@@ -1,6 +1,5 @@
 <template>
     <div class="chartbar p-2">
-
         <b-button-group class="c-100">
             <b-button
                     variant="default" @click="changeOpenSettings(0)"
@@ -16,13 +15,12 @@
             >Design</b-button>
         </b-button-group>
 
-
-
-
-
         <!--        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>-->
         <ChartTypeSelector v-show="openSettings===0" :chartsSettings="chartsSettings"/>
-        <ChartDataCard v-show="openSettings===0" :chartDataFields="chartDataFields"/>
+        <ChartDataCard
+                v-show="openSettings===0"
+                :chartDataFields="chartDataFields"
+                :DataObjectId="activeNodeSettings['data_object_tags']"/>
 <!--        <img :src="" />-->
 
 
@@ -53,16 +51,16 @@
         <div v-show="openSettings===1" class="p-2 chartbar-parameters">
             <div
                     v-for="(prop, i) in filteredChartProperties"
-                    :key="'chart-form-container-'+i"
+                    :key="'chart-form-container-'+activeNode+i"
             >
                 <div class="chartbar-parameters-form-container c-100 d-inline-flex pb-3 pt-3">
                     <div class=" c-40 mr-3 d-flex align-items-center align-content-center">
                         <div class="c-100 chartbar-parameters-form align-items-center align-content-center">
                             <FormContainer
-                                    :route="prop.path"
-                                    :parameterIndex="prop.name"
+                                    :route="['template'].concat(prop.name.split('.').slice(0, -1))"
+                                    :parameterIndex="prop.name.split('.').slice(-1)[0]"
                                     :typeSettings="prop.type"
-                                    :objectID="'17'"
+                                    :objectID="activeNodeSettings.data_object_tags.chart_template"
                                     :showLabel="false"
                             />
                         </div>
@@ -176,8 +174,8 @@
 
             chartProperties() {
                 let result = [];
-                console.log(this.dataObjectParameterMapping["300000"])
                 getNestedValues(this.dataObjectParameterMapping["300000"]['__init__'][0]["dtype"], result, []);
+                // console.log(result);
                 return result;
             },
             filteredChartProperties() {
@@ -231,7 +229,7 @@
             chartDataFields() {
                 let result = [];
                 for (let field of this.chartsDataFields) {
-                    if (this.layoutDataFields.includes(field['alias'])) {
+                    if (this.layoutDataFields.includes(field['name'])) {
                         result.push(field)
                     }
                 }
@@ -284,7 +282,7 @@
                 return this.projectObjects[this.activeNode]
             },
             activeChartType() {
-                console.log(this.activeNodeSettings,this.activeNode,this.projectObjects);
+                // console.log(this.activeNodeSettings,this.activeNode,this.projectObjects);
                 return this.activeNodeSettings['display_settings']['active_chart_type']
             }
 
