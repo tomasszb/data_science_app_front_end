@@ -45,6 +45,7 @@
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},
             route: {type: Array, default: function() {return []}},
+            defaultValue: {},
             conditionTypes: {type: Array, default: function () { return [] }},
         },
         computed: {

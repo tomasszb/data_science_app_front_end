@@ -57,7 +57,7 @@
                     <div class=" c-40 mr-3 d-flex align-items-center align-content-center">
                         <div class="c-100 chartbar-parameters-form align-items-center align-content-center">
                             <FormContainer
-                                    :route="['template'].concat(prop.name.split('.').slice(0, -1))"
+                                    :route="['template'].concat(prop.path).concat(prop.name.split('.').slice(0, -1))"
                                     :parameterIndex="prop.name.split('.').slice(-1)[0]"
                                     :typeSettings="prop.type"
                                     :objectID="activeNodeSettings.data_object_tags.chart_template"

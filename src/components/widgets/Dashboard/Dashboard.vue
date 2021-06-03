@@ -15,6 +15,7 @@
                 >
                     <data-visualization
                         :nodeID="nodeID"
+                        :key="'dashboard-item-vis-'+nodeID"
                     />
                 </dashboard-item>
             </section>

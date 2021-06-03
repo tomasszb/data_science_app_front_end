@@ -11,6 +11,7 @@
                                         :key="'column-control-' + i"
                                         :columnName="columnName"
                                         :sortID="tableSortID"
+                                        @request-table="requestTable"
                                 />
                             </div>
                         </th>
@@ -35,6 +36,7 @@
                             :nodeID="nodeID"
                             :nodeSignature="activeNodeSignature"
                             :filterID="tableFilterID"
+                            @request-table="requestTable"
                     />
                 </div>
             </div>

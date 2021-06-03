@@ -1,34 +1,20 @@
 <template>
-    <div class="column-form pr-2">
-        <b-form-group
-                :label="name"
-                :label-sr-only="!showLabel"
-                label-class="pb-1"
-                :label-cols="horizontal ? 5 : 0"
-                :horizontal="horizontal"
-        >
-            <v-select
-                    :multiple="multiple"
-                    append-to-body
-                    class="c-100"
-                    v-model="value"
-                    :options="options"
-                    :clearable="false"
-            />
-        </b-form-group>
+    <div class="string-form pr-2">
+        {{value}}
+        {{this.route.concat(this.parameterIndex)}}
     </div>
 </template>
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
     import vSelect from 'vue-select';
-    import {getObjectByRoute} from "../../../../core/projectManager";
     import 'vue-select/dist/vue-select.css';
+    import {getObjectByRoute} from "../../../../core/projectManager";
     const R = require('ramda');
-    import Vue from 'vue'
+    import Vue from 'vue';
 
     export default {
-        name: 'ColumnForm',
+        name: 'StringForm',
         components: {
             vSelect
         },
@@ -40,12 +26,9 @@
             parameterIndex: {type: [Number, String]},
             route: {type: Array, default: function() {return []}},
             defaultValue: {},
-            multiple: {type: Boolean, default: false},
-
         },
         data() {
             return {
-                options: ['column1', 'column2', 'column3', 'column4', 'column5', 'column6']
             }
         },
         computed: {
@@ -53,6 +36,8 @@
                 'dataObjects'
             ]),
             parentParameters() {
+                // // console.log('parentParameters', this.objectID, this.dataObjects[this.objectID]);
+                // // console.log(this.dataObjects, this.objectID)
                 return this.dataObjects[this.objectID]['parameters']
             },
             value: {
@@ -71,16 +56,16 @@
         methods: {
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER'
-            ]),
+            ])
         },
         mounted() {
             if (typeof this.value==='undefined') {
+                console.log('constant', this.defaultValue)
                 Vue.set(this, 'value', this.defaultValue);
             }
         }
+
     };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
-<style src="./ColumnForm.scss" lang="scss"></style>
+<style src="./ConstantForm.scss" lang="scss"></style>

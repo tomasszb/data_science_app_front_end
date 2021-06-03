@@ -22,7 +22,7 @@ export default {
           "parameters": {
             "sep": ",",
             "decimal": ".",
-            "filename": "/Users/tomasszabo/PycharmProjects/dswrapper/test_objects/data/csv/nba-players-stats/Players.csv"
+            "filename": "/media/tomas/DATA/SHARED_DATA/DSWRAPPER_TEST_DATASETS/nba-players-stats/Players.csv"
           }
         },
         {
@@ -107,7 +107,7 @@ export default {
           "parameters": {
             "sep": ",",
             "decimal": ".",
-            "filename": "/Users/tomasszabo/PycharmProjects/dswrapper/test_objects/data/csv/nba-players-stats/Seasons_Stats.csv"
+            "filename": "/media/tomas/DATA/SHARED_DATA/DSWRAPPER_TEST_DATASETS/nba-players-stats/Seasons_Stats.csv"
           }
         },
         {
@@ -429,8 +429,6 @@ export default {
           "type": 303,
           "data_object_tags": {
             "chart_template": [
-              17,
-              18
             ],
             "chart_pivot": 19
           },
@@ -3283,345 +3281,345 @@ export default {
                           "options": null,
                           "allow_null": true
                         },
+                        "x_axis.type": {
+                          "type": "string",
+                          "default": "category",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "value",
+                            "category",
+                            "time",
+                            "log"
+                          ],
+                          "allow_null": true
+                        },
+                        "x_axis.show": {
+                          "type": "boolean",
+                          "default": true,
+                          "allow_null": true
+                        },
+                        "x_axis.offset": {
+                          "type": "integer",
+                          "default": 0,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.min": {
+                          "type": "integer",
+                          "default": null,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.max": {
+                          "type": "integer",
+                          "default": null,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.name.show": {
+                          "type": "boolean",
+                          "default": true,
+                          "allow_null": true
+                        },
+                        "x_axis.name.color": {
+                          "type": "color",
+                          "default": "#111111",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.name.font_family": {
+                          "type": "string",
+                          "default": "arial",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "arial",
+                            "times",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "x_axis.name.font_weight": {
+                          "type": "string",
+                          "default": "normal",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "normal",
+                            "bolder",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "x_axis.name.font_size": {
+                          "type": "integer",
+                          "default": 18,
+                          "min_value": 8,
+                          "max_value": 80,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.name.offset": {
+                          "type": "integer",
+                          "default": 0,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.label.show": {
+                          "type": "boolean",
+                          "default": null,
+                          "allow_null": true
+                        },
+                        "x_axis.label.color": {
+                          "type": "color",
+                          "default": "#111111",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.label.font_family": {
+                          "type": "string",
+                          "default": "arial",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "arial",
+                            "times",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "x_axis.label.font_weight": {
+                          "type": "string",
+                          "default": "normal",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "normal",
+                            "bolder",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "x_axis.label.font_size": {
+                          "type": "integer",
+                          "default": 18,
+                          "min_value": 8,
+                          "max_value": 80,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "x_axis.label.position": {
+                          "type": "string",
+                          "default": null,
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "top",
+                            "bottom"
+                          ],
+                          "allow_null": true
+                        },
+                        "x_axis.label.offset": {
+                          "type": "integer",
+                          "default": 0,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.type": {
+                          "type": "string",
+                          "default": null,
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "value",
+                            "category",
+                            "time",
+                            "log"
+                          ],
+                          "allow_null": true
+                        },
+                        "y_axis.show": {
+                          "type": "boolean",
+                          "default": null,
+                          "allow_null": true
+                        },
+                        "y_axis.offset": {
+                          "type": "integer",
+                          "default": 0,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.min": {
+                          "type": "integer",
+                          "default": null,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.max": {
+                          "type": "integer",
+                          "default": null,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.name.show": {
+                          "type": "boolean",
+                          "default": null,
+                          "allow_null": true
+                        },
+                        "y_axis.name.color": {
+                          "type": "color",
+                          "default": null,
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.name.font_family": {
+                          "type": "string",
+                          "default": "arial",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "arial",
+                            "times",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "y_axis.name.font_weight": {
+                          "type": "string",
+                          "default": "normal",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "normal",
+                            "bolder",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "y_axis.name.font_size": {
+                          "type": "integer",
+                          "default": 18,
+                          "min_value": 8,
+                          "max_value": 80,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.name.offset": {
+                          "type": "integer",
+                          "default": 0,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.label.show": {
+                          "type": "boolean",
+                          "default": null,
+                          "allow_null": true
+                        },
+                        "y_axis.label.color": {
+                          "type": "color",
+                          "default": "#111111",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.label.font_family": {
+                          "type": "string",
+                          "default": "arial",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "arial",
+                            "times",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "y_axis.label.font_weight": {
+                          "type": "string",
+                          "default": "normal",
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "normal",
+                            "bolder",
+                            "bold"
+                          ],
+                          "allow_null": true
+                        },
+                        "y_axis.label.font_size": {
+                          "type": "integer",
+                          "default": 18,
+                          "min_value": 8,
+                          "max_value": 80,
+                          "options": null,
+                          "allow_null": true
+                        },
+                        "y_axis.label.position": {
+                          "type": "string",
+                          "default": null,
+                          "min_length": null,
+                          "max_length": null,
+                          "regex": null,
+                          "options": [
+                            "top",
+                            "bottom"
+                          ],
+                          "allow_null": true
+                        },
+                        "y_axis.label.offset": {
+                          "type": "integer",
+                          "default": 0,
+                          "min_value": null,
+                          "max_value": null,
+                          "options": null,
+                          "allow_null": true
+                        },
                         "chart_types": {
                           "line": {
                             "chart_type": {
                               "type": "constant",
                               "value": "line",
-                              "allow_null": true
-                            },
-                            "x_axis.type": {
-                              "type": "string",
-                              "default": null,
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "value",
-                                "category",
-                                "time",
-                                "log"
-                              ],
-                              "allow_null": true
-                            },
-                            "x_axis.show": {
-                              "type": "boolean",
-                              "default": true,
-                              "allow_null": true
-                            },
-                            "x_axis.offset": {
-                              "type": "integer",
-                              "default": 0,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.min": {
-                              "type": "integer",
-                              "default": null,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.max": {
-                              "type": "integer",
-                              "default": null,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.name.show": {
-                              "type": "boolean",
-                              "default": true,
-                              "allow_null": true
-                            },
-                            "x_axis.name.color": {
-                              "type": "color",
-                              "default": "#111111",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.name.font_family": {
-                              "type": "string",
-                              "default": "arial",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "arial",
-                                "times",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "x_axis.name.font_weight": {
-                              "type": "string",
-                              "default": "normal",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "normal",
-                                "bolder",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "x_axis.name.font_size": {
-                              "type": "integer",
-                              "default": 18,
-                              "min_value": 8,
-                              "max_value": 80,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.name.offset": {
-                              "type": "integer",
-                              "default": 0,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.label.show": {
-                              "type": "boolean",
-                              "default": null,
-                              "allow_null": true
-                            },
-                            "x_axis.label.color": {
-                              "type": "color",
-                              "default": "#111111",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.label.font_family": {
-                              "type": "string",
-                              "default": "arial",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "arial",
-                                "times",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "x_axis.label.font_weight": {
-                              "type": "string",
-                              "default": "normal",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "normal",
-                                "bolder",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "x_axis.label.font_size": {
-                              "type": "integer",
-                              "default": 18,
-                              "min_value": 8,
-                              "max_value": 80,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "x_axis.label.position": {
-                              "type": "string",
-                              "default": null,
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "top",
-                                "bottom"
-                              ],
-                              "allow_null": true
-                            },
-                            "x_axis.label.offset": {
-                              "type": "integer",
-                              "default": 0,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.type": {
-                              "type": "string",
-                              "default": null,
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "value",
-                                "category",
-                                "time",
-                                "log"
-                              ],
-                              "allow_null": true
-                            },
-                            "y_axis.show": {
-                              "type": "boolean",
-                              "default": null,
-                              "allow_null": true
-                            },
-                            "y_axis.offset": {
-                              "type": "integer",
-                              "default": 0,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.min": {
-                              "type": "integer",
-                              "default": null,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.max": {
-                              "type": "integer",
-                              "default": null,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.name.show": {
-                              "type": "boolean",
-                              "default": null,
-                              "allow_null": true
-                            },
-                            "y_axis.name.color": {
-                              "type": "color",
-                              "default": null,
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.name.font_family": {
-                              "type": "string",
-                              "default": "arial",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "arial",
-                                "times",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "y_axis.name.font_weight": {
-                              "type": "string",
-                              "default": "normal",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "normal",
-                                "bolder",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "y_axis.name.font_size": {
-                              "type": "integer",
-                              "default": 18,
-                              "min_value": 8,
-                              "max_value": 80,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.name.offset": {
-                              "type": "integer",
-                              "default": 0,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.label.show": {
-                              "type": "boolean",
-                              "default": null,
-                              "allow_null": true
-                            },
-                            "y_axis.label.color": {
-                              "type": "color",
-                              "default": "#111111",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": "#[\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F][\\dA-F]",
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.label.font_family": {
-                              "type": "string",
-                              "default": "arial",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "arial",
-                                "times",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "y_axis.label.font_weight": {
-                              "type": "string",
-                              "default": "normal",
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "normal",
-                                "bolder",
-                                "bold"
-                              ],
-                              "allow_null": true
-                            },
-                            "y_axis.label.font_size": {
-                              "type": "integer",
-                              "default": 18,
-                              "min_value": 8,
-                              "max_value": 80,
-                              "options": null,
-                              "allow_null": true
-                            },
-                            "y_axis.label.position": {
-                              "type": "string",
-                              "default": null,
-                              "min_length": null,
-                              "max_length": null,
-                              "regex": null,
-                              "options": [
-                                "top",
-                                "bottom"
-                              ],
-                              "allow_null": true
-                            },
-                            "y_axis.label.offset": {
-                              "type": "integer",
-                              "default": 0,
-                              "min_value": null,
-                              "max_value": null,
-                              "options": null,
                               "allow_null": true
                             },
                             "color_palette": {

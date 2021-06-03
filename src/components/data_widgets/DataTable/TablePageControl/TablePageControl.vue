@@ -91,9 +91,11 @@
             changePageSize(value) {
                 Vue.set(this, 'pageSize', value);
                 Vue.set(this, 'pageIndex', 1);
+                this.$emit('request-table');
             },
             changePageIndex(value) {
                 Vue.set(this, 'pageIndex', this.pageIndex+value);
+                this.$emit('request-table');
             },
         },
     };

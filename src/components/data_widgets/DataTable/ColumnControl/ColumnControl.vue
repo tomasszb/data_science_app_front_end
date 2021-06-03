@@ -80,6 +80,7 @@
                     newObject['parameters'].setPath(this.sortRoute, newSortParameters);
                     this.UPDATE_DATA_OBJECT({ObjectID: this.sortID, Object: newObject});
                 }
+                this.$emit('request-table');
             },
             cleanSortOptions() {
                 let newObject = R.clone(this.dataObjects[this.sortID]);

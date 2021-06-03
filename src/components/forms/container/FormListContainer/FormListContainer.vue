@@ -35,6 +35,7 @@
             typeSettings: {type: Object, default: function() {return {}} },
             objectID: { type: String, default: null },
             route: {type: Array, default: function() {return []}},
+            defaultValue: {},
             parameterIndex: {type: [Number, String]},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false}

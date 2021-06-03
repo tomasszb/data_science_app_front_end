@@ -7,7 +7,7 @@
         <i class="fa fa-circle text-success"></i>
       </h5>
       <Widget class="widget mx-auto" >
-        <b-button class="text-left rounded-0" variant="default" href="main" block><i class="fa fa-file"/> New</b-button>
+        <b-button class="text-left rounded-0" variant="default" href="#/new" block><i class="fa fa-file"/> New</b-button>
         <b-button class="text-left rounded-0" variant="default" block><i class="fa fa-folder-open"/> Open</b-button>
         <b-button class="text-left rounded-0" variant="default" block><i class="fa fa-sign-in"/> Import</b-button>
         <br>
@@ -23,6 +23,7 @@
           {{project.name}}
         </b-button>
       </Widget>
+
     </b-container>
   </div>
 </template>

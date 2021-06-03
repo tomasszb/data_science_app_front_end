@@ -39,7 +39,7 @@
             horizontal: {type: Boolean, default: false},
             parameterIndex: {type: [Number, String]},
             route: {type: Array, default: function() {return []}},
-
+            defaultValue: {},
             options: {type: Array, default: function() {return []}},
         },
         data() {

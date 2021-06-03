@@ -70,6 +70,7 @@ webSocketService.install = function (Vue, store) {
     }
 
     Vue.prototype.$webSocketSend = (data) => {
+        console.log('$webSocketSend', data)
         waitForSocketConnection(ws, function(){
             ws.send(JSON.stringify(data));
         });

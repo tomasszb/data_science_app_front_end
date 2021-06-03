@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Layout from '@/components/layout/Layout';
 import AnalyticsPage from '@/pages/Dashboard/Dashboard';
 import ProjectManager from '@/pages/ProjectManager/ProjectManager';
+import NewProject from '@/pages/NewProject/NewProject';
 import Login from '@/pages/Login/Login';
 import Register from '@/pages/Register/Register';
 import Process from '@/pages/Process/Process'
@@ -29,6 +30,15 @@ export default new Router({
             path: '/projects',
             name: 'ProjectManager',
             component: ProjectManager,
+            beforeEnter: (to, from, next) => {
+                let token = localStorage.getItem('token');
+                isAuthenticated(token) ? next() : next({path: '/login'});
+            },
+        },
+        {
+            path: '/new',
+            name: 'NewProject',
+            component: NewProject,
             beforeEnter: (to, from, next) => {
                 let token = localStorage.getItem('token');
                 isAuthenticated(token) ? next() : next({path: '/login'});

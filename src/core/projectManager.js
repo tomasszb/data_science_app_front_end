@@ -128,16 +128,12 @@ export function calculateNodeSignature(parentNodeID) {
     let tags = {...page['data_object_tags'], ...node['data_object_tags']};
 
     nodeDataObjects[nodeID] = [];
-    if (node.type===300) {
-      if (tags.hasOwnProperty('connector')) {
-        nodeDataObjects[nodeID].push(dataObjects[tags['connector'].toString()])
+    for (const [tagName, tagID] of Object.entries(tags)) {
+      if (tagName!=="output_table_sort" && tagName!=="output_table_filter") {
+        nodeDataObjects[nodeID].push(dataObjects[tagID.toString()])
       }
     }
-    else if (node.type===301) {
-      if (tags.hasOwnProperty('action')) {
-        nodeDataObjects[nodeID].push(dataObjects[tags['action'].toString()])
-      }
-    }
+
     if (node.id === parentNodeID) {
       if (tags.hasOwnProperty('output_table_sort') && tags.hasOwnProperty('output_table_filter')) {
         nodeDataObjects[nodeID].push(dataObjects[tags['output_table_sort'].toString()]);

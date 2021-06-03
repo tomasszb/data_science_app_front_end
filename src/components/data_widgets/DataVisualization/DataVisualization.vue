@@ -1,10 +1,9 @@
 <template>
-    <div class="flex-vertical-no-scroll">
+    <div class="flex-vertical">
         <b-button @click="requestTable">hello</b-button>
-        keys: {{Object.keys(dataFrames)}}<br>
-        signature: {{activeNodeSignature}}<br>
-        data: {{tableData}}<br>
-        status: {{status}}<br>
+
+        <chart :chartData="tableData"></chart>
+        {{activeNodeSignature}}
     </div>
 </template>
 
@@ -13,6 +12,7 @@
     import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
     import draggable from "vuedraggable";
     import Vue from 'vue';
+    import Chart from "@/components/data_widgets/DataVisualization/Chart/Chart";
     import Loader from '../../ui/Loader/Loader';
     import { getEmptyDataObject, createFlowRequest, getResultObjectID } from '@/core/projectManager';
     const R = require('ramda');
@@ -21,14 +21,15 @@
     export default {
         name: "DataVisualization",
         components: {
-            draggable, Loader
+            draggable, Loader, Chart
         },
         props: {
             nodeID: {type: String }
         },
         data() {
             return {
-                activeNodeSignature: ''
+                activeNodeSignature: '',
+                tableData: {}
             }
         },
         methods: {
@@ -80,10 +81,16 @@
                 }
                 return 'not_requested'
 
-            },
-            tableData() {
+            }
+        },
+        watch: {
+            status() {
                 let dataFrameID = getResultObjectID([this.nodeID, 'chart_data', this.activeNodeSignature]);
-                return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
+                Vue.set(
+                    this,
+                    'tableData',
+                    typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : {}
+                )
             }
         }
     }

@@ -136,12 +136,23 @@
                 :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
+        <constant-form
+            v-if="typeSettings.type === 'constant'"
+            :objectID="objectID"
+            :parameterIndex="parameterIndex"
+            :name="name"
+            :horizontal="horizontal"
+            :route="route"
+            :defaultValue="typeSettings.value"
+            :showLabel="showLabel"
+        />
     </div>
 </template>
 
 <script>
     import NumericForm from "../../../forms/simple/NumericForm/NumericForm";
     import BooleanForm from "../../../forms/simple/BooleanForm/BooleanForm";
+    import ConstantForm from "../../simple/ConstantForm/ConstantForm";
     import ConditionForm from "../../../forms/nested/ConditionForm/ConditionForm";
     import DictionaryForm from "../../../forms/simple/DictionaryForm/DictionaryForm";
     import StringForm from "../../../forms/simple/StringForm/StringForm";
@@ -158,12 +169,13 @@
     export default {
         name: "FormContainer",
         components: {
-            ColumnForm, NumericForm, FormulaForm, ColorForm,
+            ColumnForm, ConstantForm, NumericForm, FormulaForm, ColorForm,
             ConditionForm, BooleanForm, DictionaryForm, StringForm, SelectForm,
             MergeColumnPairForm, ColumnListForm, ScriptForm
         },
         props: {
             route: {type: Array, default: function() {return []}},
+            defaultValue: {},
             parameterIndex: {type: [Number, String]},
             horizontal: {type: Boolean, default: false},
             typeSettings: {type: Object, default: function() {return {}} },

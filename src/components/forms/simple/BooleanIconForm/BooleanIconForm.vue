@@ -27,6 +27,7 @@
             showLabel: {type: Boolean, default: true},
             parameterIndex: {type: [Number, String]},
             route: {type: Array, default: function() {return []}},
+            defaultValue: {}
         },
         data() {
             return {

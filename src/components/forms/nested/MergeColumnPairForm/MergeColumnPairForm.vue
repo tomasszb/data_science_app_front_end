@@ -43,6 +43,7 @@
             parameterIndex: {type: [Number, String]},
             showLabel: {type: Boolean, default: true},
             route: {type: Array, default: function() {return []}},
+            defaultValue: {},
             conditionTypes: {type: Array, default: function () { return [] }},
         },
         computed: {
