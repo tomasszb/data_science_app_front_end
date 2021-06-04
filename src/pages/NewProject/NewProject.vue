@@ -20,7 +20,7 @@
           </b-form-group>
 
           <b-form-group class="abc-checkbox mb-3">
-              <input type="checkbox" id="new-project-jupyter-check" v-model="jupyterCheck"/>
+              <input type="checkbox" id="new-project-jupyter-check" v-model="notebookCheck"/>
               <label class="pl-3" for="new-project-jupyter-check">Notebooks</label>
           </b-form-group>
 
@@ -30,12 +30,15 @@
           </b-form-group>
           <hr>
           <a class="fa fa-chevron-left" href="#/projects"></a>
-          <b-button variant="info" size="sm" class="px-4 float-right"><strong>Create</strong></b-button>
+          <b-button variant="info" size="sm" class="px-4 float-right" @click="newProject"><strong>Create</strong></b-button>
 
           <br>
         <br>
       </Widget>
-
+        <div class="text-center mt-3">
+            {{project.id}}
+            {{project.status}}
+        </div>
     </b-container>
   </div>
 </template>
@@ -52,40 +55,28 @@ export default {
       return {
           inputFiles: [],
           name: "",
-          jupyterCheck: true,
+          notebookCheck: true,
           pythonCheck: true
         }
     },
   computed: {
-    ...mapState('proj', ['projectList']),
+    ...mapState('proj', ['projectList', 'project']),
+      newProjectData() {
+        return {
+            "name": this.name,
+            "notebook": this.notebookCheck,
+            "pythonCheck": this.pythonCheck
+        }
+      }
   },
   methods: {
-    ...mapActions('proj/api', ['loadProjectData', 'loadProjectList']),
-    openProject(project) {
-      let projectID = project.version;
-      let projectVersion = project.version;
-      localStorage.setItem('project_id', projectID);
-      localStorage.setItem('project_version', projectVersion);
-
-
-      this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
-      router.push('/app/main');
-    },
-    onChangeInputFiles(e) {
-      const files = [];
-      let i = 0;
-      for (i; i < e.target.files.length; i += 1) {
-          files.push(e.target.files[i]);
-      }
-
-      Vue.set(this, 'inputFiles', files);
+    ...mapActions('proj/api', ['createNewProject']),
+    newProject(project) {
+        localStorage.removeItem('project_id');
+        localStorage.removeItem('project_version');
+        this.status = 'creating project structure'
+      this.createNewProject({data: this.newProjectData} );
     }
-  },
-  created() {
-    //this.loadProjectData();
-  },
-  mounted() {
-    this.loadProjectList();
   }
 };
 </script>

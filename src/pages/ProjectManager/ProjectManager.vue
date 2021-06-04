@@ -42,10 +42,10 @@ export default {
   methods: {
     ...mapActions('proj/api', ['loadProjectData', 'loadProjectList']),
     openProject(project) {
-      let projectID = project.version;
-      let projectVersion = project.version;
-      localStorage.setItem('project_id', projectID);
-      localStorage.setItem('project_version', projectVersion);
+        let projectID = project.id;
+        let projectVersion = project.version;
+        localStorage.setItem('project_id', projectID);
+        localStorage.setItem('project_version', projectVersion);
 
 
       this.loadProjectData({projectID: projectID, projectVersion: projectVersion});

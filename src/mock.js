@@ -1,5 +1,12 @@
 
 export default {
+  new_project: {
+    "status": true,
+    "Response": {
+      "id": 1,
+      "message": "created obj"
+    }
+  },
   project_objects_data_1: {
     "status": true,
     "Response": {

@@ -76,37 +76,45 @@ export default {
             commit('addRequest', payload)
         },
         processNotifications: ({commit}, payload) => {
-            var timestamp = Number(new Date());
-            var date = new Date(timestamp);
             let action = payload["action"];
-            let src_request_id = payload["result"]["src_request_id"];
-            let nodeID = payload["result"]["node_id"];
-            let executionTemplate = payload["result"]["execution_template"];
-            let lastCommandTask = payload["result"]["last_command_task"];
-            let status = payload["result"]["status"];
-            let resultTag = payload["result"]["result_tag"];
-            let nodeSignature = payload["result"]["node_signature"];
 
-            if (action === 'report_data') {
-                let data = JSON.parse(payload["result"]["data"]);
-                console.log('processNotifications - data', {nodeID: nodeID, resultTag: resultTag, data: data, nodeSignature: nodeSignature});
-                commit(
-                    "proj/UPDATE_DATAFRAME",
-                    {nodeID: nodeID, resultTag: resultTag, data: data, nodeSignature: nodeSignature},
-                    { root: true });
+            if (action.startsWith('project - ')) {
+                console.log('processNotifications - project', payload);
             }
-            else if(lastCommandTask && status!=='running') {
-                console.log('processNotifications', nodeID, executionTemplate, nodeSignature, status);
-                commit(
-                    "proj/UPDATE_NODE_EXECUTION_STATUS",
-                    {
-                        nodeID: nodeID,
-                        executionTemplate: executionTemplate,
-                        nodeSignature: nodeSignature,
-                        status: status
-                    },
-                    { root: true }
-                );
+
+            if (action.startsWith('flow -')) {
+                var timestamp = Number(new Date());
+                var date = new Date(timestamp);
+
+                let src_request_id = payload["result"]["src_request_id"];
+                let nodeID = payload["result"]["node_id"];
+                let executionTemplate = payload["result"]["execution_template"];
+                let lastCommandTask = payload["result"]["last_command_task"];
+                let status = payload["result"]["status"];
+                let resultTag = payload["result"]["result_tag"];
+                let nodeSignature = payload["result"]["node_signature"];
+
+                if (action === 'flow - report_data') {
+                    let data = JSON.parse(payload["result"]["data"]);
+                    console.log('processNotifications - data', payload);
+                    commit(
+                        "proj/UPDATE_DATAFRAME",
+                        {nodeID: nodeID, resultTag: resultTag, data: data, nodeSignature: nodeSignature},
+                        { root: true });
+                }
+                else if(lastCommandTask && status!=='running') {
+                    console.log('processNotifications', payload);
+                    commit(
+                        "proj/UPDATE_NODE_EXECUTION_STATUS",
+                        {
+                            nodeID: nodeID,
+                            executionTemplate: executionTemplate,
+                            nodeSignature: nodeSignature,
+                            status: status
+                        },
+                        { root: true }
+                    );
+                }
             }
         }
     },

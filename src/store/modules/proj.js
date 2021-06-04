@@ -3,6 +3,7 @@ import {getProjectBranch, concatValues, get_selected_object, getObjectByRoute, c
 import api from './project_data_handling/api';
 import websocket from './project_data_handling/websocket';
 import object_manager from './project_data_handling/object_manager'
+import project_manager from './project_data_handling/project_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 const R = require('ramda');
@@ -20,6 +21,8 @@ function getObjectIndex(objectList, objectID) {
 export default {
     namespaced: true,
     state: {
+        project: {},
+
         projectData: emptyProject(),
         projectList: [],
         dataLoaded: false,
@@ -159,6 +162,9 @@ export default {
         }
     },
     mutations: {
+        SET_PROJECT_VARIABLE(state, variables) {
+            state.project = variables;
+        },
         LOAD_PROJECT_DATA(state, data) {
             state.projectData = data;
             state.dataLoaded = true;
@@ -169,7 +175,6 @@ export default {
         LOAD_OBJECT_DEFINITIONS(state, data) {
             state.dataObjectDefinitions = data;
         },
-
         SET_SELECTED_PROCESS(state, selectedProcess) {
             state.selectedProcess = selectedProcess;
         },
@@ -235,6 +240,7 @@ export default {
     modules: {
         api,
         object_manager,
+        project_manager,
         websocket
     }
 };

@@ -14,6 +14,26 @@ export default {
         }
     },
     actions: {
+        createNewProject({commit, dispatch}, {data}) {
+            const promise = new Promise((resolve, reject) => {
+                if (config.mock) {
+                    let res = {'id': mock.new_project};
+                    resolve(res);
+                } else {
+                    resolve(axios.post('/project/', data));
+                }
+            });
+            promise.then(res => {
+                let response = res.data['Response'];
+                let newVariables = {project_version: 1, id: response.id, status: "requesting new project"}
+                dispatch("proj/project_manager/updateProjectVariables",
+                    {newVariables},
+                    { root: true }
+                );
+            }).catch(err => {
+                dispatch("callError", err.response.data);
+            })
+        },
         loadProjectData({commit, dispatch}, {projectID, projectVersion}) {
             const promise = new Promise((resolve, reject) => {
                 if (config.mock) {
