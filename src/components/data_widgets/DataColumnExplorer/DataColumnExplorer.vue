@@ -71,7 +71,7 @@
     import draggable from "vuedraggable";
     import Vue from 'vue';
     import Loader from '../../ui/Loader/Loader';
-    import { getEmptyDataObject, createFlowRequest, getResultObjectID } from '@/core/projectManager';
+    import { getEmptyDataObject, createDataFlowRequest, getResultObjectID } from '@/core/projectManager';
     import TableInfo from "@/components/data_widgets/DataColumnExplorer/TableInfo/TableInfo";
     import ColumnInfo from "@/components/data_widgets/DataColumnExplorer/ColumnInfo/ColumnInfo";
     const R = require('ramda');
@@ -108,7 +108,7 @@
                 'createDO'
             ]),
             requestColumnStats() {
-                let request = createFlowRequest(this.nodeID, ['run_connector', 'get_data_stats']);
+                let request = createDataFlowRequest(this.nodeID, ['run_connector', 'get_data_stats']);
                 this.UPDATE_NODE_EXECUTION_STATUS({
                     nodeID: this.nodeID,
                     executionTemplate: "get_data_stats",

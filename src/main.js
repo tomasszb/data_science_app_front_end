@@ -71,6 +71,20 @@ Object.defineProperty(Object.prototype, 'setPath', {
     }
 });
 
+Vue.mixin({
+    methods: {
+        getSet(providedValue, defaultValue) {
+            if (providedValue===null) {
+                return defaultValue
+            }
+            else if (typeof providedValue==='undefined') {
+                return defaultValue
+            }
+            return providedValue;
+        }
+    }
+})
+
 axios.defaults.baseURL = config.baseURLApi;
 axios.defaults.headers.common['Content-Type'] = "application/json";
 const token = localStorage.getItem('token');

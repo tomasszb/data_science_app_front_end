@@ -15,6 +15,11 @@ export default {
     },
     actions: {
         createNewProject({commit, dispatch}, {data}) {
+            let newVariables = {project_version: null, id: null, parameters: data, status: "preparing request"}
+            dispatch("proj/project_manager/updateProjectVariables",
+                {newVariables},
+                { root: true }
+            );
             const promise = new Promise((resolve, reject) => {
                 if (config.mock) {
                     let res = {'id': mock.new_project};
@@ -25,7 +30,7 @@ export default {
             });
             promise.then(res => {
                 let response = res.data['Response'];
-                let newVariables = {project_version: 1, id: response.id, status: "requesting new project"}
+                let newVariables = {project_version: 1, id: response.id, parameters: data, status: "project registered"}
                 dispatch("proj/project_manager/updateProjectVariables",
                     {newVariables},
                     { root: true }
@@ -34,7 +39,20 @@ export default {
                 dispatch("callError", err.response.data);
             })
         },
+        saveProject({commit, dispatch}, {projectID, projectVersion, projectDataTree}) {
+            const promise = new Promise((resolve, reject) => {
+                resolve(axios.post('/project/'+projectID+'/'+projectVersion+'/', projectDataTree));
+                console.log(projectDataTree)
+            });
+            promise.then(res => {
+                let data = res.data['Response'];
+            }).catch(err => {
+                dispatch("callError", err.response.data);
+            })
+        },
         loadProjectData({commit, dispatch}, {projectID, projectVersion}) {
+            localStorage.setItem('project_id', projectID);
+            localStorage.setItem('project_version', projectVersion);
             const promise = new Promise((resolve, reject) => {
                 if (config.mock) {
                     let res = {'data': mock.project_objects_data_1};
@@ -45,7 +63,13 @@ export default {
             });
             promise.then(res => {
                 let data = res.data['Response'];
-                // console.log('hello', data);
+                console.log('loadProjectData', data);
+                let newVariables = {project_version: 1, id: data.id, parameters: {}, status: "project loaded"}
+                dispatch("proj/project_manager/updateProjectVariables",
+                    {newVariables},
+                    { root: true }
+                );
+
                 commit("proj/LOAD_PROJECT_DATA", data, { root: true });
                 let selectedProcess = null;
                 let selectedPage = null;

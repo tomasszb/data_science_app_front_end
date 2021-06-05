@@ -19,6 +19,11 @@
                     <i class="la la-mail-forward fa-lg" />
                 </a>
             </b-nav-item>
+            <b-nav-item class="d-md-down-none" @click="requestSaveProject">
+                <a href="#" class="px-2">
+                    <i class="la la-save fa-lg" />
+                </a>
+            </b-nav-item>
         </b-nav>
         <a  class="navbarBrand d-md-none">
             <i class="la la-circle text-primary mr-n-sm" />
@@ -57,7 +62,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex';
+    import { mapState, mapActions, mapGetters } from 'vuex';
     import avatarImage from '@/assets/people/a5.jpg';
 
     export default {
@@ -76,7 +81,8 @@
                 'navbarColorScheme'
             ]),
             firstUserLetter() { return (this.user || "A")[0].toUpperCase(); },
-            ...mapState('proj', ['projectData']),
+            ...mapState('proj', ['projectData', 'project']),
+            ...mapGetters('proj', ['ProjectDataTree']),
             navbarTypeClass: function () {
                 return "navbar-" + this.navbarType + "-type"
             }
@@ -88,7 +94,7 @@
                 'changeSidebarActive',
             ]),
             ...mapActions('auth', ['logoutUser']),
-            ...mapActions('proj/api', ['loadObjectDefinitions']),
+            ...mapActions('proj/api', ['loadObjectDefinitions', 'saveProject']),
             //...mapActions('proj', ['loadObjects']),
             ...mapActions('websocket', ['websocketConnect']),
             switchSidebarMethod() {
@@ -112,6 +118,13 @@
                     paths.pop();
                     this.changeSidebarActive(paths.join('/'));
                 }
+            },
+            requestSaveProject() {
+                this.saveProject({
+                    projectID: this.project.id,
+                    projectVersion: this.project.project_version,
+                    projectDataTree: this.ProjectDataTree}
+                )
             }
         },
 

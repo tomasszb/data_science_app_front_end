@@ -102,7 +102,7 @@ import QueryEditor from "@/components/widgets/QueryEditor/QueryEditor";
 import Dashboard from "@/components/widgets/Dashboard/Dashboard";
 
 import { mapState, mapGetters, mapActions} from "vuex";
-import { initProjectBranches, initProcessBranches, createFlowRequest, getUpstreamElements } from '@/core/projectManager';
+import { initProjectBranches, initProcessBranches, createDataFlowRequest, getUpstreamElements } from '@/core/projectManager';
 import dsw_config from "../../dsw_config";
 
 export default {
@@ -146,17 +146,11 @@ export default {
         dsw_config() {
             return dsw_config
         },
-        activePageDisplaySettings() {
-            return this.projectObjects[this.activePage]['display_settings']
-        },
         pageDisplayTag() {
-            let displayTag = this.activePageDisplaySettings['node_view'];
-            // console.log('display tag', displayTag, this.projectObjects[this.activePage]);
-            return typeof displayTag!=='undefined' ? displayTag : 0
+            return this.projectObjects.getPath(this.activePage + '.display_settings.node_view', 0)
         },
         activeConnectorGroup() {
-            let dataObjectTags = this.projectObjects[this.activePage]['data_object_tags'];
-            return dataObjectTags.hasOwnProperty('connector') ? this.dataObjects[dataObjectTags['connector']].group : null
+            return this.projectObjects.getPath(this.activePage + '.data_object_tags.connector.group', null)
         }
     },
     directives: {

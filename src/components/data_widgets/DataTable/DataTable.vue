@@ -65,7 +65,7 @@
     import Loader from '../../ui/Loader/Loader';
     import ColumnControl from "./ColumnControl/ColumnControl";
     import TablePageControl from "./TablePageControl/TablePageControl";
-    import { getEmptyDataObject, createFlowRequest, getResultObjectID } from '@/core/projectManager';
+    import { getEmptyDataObject, createDataFlowRequest, getResultObjectID } from '@/core/projectManager';
     const R = require('ramda');
 
 
@@ -91,7 +91,7 @@
                 'createDO'
             ]),
             requestTable() {
-                let request = createFlowRequest(this.nodeID, ['run_connector', 'get_output_table']);
+                let request = createDataFlowRequest(this.nodeID, ['run_connector', 'get_output_table']);
                 this.UPDATE_NODE_EXECUTION_STATUS({
                     nodeID: this.nodeID,
                     executionTemplate: "get_output_table",
@@ -122,6 +122,8 @@
                 let status = this.nodeExecutionStatus[nodeExecutionStatusID];
                 let check1 = typeof this.dataFrames[outputTableID]!== "undefined";
                 let check2 = typeof this.dataFrames[outputTableQuickInfoID]!== "undefined";
+
+                console.log(status, check1, check2, this.nodeSignature, outputTableID, outputTableQuickInfoID, this.dataFrames)
 
                 if (status==='success' && check1 && check2) {
                     this.activeNodeSignature = this.nodeSignature;

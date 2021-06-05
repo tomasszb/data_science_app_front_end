@@ -63,7 +63,7 @@
     const R = require('ramda');
     import ClickOutside from 'vue-click-outside'
     import {getObjectSettings, getObjectSetting} from "../../../core/projectObjectParser";
-    import {createFlowRequest} from '@/core/projectManager';
+    import {createDataFlowRequest} from '@/core/projectManager';
     import TreeModel from "tree-model";
 
     export default {
@@ -173,7 +173,7 @@
                 for (const child of projectObject.children) {
                     let childID = child.model.id;
                     if (this.projectObjects[childID].group === 3) {
-                        let request = createFlowRequest(childID, ['run_connector', 'get_output_table']);
+                        let request = createDataFlowRequest(childID, ['run_connector', 'get_output_table']);
 
                         this.UPDATE_NODE_EXECUTION_STATUS({
                             nodeID: childID,

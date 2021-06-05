@@ -4,6 +4,7 @@ webSocketService.install = function (Vue, store) {
     let ws = "";
 
     Vue.prototype.$webSocketConnect = (options) => {
+        console.log('$webSocketConnect')
         ws = new WebSocket(options.url);
         let reconnectInterval = options.reconnectInterval || 1000;
 
@@ -41,6 +42,7 @@ webSocketService.install = function (Vue, store) {
 
     Vue.prototype.$webSocketDisconnect = () => {
         // Our custom disconnect event
+        console.log('$webSocketDisconnect')
         ws.close()
     };
 
@@ -57,7 +59,6 @@ webSocketService.install = function (Vue, store) {
         setTimeout(
             function () {
                 if (socket.readyState === 1) {
-                    // console.log("Connection is made")
                     if (callback != null){
                         callback();
                     }

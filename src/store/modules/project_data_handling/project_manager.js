@@ -6,9 +6,9 @@ export default {
     namespaced: true,
     actions: {
         updateProjectVariables({state, commit, rootState, rootGetters}, {newVariables}) {
-            let existVariables = rootState.project;
-            let variables = {...existVariables, ...newVariables }
-            commit("proj/SET_PROJECT_VARIABLE", variables, { root: true });
+            // let existVariables = rootState.project;
+            // let variables = {...existVariables, ...newVariables }
+            commit("proj/SET_PROJECT_VARIABLE", newVariables, { root: true });
         }
     },
 };

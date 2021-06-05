@@ -36,7 +36,6 @@
         <br>
       </Widget>
         <div class="text-center mt-3">
-            {{project.id}}
             {{project.status}}
         </div>
     </b-container>
@@ -45,12 +44,14 @@
 
 <script>
 import Widget from '@/components/layout/Widget/Widget';
-import { mapActions, mapState} from 'vuex';
+import {mapActions, mapMutations, mapState} from 'vuex';
 import router from '../../Routes';
+const R = require('ramda');
+import { createProjectFlowRequest, getResultObjectID } from '@/core/projectManager';
 
 export default {
-  name: 'ProjectManager',
-  components: { Widget },
+    name: 'ProjectManager',
+    components: { Widget },
     data() {
       return {
           inputFiles: [],
@@ -59,25 +60,59 @@ export default {
           pythonCheck: true
         }
     },
-  computed: {
-    ...mapState('proj', ['projectList', 'project']),
-      newProjectData() {
-        return {
-            "name": this.name,
-            "notebook": this.notebookCheck,
-            "pythonCheck": this.pythonCheck
+    computed: {
+        ...mapState('proj', ['projectList', 'project', 'projectExecutionStatus']),
+          newProjectData() {
+            return {
+                "name": this.name,
+                "notebook": this.notebookCheck,
+                "python": this.pythonCheck
+            }
+          },
+          createFoldersStatus() {
+            let resultID = getResultObjectID([this.project.id, "create_new_project_folders"]);
+            let status = this.projectExecutionStatus[resultID];
+            return typeof status!=='undefined'? status : 'not_requested'
+
+          }
+    },
+    methods: {
+        ...mapActions('proj/api', ['createNewProject']),
+        ...mapMutations('proj', ['SET_PROJECT_VARIABLE']),
+        newProject(project) {
+            localStorage.removeItem('project_id');
+            localStorage.removeItem('project_version');
+          this.createNewProject({data: this.newProjectData} );
         }
-      }
-  },
-  methods: {
-    ...mapActions('proj/api', ['createNewProject']),
-    newProject(project) {
-        localStorage.removeItem('project_id');
-        localStorage.removeItem('project_version');
-        this.status = 'creating project structure'
-      this.createNewProject({data: this.newProjectData} );
+    },
+    watch:{
+        project(value) {
+            if (value.status ==='project registered') {
+                let request = createProjectFlowRequest(
+                    ["create_new_project_folders"],
+                    [this.project.parameters],
+                    this.project.id
+                )
+                this.$webSocketSend(request);
+            }
+            if (value.status === 'ready') {
+                router.push('/app/main');
+            }
+        },
+        createFoldersStatus(value) {
+            if (value === 'running') {
+                let project = R.clone(this.project)
+                project.status = 'creating folder structure'
+                this.SET_PROJECT_VARIABLE(project)
+            }
+            if (value === 'success') {
+                let project = R.clone(this.project)
+                project.status = 'ready'
+                this.SET_PROJECT_VARIABLE(project)
+            }
+        }
     }
-  }
+
 };
 </script>
 

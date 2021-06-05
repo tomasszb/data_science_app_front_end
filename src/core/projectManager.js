@@ -145,21 +145,36 @@ export function calculateNodeSignature(parentNodeID) {
 
 }
 
+export function createProjectFlowRequest(execution_commands, parameters, projectID) {
+  let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
 
-export function createFlowRequest(parentNodeID, execution_commands=null) {
+  return {
+    "action": "project - run_flow",
+    "request": {
+      "src_request_id": src_request_id,
+      "project_id": projectID,
+      "commands": execution_commands,
+      "parameters": parameters
+    }
+  }
+}
+
+
+export function createDataFlowRequest(parentNodeID, execution_commands=null) {
   let projectObjects = store.getters['proj/projectObjects'];
+  let project = store.state.proj.project;
   let dataObjects = store.getters['proj/dataObjects'];
   let nodeSignatures = store.getters['proj/nodeSignatures'];
 
   let src_request_id = (Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-  let request = {"action": "flow - run_flow"};
+  let request = {"action": "data - run_flow"};
   let nodeIDs = [];
   let nodes = [];
   let connDataObjectIDs = [];
   let connDataObjects = [];
   let nodeCommands = {};
   let inheritedDataObjectTags = {};
-  let projectID = localStorage.getItem('project_id');
+  let projectID = project.id;
   let allUpstreamNodeIDs = getUpstreamNodes(parentNodeID,[]);
 
   for (let nodeID of allUpstreamNodeIDs.reverse().concat([parentNodeID])) {

@@ -2,10 +2,17 @@ import axios from "axios";
 import router from "../../../Routes";
 import TreeModel from 'tree-model'
 import {get_active_object} from "../../../core/projectManager";
+import store from "@/store";
 const R = require('ramda');
 
 function getOrDefault(providedValue, defaultValue) {
-    return providedValue!==null ? providedValue : defaultValue;
+    if (providedValue===null) {
+        return defaultValue
+    }
+    else if (typeof providedValue==='undefined') {
+        return defaultValue
+    }
+    return providedValue;
 }
 
 function genProjectObjectID() {
@@ -112,6 +119,7 @@ export default {
             }
         ) {
             let rg = rootGetters;
+            let project = store.state.proj.project;
             let nodeID = getOrDefault(existNodeID, genProjectObjectID());
             // let pageID = getOrDefault(selPage, rg['proj/activePage']);
             let parameters = getOrDefault(params, {'page_id': rg['proj/activePage']});
@@ -123,7 +131,7 @@ export default {
                 'name': name,
                 'group': 3,
                 'type': typeCD,
-                "project_id": localStorage.getItem('project_id'),
+                "project_id": project.id,
                 "data_object_tags": dataObjectTags,
                 "relative_position": relativePosition,
                 'parameters': parameters,
@@ -200,6 +208,7 @@ export default {
             }
         ) {
             let rg = rootGetters;
+            let project = store.state.proj.project;
             let pageID = getOrDefault(existPageID, genProjectObjectID());
             let processID = getOrDefault(selProcess, rg['proj/activeProcess']);
             let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/pageLists'][processID]));
@@ -210,7 +219,7 @@ export default {
                 'name': name,
                 'group': 2,
                 'type': typeCD,
-                "project_id": localStorage.getItem('project_id'),
+                "project_id": project.id,
                 "relative_position": relativePosition,
                 "data_object_tags": dataObjectTags,
                 'parameters': {

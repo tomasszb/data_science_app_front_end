@@ -55,6 +55,7 @@ export default new Router({
                     localStorage.removeItem('expires');
                 }
                 let token = localStorage.getItem('token');
+                console.log(localStorage)
                 isAuthenticated(token) ? next() : next({path: '/login'});
             },
             children: [

@@ -45,14 +45,14 @@ export default {
         }
     },
     computed: {
-        ...mapState('proj', ['projectData']),
+        ...mapState('proj', ['projectData', 'project']),
         ...mapState('proj', ['dataLoaded']),
         ...mapState('layout', ["sidebarClose", "sidebarStatic", "sidebarColorName", "sidebarType"]),
     },
 
     created() {
-        let projectID = localStorage.getItem('project_id');
-        let projectVersion= localStorage.getItem('project_version');
+        let projectID = this.project.id;
+        let projectVersion= 1;
         if (projectID != null && projectVersion != null) {
             this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
             this.loadObjectDefinitions();
@@ -70,13 +70,13 @@ export default {
 
         this.handleWindowResize();
         window.addEventListener('resize', this.handleWindowResize);
-        this.wsConnect(projectID);
+        // this.wsConnect(projectID);
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.handleWindowResize);
     },
     destroyed() {
-        this.wsDisconnect();
+        // this.wsDisconnect();
     }
 };
 </script>

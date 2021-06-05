@@ -14,7 +14,7 @@
     import Vue from 'vue';
     import Chart from "@/components/data_widgets/DataVisualization/Chart/Chart";
     import Loader from '../../ui/Loader/Loader';
-    import { getEmptyDataObject, createFlowRequest, getResultObjectID } from '@/core/projectManager';
+    import { getEmptyDataObject, createDataFlowRequest, getResultObjectID } from '@/core/projectManager';
     const R = require('ramda');
 
 
@@ -41,7 +41,7 @@
                 'createDO'
             ]),
             requestTable() {
-                let request = createFlowRequest(this.nodeID, ['run_visualization']);
+                let request = createDataFlowRequest(this.nodeID, ['run_visualization']);
                 this.UPDATE_NODE_EXECUTION_STATUS({
                     nodeID: this.nodeID,
                     executionTemplate: "run_visualization",

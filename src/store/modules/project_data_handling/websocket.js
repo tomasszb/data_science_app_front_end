@@ -80,26 +80,31 @@ export default {
 
             if (action.startsWith('project - ')) {
                 console.log('processNotifications - project', payload);
+                commit(
+                    "proj/UPDATE_PROJECT_EXECUTION_STATUS",
+                    {
+                        projectID: payload["result"]["project_id"],
+                        command: payload["result"]["command"],
+                        status: payload["result"]["status"]
+                    },
+                    { root: true }
+                );
             }
 
-            if (action.startsWith('flow -')) {
-                var timestamp = Number(new Date());
-                var date = new Date(timestamp);
-
-                let src_request_id = payload["result"]["src_request_id"];
-                let nodeID = payload["result"]["node_id"];
-                let executionTemplate = payload["result"]["execution_template"];
+            if (action.startsWith('data -')) {
                 let lastCommandTask = payload["result"]["last_command_task"];
                 let status = payload["result"]["status"];
-                let resultTag = payload["result"]["result_tag"];
-                let nodeSignature = payload["result"]["node_signature"];
 
-                if (action === 'flow - report_data') {
-                    let data = JSON.parse(payload["result"]["data"]);
+                if (action === 'data - report_data') {
                     console.log('processNotifications - data', payload);
                     commit(
                         "proj/UPDATE_DATAFRAME",
-                        {nodeID: nodeID, resultTag: resultTag, data: data, nodeSignature: nodeSignature},
+                        {
+                            nodeID: payload["result"]["node_id"],
+                            resultTag: payload["result"]["result_tag"],
+                            data: JSON.parse(payload["result"]["data"]),
+                            nodeSignature: payload["result"]["node_signature"]
+                        },
                         { root: true });
                 }
                 else if(lastCommandTask && status!=='running') {
@@ -107,10 +112,10 @@ export default {
                     commit(
                         "proj/UPDATE_NODE_EXECUTION_STATUS",
                         {
-                            nodeID: nodeID,
-                            executionTemplate: executionTemplate,
-                            nodeSignature: nodeSignature,
-                            status: status
+                            nodeID: payload["result"]["node_id"],
+                            executionTemplate: payload["result"]["execution_template"],
+                            nodeSignature: payload["result"]["node_signature"],
+                            status: payload["result"]["status"]
                         },
                         { root: true }
                     );

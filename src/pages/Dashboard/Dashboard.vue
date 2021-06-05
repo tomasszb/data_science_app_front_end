@@ -2,6 +2,14 @@
     <div class="dashboard-page">
         <h3>Project Objects</h3><hr><div>{{ projectObjects }}</div><br>
         <h3>Data Objects</h3><hr><div>{{ dataObjects }}</div><br>
+        <h3>Project Data Tree</h3><hr><div>{{ ProjectDataTree }}</div><br>
+        <h3>Active Objects</h3><hr>
+            <div>processList:{{ processList }}</div><br>
+            <div>pageLists:{{ pageLists }}</div><br>
+            <div>nodeLists:{{ nodeLists }}</div><br>
+            <div>activeProcess:{{ activeProcess }}</div><br>
+            <div>activePage:{{ activePage }}</div><br>
+            <div>activeNode:{{ activeNode }}</div><br>
         <h3>Node Signatures</h3><hr><div>{{ nodeSignatures }}</div><br>
         <h3>Data Object Parameters</h3><hr><div>{{ dataObjectParameterMapping }}</div><br>
         <h3>Objects Statuses</h3><hr><div>{{ nodeExecutionStatus }}</div><br>
@@ -19,7 +27,10 @@
       name: 'Dashboard',
       computed: {
           ...mapGetters('proj', ['projectObjects', 'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping',
-              'dataObjectParameterMapping', 'nodeSignatures']),
+              'dataObjectParameterMapping', 'nodeSignatures', 'ProjectDataTree',
+              'processList', 'pageLists', 'nodeLists',
+              'activeProcess', 'activePage', 'activeNode'
+          ]),
           ...mapState('proj', ['projectObjectStatuses', 'dataFrames', 'dataObjectDefinitions', 'dataFrames', 'nodeExecutionStatus'])
       }
     };

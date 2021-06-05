@@ -30,9 +30,10 @@ export default {
         dataObjectDefinitions: {},
 
         dataFrames: {},
+
         dataFrameStatus: {},
         nodeExecutionStatus: {},
-
+        projectExecutionStatus: {},
 
         selectedProcess: null,
         selectedPages: {},
@@ -156,6 +157,36 @@ export default {
             // // console.log(ProjectDict);
             return ProjectDict
         },
+        ProjectDataTree: (state, getters) => {
+
+            let ProjectDict = {
+                ...state.project,
+                ...{'project_data_objects': state.projectData['project_data_objects'], 'children': []}
+            };
+            for (let ProcessID of getters.processList) {
+                let process = {
+                    ...getters.projectObjects[ProcessID],
+                    ...{'children': []}
+                };
+                for (let PageID of getters.pageLists[ProcessID]) {
+                    let page = {
+                        ...getters.projectObjects[PageID],
+                        ...{'children': []}
+                    };
+                    for (let NodeID of getters.nodeLists[PageID]) {
+                        let node = {
+                            ...getters.projectObjects[NodeID],
+                            ...{'children': []}
+                        };
+                        page['children'].push(node);
+                    }
+                    process['children'].push(page);
+                }
+                ProjectDict['children'].push(process);
+            }
+            // // console.log(ProjectDict);
+            return ProjectDict
+        },
         projectTreeModel: (state, getters) => {
             let tree = new TreeModel();
             return tree.parse(getters.ProjectTree)
@@ -235,6 +266,10 @@ export default {
         UPDATE_NODE_EXECUTION_STATUS(state, {nodeID, executionTemplate, nodeSignature, status}) {
             let nodeExecutionID = getResultObjectID([nodeID, executionTemplate, nodeSignature]);
             Vue.set(state.nodeExecutionStatus, nodeExecutionID,  status);
+        },
+        UPDATE_PROJECT_EXECUTION_STATUS(state, {projectID, command, status}) {
+            let projectExecutionID = getResultObjectID([projectID, command]);
+            Vue.set(state.projectExecutionStatus, projectExecutionID,  status);
         },
     },
     modules: {
