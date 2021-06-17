@@ -40,9 +40,9 @@ export default {
             })
         },
         saveProject({commit, dispatch}, {projectID, projectVersion, projectDataTree}) {
+            console.log(projectDataTree)
             const promise = new Promise((resolve, reject) => {
                 resolve(axios.post('/project/'+projectID+'/'+projectVersion+'/', projectDataTree));
-                console.log(projectDataTree)
             });
             promise.then(res => {
                 let data = res.data['Response'];
