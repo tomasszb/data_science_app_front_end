@@ -123,7 +123,7 @@
                 let check1 = typeof this.dataFrames[outputTableID]!== "undefined";
                 let check2 = typeof this.dataFrames[outputTableQuickInfoID]!== "undefined";
 
-                console.log(status, check1, check2, this.nodeSignature, outputTableID, outputTableQuickInfoID, this.dataFrames)
+                // console.log(status, check1, check2, this.nodeSignature, outputTableID, outputTableQuickInfoID, this.dataFrames)
 
                 if (status==='success' && check1 && check2) {
                     this.activeNodeSignature = this.nodeSignature;

@@ -60,7 +60,7 @@
         },
         mounted() {
             if (typeof this.value==='undefined') {
-                console.log('constant', this.defaultValue)
+                // console.log('constant', this.defaultValue)
                 Vue.set(this, 'value', this.defaultValue);
             }
         }

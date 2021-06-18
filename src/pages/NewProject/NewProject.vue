@@ -81,7 +81,7 @@ export default {
         ...mapMutations('proj', ['SET_PROJECT_VARIABLE']),
         newProject(project) {
             localStorage.removeItem('project_id');
-            localStorage.removeItem('project_version');
+            localStorage.removeItem('version_number');
           this.createNewProject({data: this.newProjectData} );
         }
     },

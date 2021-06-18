@@ -10,7 +10,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :dataObjectID="dataObjectID" tag="connector" type="new"/>
+            <connector-form :dataObjectID="dataObjectID" :tag="tag" type="new"/>
         </b-modal>
         <b-modal
                 id="existing-connector-explorer"
@@ -21,7 +21,7 @@
                 no-fade
                 hide-footer
                 hide-header>
-            <connector-form :dataObjectID="activeDataObjectID" tag="connector" type="existing"/>
+            <connector-form :dataObjectID="activeDataObjectID" :tag="tag" type="existing"/>
         </b-modal>
     </div>
 </template>
@@ -39,6 +39,7 @@
         },
         data() {
           return {
+              tag: 'connector',
               connectorFilter: '',
               activeConnectorType: '',
               elementName: '',
@@ -66,6 +67,7 @@
                     Object: {
                         'id': dataObjectID,
                         'type': this.activeConnectorType,
+                        'tag': this.tag,
                         'parameters': {}
                     }
                 });

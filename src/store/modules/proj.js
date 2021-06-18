@@ -196,6 +196,17 @@ export default {
         SET_PROJECT_VARIABLE(state, variables) {
             state.project = variables;
         },
+        UNLOAD_PROJECT_DATA(state) {
+            state.projectData = emptyProject();
+            state.dataLoaded = false;
+            state.dataFrames = {};
+            state.dataFrameStatus = {};
+            state.nodeExecutionStatus = {};
+            state.projectExecutionStatus = {};
+            state.selectedProcess = null;
+            state.selectedPages = {};
+            state.selectedNodes = {};
+        },
         LOAD_PROJECT_DATA(state, data) {
             state.projectData = data;
             state.dataLoaded = true;

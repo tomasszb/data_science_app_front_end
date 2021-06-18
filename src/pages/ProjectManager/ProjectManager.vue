@@ -1,5 +1,6 @@
 <template>
   <div class="projects-page">
+      {{dataLoaded}}
     <b-container>
       <h5 class="auth-logo">
         <i class="fa fa-circle text-primary"></i>
@@ -20,6 +21,7 @@
                 variant="light"
                 @click="openProject(project)"
                 block>
+            {{project.id}}
           {{project.name}}
         </b-button>
       </Widget>
@@ -37,21 +39,29 @@ export default {
   name: 'ProjectManager',
   components: { Widget },
   computed: {
-    ...mapState('proj', ['projectList']),
+    ...mapState('proj', ['projectList', 'dataLoaded']),
   },
   methods: {
-    ...mapActions('proj/api', ['loadProjectData', 'loadProjectList']),
+    ...mapActions('proj/api', ['loadProjectData', 'loadObjectDefinitions', 'loadProjectList']),
     openProject(project) {
         let projectID = project.id;
         let projectVersion = project.version;
         localStorage.setItem('project_id', projectID);
-        localStorage.setItem('project_version', projectVersion);
+        localStorage.setItem('version_number', projectVersion);
 
 
       this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
-      router.push('/app/main');
+      this.loadObjectDefinitions();
+
     }
   },
+    watch: {
+        dataLoaded(value) {
+            if (value===true) {
+                router.push('/app/main');
+            }
+        }
+    },
   created() {
     //this.loadProjectData();
   },

@@ -53,7 +53,7 @@ export default {
     created() {
         let projectID = this.project.id;
         let projectVersion= 1;
-        if (projectID != null && projectVersion != null) {
+        if (this.dataLoaded===false) {
             this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
             this.loadObjectDefinitions();
         }

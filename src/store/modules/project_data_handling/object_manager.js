@@ -230,12 +230,12 @@ export default {
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: pageID, Object: emptyPage}, { root: true });
             if (createChild) {
                 let childType = childTypes[typeCD];
-                let dataObjectTags = {};
+                let dataObjectTags2 = {};
                 if (childType===300) {
-                    dataObjectTags['query'] = null;
+                    dataObjectTags2['query'] = null;
                 }
                 let name = defaultNames[childType];
-                dispatch('newNode', {typeCD: childType, selName: name, selPage: pageID, dataObjectTags: dataObjectTags})
+                dispatch('newNode', {typeCD: childType, selName: name, selPage: pageID, dataObjectTags: dataObjectTags2})
             }
         }
     },

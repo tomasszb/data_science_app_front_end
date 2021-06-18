@@ -122,7 +122,7 @@
             requestSaveProject() {
                 this.saveProject({
                     projectID: this.project.id,
-                    projectVersion: this.project.project_version,
+                    projectVersion: this.project.version_number,
                     projectDataTree: this.ProjectDataTree}
                 )
             }

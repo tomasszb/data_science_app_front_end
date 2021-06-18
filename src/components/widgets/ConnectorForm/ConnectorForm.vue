@@ -3,7 +3,6 @@
         <div class="connector-explorer-panel flex-vertical">
             <div class="connector-explorer-title">
                 <div class="title">Connector</div>
-                {{dataObjectID}}
                 <b-form-group>
                     <b-form-input
                             id="transparent-field"
@@ -34,7 +33,6 @@
                 {{dataObjectTypeMapping[activeConnectorType]}}
             </div>
             <div class="connector-kwargs">
-                <!--                {{activeFunctionKwargs}}-->
                 <b-form-group
                         horizontal
                         class="connector-name-form"
@@ -50,8 +48,10 @@
                             class="bg-gray-lighter"/>
                 </b-form-group>
                 <data-object-settings
-                        :providedDataObjectID="dataObjectID"
-                        :horizontal="true"
+                    v-if="activeConnectorType!==''"
+                    :providedDataObjectID="dataObjectID"
+                    :horizontal="true"
+                    :key="dataObjectID"
                 />
 
             </div>
