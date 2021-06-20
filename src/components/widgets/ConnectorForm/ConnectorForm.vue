@@ -1,64 +1,33 @@
 <template>
-    <div class="connector-explorer flex-horizontal-no-scroll">
+    <div class="connector-explorer flex-vertical">
         <div class="connector-explorer-panel flex-vertical">
             <div class="connector-explorer-title">
-                <div class="title">Connector</div>
-                <b-form-group>
+                <b-input-group id="transparent-field" class="input-group-transparent">
+                    <b-input-group-text class="bg-transparent" slot="prepend">
+                        <i class="fa fa-search" />
+                    </b-input-group-text>
                     <b-form-input
-                            id="transparent-field"
-                            class="input-no-border input-sm"
-                            type="text"
-                            autocomplete="off"
-                            v-model="connectorFilter"
-                            placeholder="Find Connector">
-                    </b-form-input>
-                </b-form-group>
+                        type="text"
+                        class="px-2"
+                        autocomplete="off"
+                        v-model="connectorFilter"
+                        placeholder="Find Connector"
+                    ></b-form-input>
+                </b-input-group>
             </div>
-            <div class="connector-type-picker">
-                <div v-for="(connectorTypes, connectorGroup) in dataConnectorGroups">
-                    <div class="connector-type-header">{{dataObjectGroupMapping[connectorGroup]}}</div>
-                    <div v-for="connectorType in connectorTypes">
-                        <div
-                                class="connector-name"
-                                :class="{'active': activeConnectorType===connectorType}"
-                                @click="selectConnectorTypeGroup(connectorType, connectorGroup) ">
-                            {{dataObjectTypeMapping[connectorType]}}
-                        </div>
+            <div class="connector-type-picker flex-vertical">
+                <div v-for="(connectorTypes, connectorGroup) in dataConnectorGroups" class="c-100 float-left mt-4">
+                    <h5 class="mb-3 font-weight-bold">
+                        &nbsp {{dataObjectGroupMapping[connectorGroup]}}
+                    </h5>
+                    <div v-for="connectorType in connectorTypes" class="float-left">
+                        <ConnectorType
+                            :name="dataObjectTypeMapping[connectorType]"
+                            :key="connectorType"
+                            :active="false"
+                            @click.native="selectConnectorTypeGroup(connectorType, connectorGroup) "
+                        />
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="connector-explorer-form" :class="{hidden: activeConnectorType===''}">
-            <div class="title">
-                {{dataObjectTypeMapping[activeConnectorType]}}
-            </div>
-            <div class="connector-kwargs">
-                <b-form-group
-                        horizontal
-                        class="connector-name-form"
-                        label-class="text-md-right"
-                >
-                    <b-form-input
-                            placeholder="Connector Name"
-                            type="text"
-                            v-model="elementName"
-                            id="connector-name"
-                            autocomplete="off"
-                            size="md"
-                            class="bg-gray-lighter"/>
-                </b-form-group>
-                <data-object-settings
-                    v-if="activeConnectorType!==''"
-                    :providedDataObjectID="dataObjectID"
-                    :horizontal="true"
-                    :key="dataObjectID"
-                />
-
-            </div>
-            <div class="footer">
-                <div class="text-md-right mt-sm">
-                    <b-button variant="gray" class="mr-3 width-100">Test</b-button>
-                    <b-button variant="warning" class="width-100" @click="saveConnector">Save</b-button>
                 </div>
             </div>
         </div>
@@ -68,36 +37,41 @@
 <script>
     import {mapGetters, mapMutations, mapState, mapActions} from "vuex";
     import DataObjectSettings from "../../layout/DataObjectSettings/DataObjectSettings";
+    import ConnectorType from "@/components/widgets/ConnectorExplorer/ConnectorType/ConnectorType";
     import draggable from 'vuedraggable';
     const R = require('ramda');
 
     export default {
         name: 'ConnectorForm',
         components: {
-            DataObjectSettings, draggable
+            ConnectorType, DataObjectSettings, draggable
         },
         data() {
           return {
               connectorFilter: '',
               activeConnectorType: '',
               elementName: '',
+              dataObjectID: ''
           }
         },
         props: {
             objectType: { type: String, default: null },
             type: { type: String, default: null },
-            dataObjectID: { type: String, default: '' },
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT'
+                'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT', 'UPDATE_DISPLAY_SETTINGS'
             ]),
             ...mapActions('proj/object_manager', [
-                'newPage'
+                'newPage', 'setActivePO'
             ]),
             selectConnectorTypeGroup(connectorType, connectorGroup) {
+                this.newDataObject();
                 let objectID = this.dataObjectID;
                 let object = R.clone(this.dataObjects[objectID]);
+                // console.log('selectConnectorTypeGroup',connectorType, connectorGroup, this.dataConnectorGroups)
+                // console.log('selectConnectorTypeGroup', this.dataObjectTypeMapping)
+                // console.log('selectConnectorTypeGroup', this.dataObjectGroupMapping)
                 object['type'] = connectorType;
                 object['type_text'] = this.dataObjectTypeMapping[connectorType];
                 object['group'] = connectorGroup;
@@ -105,20 +79,37 @@
                 object['parameters'] = {};
                 this.UPDATE_DATA_OBJECT({ObjectID: objectID, Object: object});
                 this.activeConnectorType = connectorType;
+                this.newPage({
+                    typeCD: 200,
+                    selName: 'New '+this.dataObjectTypeMapping[this.activeConnectorType]+' connector',
+                    dataObjectTags: {'connector': objectID}
+                });
+                this.resetProcessViewCode();
+            },
+            newDataObject(existDataObjectID=null) {
+                let newDataObjectID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+                let dataObjectID = existDataObjectID!==null ? existDataObjectID : newDataObjectID;
+                this.UPDATE_DATA_OBJECT({
+                    ObjectID: dataObjectID,
+                    Object: {
+                        'id': dataObjectID,
+                        'type': this.activeConnectorType,
+                        'tag': "connector",
+                        'parameters': {}
+                    }
+                });
+                this.dataObjectID = dataObjectID;
             },
             disableActive() {
                 this.activeConnectorType = ''
             },
-            saveConnector() {
-                if (this.type==='new') {
-                    this.newPage({
-                        typeCD: 200,
-                        selName: this.elementName,
-                        dataObjectTags: {'connector': this.dataObjectID}
-                    });
-                }
-                this.$bvModal.hide('new-connector-explorer');
-                this.$bvModal.hide('existing-connector-explorer');
+            resetProcessViewCode() {
+                let displaySettings = R.clone(this.projectObjects.getPath(this.activeProcess+'.display_settings', {}))
+                delete displaySettings['process_view'];
+                this.UPDATE_DISPLAY_SETTINGS({
+                    ObjectID: this.activeProcess,
+                    displaySettings: displaySettings
+                });
             }
         },
         computed: {
@@ -126,12 +117,13 @@
                 'dataObjectDefinitions'
             ]),
             ...mapGetters('proj', [
-                'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping', 'activeNode', 'activeProcess', 'activePage', 'dataObjects'
+                'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping',
+                'activeNode', 'activeProcess', 'activePage', 'projectObjects'
             ]),
             dataConnectorGroups() {
                 let result = {};
                 for (let dataType of this.dataObjectDefinitions["Data Connector"]["children"]) {
-                    let filterCheck = this.dataObjectTypeMapping[dataType['type_cd']].toLowerCase().includes(this.connectorFilter);
+                    let filterCheck = this.dataObjectTypeMapping[dataType['type_cd']].toLowerCase().includes(this.connectorFilter.toLowerCase());
                     if (filterCheck || this.connectorFilter==='') {
                         (result[dataType["group_cd"]] = result[dataType["group_cd"]] || []).push(dataType['type_cd']);
                     }
@@ -152,14 +144,14 @@
             },
             activeFunctionKwargs() {
                 return this.activeFunction.hasOwnProperty('parameters') ? this.activeFunction['parameters'] : []
+            },
+            projectObject() {
+                return this.projectObjects[this.activePage]
+            },
+            displaySettings() {
+                return this.projectObject['display_settings']
             }
         },
-        mounted() {
-            if (this.dataObject.type) {
-                this.activeConnectorType = this.dataObject.type;
-            }
-
-        }
     };
 </script>
 

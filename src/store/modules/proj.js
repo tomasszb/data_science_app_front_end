@@ -93,6 +93,7 @@ export default {
             let result = {};
             for (const projectObject of state.projectData['project_objects']) {
                 if (projectObject.group===3) {
+                    // console.log('nodeSignatures', projectObject, projectObject.id)
                     result[projectObject.id] = calculateNodeSignature(projectObject.id);
                 }
             }
@@ -197,15 +198,15 @@ export default {
             state.project = variables;
         },
         UNLOAD_PROJECT_DATA(state) {
-            state.projectData = emptyProject();
             state.dataLoaded = false;
-            state.dataFrames = {};
-            state.dataFrameStatus = {};
-            state.nodeExecutionStatus = {};
-            state.projectExecutionStatus = {};
-            state.selectedProcess = null;
-            state.selectedPages = {};
-            state.selectedNodes = {};
+            // state.projectData = emptyProject();
+            // state.dataFrames = {};
+            // state.dataFrameStatus = {};
+            // state.nodeExecutionStatus = {};
+            // state.projectExecutionStatus = {};
+            // state.selectedProcess = null;
+            // state.selectedPages = {};
+            // state.selectedNodes = {};
         },
         LOAD_PROJECT_DATA(state, data) {
             state.projectData = data;
@@ -237,6 +238,7 @@ export default {
         },
         UPDATE_DISPLAY_SETTINGS(state, {ObjectID, displaySettings}) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
+            // console.log('UPDATE_DISPLAY_SETTINGS', state.projectData['project_objects'][index], 'display_settings', displaySettings)
             Vue.set(state.projectData['project_objects'][index], 'display_settings', displaySettings)
         },
         UPDATE_DATAFRAME(state, {nodeID, resultTag, nodeSignature, data}) {

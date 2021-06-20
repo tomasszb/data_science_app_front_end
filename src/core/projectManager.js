@@ -89,9 +89,9 @@ export function get_active_object(activeNew, activeOld, allList) {
 export function getUpstreamNodes(nodeID, upstreamNodes) {
   let objects = store.getters['proj/projectObjects'];
   let node = objects[nodeID];
-  let srcNodeID = node['parameters']['source_data_node'];
-  let secNodeIDs = node['parameters']['secondary_data_nodes'];
-  let parentPageID = node['parameters']['page_id'];
+  let srcNodeID = node.getPath('parameters.source_data_node', null);
+  let secNodeIDs = node.getPath('parameters.secondary_data_nodes', []);
+  let parentPageID = node.getPath('parameters.page_id', null);
   if (srcNodeID !== null) {
     let upstreamNodeID = srcNodeID.toString();
     upstreamNodes.push(upstreamNodeID);
@@ -117,10 +117,12 @@ export function getUpstreamNodes(nodeID, upstreamNodes) {
 }
 
 export function calculateNodeSignature(parentNodeID) {
+  // console.log('calculateNodeSignature start', parentNodeID)
   let projectObjects = store.getters['proj/projectObjects'];
   let dataObjects = store.getters['proj/dataObjects'];
   let nodeDataObjectTags = {};
   let nodeDataObjects = {};
+  // console.log('calculateNodeSignature mid', projectObjects, dataObjects, parentNodeID)
   let nodeIDs = getUpstreamNodes(parentNodeID, []).reverse().concat([parentNodeID]);
   for (const nodeID of nodeIDs) {
     let node = projectObjects[nodeID];
@@ -130,7 +132,9 @@ export function calculateNodeSignature(parentNodeID) {
     nodeDataObjects[nodeID] = [];
     for (const [tagName, tagID] of Object.entries(tags)) {
       if (tagName!=="output_table_sort" && tagName!=="output_table_filter") {
-        nodeDataObjects[nodeID].push(dataObjects[tagID.toString()])
+        if (tagID!==null) {
+          nodeDataObjects[nodeID].push(dataObjects[tagID.toString()])
+        }
       }
     }
 
@@ -141,6 +145,7 @@ export function calculateNodeSignature(parentNodeID) {
       }
     }
   }
+  // console.log('calculateNodeSignature end', JSON.stringify({'nodes': nodeIDs, 'data_objects': nodeDataObjects}).hashCode())
   return JSON.stringify({'nodes': nodeIDs, 'data_objects': nodeDataObjects}).hashCode();
 
 }

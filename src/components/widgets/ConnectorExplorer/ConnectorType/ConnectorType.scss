@@ -1,0 +1,31 @@
+@import '../../../../styles/app';
+
+.chart-type-option {
+  border-bottom: 4px solid white;
+  width: 150px;
+  opacity: 80%;
+  background-color: $gray-200;
+  margin: 2px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+
+  img {
+    height: 100px;
+    filter: grayscale(100%);
+  }
+
+}
+
+.chart-type-option:hover {
+  opacity: 100%;
+
+  img {
+    filter: grayscale(0%);
+  }
+}
+
+.chart-type-option.active {
+  opacity: 100%;
+  border-bottom: 4px solid var(--sidebar-item-active)!important;
+}

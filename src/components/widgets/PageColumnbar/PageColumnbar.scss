@@ -24,6 +24,10 @@
   height: calc(100vh - 100px);
   overflow: auto;
 
+  .dragged {
+    background-color: var(--sidebar-item-active-faded);
+  }
+
 
   .page-column-button {
     width: 100%;

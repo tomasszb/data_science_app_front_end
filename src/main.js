@@ -30,6 +30,7 @@ import VueNumericInput from 'vue-numeric-input';
 import FontPicker from 'font-picker-vue';
 import VueFormulate from '@braid/vue-formulate'
 const R = require('ramda');
+const VueScrollTo = require('vue-scrollto');
 
 Object.defineProperty(String.prototype, 'hashCode', {
     value: function() {
@@ -71,9 +72,24 @@ Object.defineProperty(Object.prototype, 'setPath', {
     }
 });
 
+Object.defineProperty(Object.prototype, 'getKeyOrDefault', {
+    value: function(key, defaultValue) {
+        if (key===null) {
+            return defaultValue
+        }
+        else if (typeof key==='undefined') {
+            return defaultValue
+        }
+        else if (this.hasOwnProperty(key)) {
+            return this[key]
+        }
+        return defaultValue;
+    }
+});
+
 Vue.mixin({
     methods: {
-        getSet(providedValue, defaultValue) {
+        getValueOrDefault(providedValue, defaultValue) {
             if (providedValue===null) {
                 return defaultValue
             }
@@ -105,6 +121,7 @@ Vue.use(BootstrapVue, {
 });
 Vue.use(VueTouch);
 Vue.use(Trend);
+Vue.use(VueScrollTo);
 Vue.component('vue-code-highlight', VueCodeHighlight);
 Vue.component('Widget', Widget);
 Vue.use(bFormSlider);

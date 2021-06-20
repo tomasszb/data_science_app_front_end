@@ -14,6 +14,7 @@
             v-model="columnList"
             :group="{ name: 'columns', pull: 'clone', put: false }"
             ghost-class="ghost"
+            drag-class="dragged"
             animation="200"
         >
             <ColumnButton
@@ -90,6 +91,7 @@
             },
             columnList() {
                 let result = []
+                console.log(this.resultObjectID, this.dataFrames)
                 let columns = this.dataFrames[this.resultObjectID]["columns"];
                 let types = this.dataFrames[this.resultObjectID]["column_types"];
                 for (let i = 0; i < columns.length ;i++) {
@@ -100,12 +102,23 @@
         },
         watch: {
             activeNode: function(activeNodeID) {
-                this.selectedInputNodeID = this.projectObjects[activeNodeID].parameters.source_data_node.toString()
-
+                if(this.activeNode!==null) {
+                    if (this.projectObjects.getPath(this.activeNode+'.parameters.source_data_node', null)!==null) {
+                        this.selectedInputNodeID = this.projectObjects[this.activeNode].parameters.source_data_node.toString()
+                    }
+                }
             }
         },
         created() {
-            this.selectedInputNodeID = this.projectObjects[this.activeNode].parameters.source_data_node.toString()
+            if(this.activeNode!==null) {
+                if (this.projectObjects.getPath(this.activeNode+'.parameters.source_data_node', null)!==null) {
+                    this.selectedInputNodeID = this.projectObjects[this.activeNode].parameters.source_data_node.toString()
+                }
+            }
+            else {
+                this.selectedInputNodeID = this.inputNodeIDs[0]
+            }
+
         }
 
     };

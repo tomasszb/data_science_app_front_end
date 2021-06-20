@@ -1,15 +1,17 @@
 <template>
     <div class=" node-view-selector mr-5">
-        <b-button-group>
+        <b-button-group v-if="processViewCode !== 2">
             <b-button
-                    :key="'node-view-key-'+i"
-                    variant="light"
-                    size="xs"
-                    v-for="(nodeViewName, i) in nodeViewNames"
-                    @click="changeNodeView('nodeViewCode', nodeViewNameCodes[nodeViewName])"
-                    :class="{ active: nodeViewCode === nodeViewNameCodes[nodeViewName] }"
+                v-for="(nodeViewCode, i) in nodeViewCodes"
+                :key="'node-view-key-'+i"
+                variant="light"
+                size="xs"
+                @click="changeNodeView('activeNodeViewCode', nodeViewCode)"
+                :class="{
+                active: activeNodeViewCode === nodeViewCode
+            }"
             >
-                {{nodeViewName}}
+                {{nodeViewNameCodes[nodeViewCode.toString()]}}
             </b-button>
         </b-button-group>
     </div>
@@ -24,27 +26,34 @@
     export default {
         name: 'NodeViewSelector',
         components: {},
-        props: {
-            objectType: { type: String, default: null },
-        },
         data() {
             return {
                 dataObjectTag : {
                     200: 'connector',
                     201: 'action',
-                    203: 'dashboard'
+                    202: 'dashboard'
                 },
                 nodeViewMapping : {
-                    1000: ['SQL', 'Data', 'Detail'],
-                    1001: ['Data', 'Detail'],
-                    1002: ['Data', 'Detail'],
-                    1003: ['Data', 'Detail'],
-                    3200: ['Data', 'Detail'],
+                    1000: [3,1,2],
+                    1001: [1,2],
+                    1002: [1,2],
+                    1003: [1,2],
+                    3200: [1,2],
                 },
                 nodeViewNameCodes : {
-                    'SQL': 3,
-                    'Data': 1,
-                    'Detail': 2
+                    3: 'SQL',
+                    1: 'Data',
+                    2: 'Detail'
+                },
+
+                processViewMapping : {
+                    100: [1,2],
+                    101: [1,2],
+                    102: [1,2]
+                },
+                processViewNameCodes : {
+                    1: 'existing_object',
+                    2: 'new_object'
                 }
             }
         },
@@ -53,7 +62,7 @@
                 'UPDATE_PROJECT_OBJECT', 'UPDATE_DISPLAY_SETTINGS',
             ]),
             ...mapActions('proj/object_manager', [
-                'newNode'
+                'newNode', 'getOrDefault'
             ]),
             changeNodeView(field, value) {
                 Vue.set(this, field, value);
@@ -62,46 +71,83 @@
         computed: {
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects',
-                'activePage'
+                'activeProcess', 'activePage', 'activeNode'
             ]),
 
+            activeNodeSettings() {
+                return this.projectObjects.getKeyOrDefault(this.activeNode, {})
+            },
+            activePageSettings() {
+                return this.projectObjects.getKeyOrDefault(this.activePage, {})
+            },
+            activeProcessSettings() {
+                return this.projectObjects.getKeyOrDefault(this.activeProcess, {})
+            },
             mainDataObjectID() {
-                let tag = this.dataObjectTag[this.projectObject.type];
-                return this.projectObject['data_object_tags'][tag]
+                let activePageType = this.activePageSettings.getKeyOrDefault('type', null)
+                let tag = this.dataObjectTag.getKeyOrDefault(activePageType, '');
+                return this.activePageSettings.getPath('data_object_tags.'+tag, null)
             },
             mainDataObject() {
-                return this.dataObjects[this.mainDataObjectID]
+                return this.dataObjects.getKeyOrDefault(this.mainDataObjectID, {})
             },
-            nodeViewNames() {
-                return this.nodeViewMapping[this.mainDataObject.group]
+            nodeViewCodes() {
+                let mainDataObjectGroup = this.mainDataObject.getKeyOrDefault('group', null)
+                return this.nodeViewMapping.getKeyOrDefault(mainDataObjectGroup, null)
             },
-            projectObject() {
-                return this.projectObjects[this.activePage]
+            processViewCodes() {
+                let activeProcessType = this.activeProcessSettings.getKeyOrDefault('type', null)
+                return this.processViewMapping.getKeyOrDefault(activeProcessType, null)
             },
-            displaySettings() {
-                return this.projectObject['display_settings']
-            },
-            nodeViewCode: {
+            activeNodeViewCode: {
                 get() {
-                    if (!this.displaySettings.hasOwnProperty('node_view') ) {
-                        let displaySettings = R.clone(this.displaySettings);
-                        displaySettings['node_view'] = this.nodeViewNameCodes[this.nodeViewNames[0]];
+                    let displaySettings = R.clone(this.activeNodeSettings.getKeyOrDefault('display_settings', {}))
+                    if (!displaySettings.hasOwnProperty('node_view') && this.activeNodeSettings.hasOwnProperty('id') ) {
+                        displaySettings['node_view'] = this.nodeViewCodes[0];
                         this.UPDATE_DISPLAY_SETTINGS({
-                            ObjectID: this.projectObject.id,
+                            ObjectID: this.activeNodeSettings.id,
                             displaySettings: displaySettings
                         });
                     }
-                    return this.displaySettings.hasOwnProperty('node_view') ? this.displaySettings['node_view'] : this.nodeViewNameCodes[this.nodeViewNames[0]]
+
+                    return displaySettings['node_view']
                 },
                 set(newValue) {
-                    let displaySettings = R.clone(this.displaySettings);
+                    let displaySettings = R.clone(this.activeNodeSettings.getKeyOrDefault('display_settings', {}))
                     displaySettings['node_view'] = newValue;
-                    this.UPDATE_DISPLAY_SETTINGS({
-                        ObjectID: this.projectObject.id,
-                        displaySettings: displaySettings
-                    });
+                    if (this.activeNodeSettings.hasOwnProperty('id')) {
+                        this.UPDATE_DISPLAY_SETTINGS({
+                            ObjectID: this.activeNodeSettings.id,
+                            displaySettings: displaySettings
+                        });
+                    }
                 }
-            }
+            },
+            processViewCode: {
+                get() {
+                    let displaySettings = R.clone(this.activeProcessSettings.getKeyOrDefault('display_settings', {}))
+                    if (!displaySettings.hasOwnProperty('process_view') && this.activeProcessSettings.hasOwnProperty('id')) {
+                        displaySettings['process_view'] = this.processViewCodes[0];
+                        this.UPDATE_DISPLAY_SETTINGS({
+                            ObjectID: this.activeProcessSettings.id,
+                            displaySettings: displaySettings
+                        });
+                    }
+
+                    return displaySettings['process_view']
+                },
+                set(newValue) {
+                    let displaySettings = R.clone(this.activeProcessSettings.getKeyOrDefault('display_settings', {}))
+                    displaySettings['process_view'] = newValue;
+
+                    if (this.activeProcessSettings.hasOwnProperty('id')) {
+                        this.UPDATE_DISPLAY_SETTINGS({
+                            ObjectID: this.activeProcessSettings.id,
+                            displaySettings: displaySettings
+                        });
+                    }
+                }
+            },
         }
     };
 </script>

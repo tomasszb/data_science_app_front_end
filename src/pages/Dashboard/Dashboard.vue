@@ -22,9 +22,13 @@
 
 <script>
     import {mapGetters, mapState} from 'vuex';
+    const VueScrollTo = require('vue-scrollto');
 
     export default {
       name: 'Dashboard',
+        directives: {
+            scrollTo: VueScrollTo
+        },
       computed: {
           ...mapGetters('proj', ['projectObjects', 'dataObjects', 'dataObjectTypeMapping', 'dataObjectGroupMapping',
               'dataObjectParameterMapping', 'nodeSignatures', 'ProjectDataTree',

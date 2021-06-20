@@ -1,8 +1,5 @@
 <template>
         <div class="flex-vertical">
-            <div class="col-explorer flex-vertical" v-if="status === 'loading'">
-                <Loader :class="'widget-loader'" :size="40"></Loader>
-            </div>
             <div class="col-explorer flex-vertical" v-if="status === 'ready'">
                 <h4><strong>table</strong> details</h4><br>
                 <table-info :tableStats="columnStatsData['table']"></table-info><br><br>
@@ -54,13 +51,20 @@
                 <!--            />-->
             </div>
             <div v-if="status === 'not_requested'" class="load-data-area flex-vertical-no-scroll align-items-center">
-                <b-button type="button" size='lg' variant="gray" class="btn-rounded load-data-button" @click="requestColumnStats()">
+                <b-button
+                    squared
+                    type="button"
+                    size='sm'
+                    variant="gray"
+                    class="load-data-button mb-4"
+                    @click="requestColumnStats()"
+                >
                     Load Column Info
                 </b-button>
-                <br>
                 <p>
-                    the requested data is not loaded yet
+                    column details are not loaded yet, click above to load
                 </p>
+
             </div>
         </div>
 </template>

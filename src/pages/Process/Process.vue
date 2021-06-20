@@ -11,22 +11,26 @@
                         <template v-slot:node-view-selector>
                             <node-view-selector/>
                         </template>
-                        <DataTable
-                            v-if="pageDisplayTag===1"
-                            :key="processKey + activeNode +  '-data-table'"
-                            :nodeID="activeNode"
-                        />
-                        <DataColumnExplorer
-                            v-if="pageDisplayTag===2"
-                            :key="processKey + activeNode  + '-data-column-explorer'"
-                            :nodeID="activeNode"
-                        />
-                        <QueryEditor
-                            v-if="pageDisplayTag===3"
-                            tag="run_query"
-                            :key="processKey + activeNode  + '-data-query-editor'"
-                            :objectID="activeNode"
-                        />
+                        <connector-explorer v-if="processDisplayTag===2"/>
+                        <div v-if="processDisplayTag===1">
+                            <DataTable
+                                v-if="pageDisplayTag===1"
+                                :key="processKey + activeNode +  '-data-table'"
+                                :nodeID="activeNode"
+                            />
+                            <DataColumnExplorer
+                                v-if="pageDisplayTag===2"
+                                :key="processKey + activeNode  + '-data-column-explorer'"
+                                :nodeID="activeNode"
+                            />
+                            <QueryEditor
+                                v-if="pageDisplayTag===3"
+                                tag="run_query"
+                                :key="processKey + activeNode  + '-data-query-editor'"
+                                :objectID="activeNode"
+                            />
+                        </div>
+
 
                     </main-content>
                     <tool-footer v-show="activeConnectorGroup === 1000">
@@ -38,7 +42,6 @@
         </div>
         <div v-if="processType===this.dsw_config.DATA_PREPARATION_PROCESS_CD" class="flex-vertical" :key="processKey">
             <tool-header></tool-header>
-<!--            <div class="flex-vertical">-->
                 <div class="flex-horizontal">
                     <nav-sidebar :defaultWidth="450" :minWidth="250" :maxWidth="700"  settingPrefix="prep">
                         <prepbar></prepbar>
@@ -53,13 +56,12 @@
                 <tool-footer>
                     <sheetbar objectType="page" :defaultWidth="700" :minWidth="600" :maxWidth="1000"  settingPrefix="prep"></sheetbar>
                 </tool-footer>
-<!--            </div>-->
         </div>
         <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">
             <tool-header></tool-header>
             <div class="flex-vertical">
                 <div class="flex-horizontal">
-                    <nav-sidebar :defaultWidth="200" :minWidth="130" :maxWidth="700" settingPrefix="column">
+                    <nav-sidebar :defaultWidth="300" :minWidth="200" :maxWidth="700" settingPrefix="column">
                         <page-columnbar/>
                     </nav-sidebar>
                     <nav-sidebar :defaultWidth="400" :minWidth="130" :maxWidth="700" settingPrefix="chart" class="vis-sidebar-2">
@@ -69,10 +71,7 @@
                         <template v-slot:node-view-selector>
                             <node-view-selector/>
                         </template>
-<!--                        <toolbox-dashboard></toolbox-dashboard>-->
-                        <dashboard></dashboard>
-<!--                        {{dataObjects[projectObjects[activePage]["data_object_tags"]["dashboard"]]}}-->
-
+<!--                        <dashboard></dashboard>-->
                     </main-content>
                 </div>
                 <tool-footer>
@@ -104,10 +103,12 @@ import Dashboard from "@/components/widgets/Dashboard/Dashboard";
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createDataFlowRequest, getUpstreamElements } from '@/core/projectManager';
 import dsw_config from "../../dsw_config";
+import ConnectorExplorer from "@/components/widgets/ConnectorExplorer/ConnectorExplorer";
 
 export default {
     name: 'Process',
     components: {
+        ConnectorExplorer,
         // Connectorbar, Prepbar,
         // NavSidebar, ToolHeader, ToolFooter,
         // DataTable, DataColumnExplorer_old, MainContent,
@@ -147,7 +148,10 @@ export default {
             return dsw_config
         },
         pageDisplayTag() {
-            return this.projectObjects.getPath(this.activePage + '.display_settings.node_view', 0)
+            return this.projectObjects.getPath(this.activeNode + '.display_settings.node_view', 0)
+        },
+        processDisplayTag() {
+            return this.projectObjects.getPath(this.activeProcess + '.display_settings.process_view', 0)
         },
         activeConnectorGroup() {
             return this.projectObjects.getPath(this.activePage + '.data_object_tags.connector.group', null)

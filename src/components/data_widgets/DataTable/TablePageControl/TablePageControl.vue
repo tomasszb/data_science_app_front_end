@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="">
         Rows per page: &nbsp;
         <b-dropdown id="simple-select" :text="pageSize.toString()" variant="light" class="pr-5">
             <b-dropdown-item-button
@@ -10,11 +10,13 @@
                 {{pageSize}}
             </b-dropdown-item-button>
         </b-dropdown>
-        {{firstRow}} - {{lastRow}} of {{dataSize}}
-        <b-button :class="{'icon':true, 'mx-4':true, 'disabled':pageIndex===1}" @click="changePageIndex(-1)">
+        <div class="d-inline-flex">
+            {{firstRow}} - {{lastRow}} of {{dataSize}}
+        </div>
+        <b-button :class="{'icon':true, 'mx-4':true, 'disabled':pageIndex===1 || dataSize==='--'}" @click="changePageIndex(-1)">
             <i class="fa fa-chevron-left fa-lg"/>
         </b-button>
-        <b-button :class="{'icon':true, 'disabled':lastRow===dataSize}" @click="changePageIndex(1)">
+        <b-button :class="{'icon':true, 'disabled':lastRow===dataSize || dataSize==='--'}" @click="changePageIndex(1)">
             <i class="fa fa-chevron-right fa-lg"/>
         </b-button>
     </div>
@@ -42,6 +44,7 @@
         },
         data() {
             return {
+                dataSize: '--'
             }
         },
         computed: {
@@ -78,10 +81,10 @@
             lastRow() {
                 return this.pageIndex * this.pageSize
             },
-            dataSize() {
+            dataSizeLive() {
                 let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.nodeSignature]);
                 let dataFrame = this.dataFrames[dataFrameID];
-                return typeof dataFrame!== "undefined" ? dataFrame['size'] : null
+                return typeof dataFrame!== "undefined" ? dataFrame['size'] : '--'
             }
         },
         methods: {
@@ -97,7 +100,20 @@
                 Vue.set(this, 'pageIndex', this.pageIndex+value);
                 this.$emit('request-table');
             },
+            updateDataSize() {
+                if(this.dataSizeLive!==this.dataSize && this.dataSizeLive!=='--') {
+                    this.dataSize = this.dataSizeLive
+                }
+            }
         },
+        watch: {
+            dataSizeLive(newValue, oldValue) {
+                this.updateDataSize()
+            }
+        },
+        mounted() {
+            this.updateDataSize()
+        }
     };
 </script>
 

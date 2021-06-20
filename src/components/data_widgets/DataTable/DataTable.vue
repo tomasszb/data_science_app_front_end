@@ -1,9 +1,31 @@
 <template>
     <div class="flex-vertical-no-scroll">
-        <div class="data-table" v-if="['loading', 'ready'].includes(status)">
-            <Loader v-if="status==='loading'" :class="'widget-loader'" :size="40"></Loader>
+        <div class="data-table" >
+<!--            <Loader v-if="status==='loading'" :class="'widget-loader'" :size="40"></Loader>-->
             <table>
-                <thead>
+                <div v-if="status === 'not_requested'" class="load-data-area flex-vertical-no-scroll align-items-center">
+                    <b-button
+                        squared
+                        type="button"
+                        size='sm'
+                        variant="gray"
+                        class="load-data-button mb-4"
+                        @click="requestTable(true)"
+                    >
+                        Load Data
+                    </b-button>
+                    <p>
+                        data not loaded yet, click above to load
+                    </p>
+
+                </div>
+                <div v-if="status === 'failed'" class="load-data-area flex-vertical-no-scroll align-items-center">
+                    <p class="text-danger">
+                        failed loading the data, please check your connector
+                    </p>
+
+                </div>
+                <thead v-show="['loading', 'ready'].includes(status)">
                     <tr>
                         <th v-for="(columnName, i) in tableColumns">
                             <div class="table-text">
@@ -17,7 +39,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-show="['loading', 'ready'].includes(status)">
                     <tr v-for="(row, i) in tableData">
                         <td
                                 v-for="columnName in tableColumns"
@@ -31,7 +53,9 @@
                 </tbody>
             </table>
             <div>
+                <hr class="mt-5">
                 <div class="table-footer">
+
                     <table-page-control
                             :nodeID="nodeID"
                             :nodeSignature="activeNodeSignature"
@@ -41,19 +65,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="status === 'not_requested'" class="load-data-area flex-vertical-no-scroll align-items-center">
 
-
-            <b-button type="button" size='lg' variant="gray" class="btn-rounded load-data-button" @click="requestTable()">
-                Load Data
-            </b-button>
-            <br>
-            <p>
-                 the requested data is not loaded yet
-            </p>
-
-
-        </div>
     </div>
 </template>
 
@@ -79,7 +91,9 @@
         },
         data() {
             return {
-                activeNodeSignature: null
+                activeNodeSignature: null,
+                tableColumns: [],
+                tableData: []
             }
         },
         methods: {
@@ -90,7 +104,11 @@
             ...mapActions('proj', [
                 'createDO'
             ]),
-            requestTable() {
+            requestTable(wipeOld=false) {
+                if (wipeOld) {
+                    this.tableData = [];
+                    this.tableColumns = [];
+                }
                 let request = createDataFlowRequest(this.nodeID, ['run_connector', 'get_output_table']);
                 this.UPDATE_NODE_EXECUTION_STATUS({
                     nodeID: this.nodeID,
@@ -99,6 +117,18 @@
                     status: 'requested'});
                 this.$webSocketSend(request);
             },
+            updateData(status) {
+                if (status==='ready') {
+                    if(this.tableColumnsLive!==this.tableColumns) {
+                        this.tableColumns = this.tableColumnsLive
+                    }
+                }
+                if (status==='ready') {
+                    if(this.tableDataLive!==this.tableData) {
+                        this.tableData = this.tableDataLive
+                    }
+                }
+            }
         },
         computed: {
             ...mapState('proj', [
@@ -123,15 +153,18 @@
                 let check1 = typeof this.dataFrames[outputTableID]!== "undefined";
                 let check2 = typeof this.dataFrames[outputTableQuickInfoID]!== "undefined";
 
-                // console.log(status, check1, check2, this.nodeSignature, outputTableID, outputTableQuickInfoID, this.dataFrames)
 
                 if (status==='success' && check1 && check2) {
                     this.activeNodeSignature = this.nodeSignature;
+                    this.updateData('ready')
                     return 'ready'
                 }
-                else if (status==='requested') {
+                else if (status==='requested' || status==='success') {
                     this.activeNodeSignature = this.nodeSignature;
                     return 'loading'
+                }
+                else if (status==='failed') {
+                    return 'failed'
                 }
                 return 'not_requested'
 
@@ -142,15 +175,19 @@
             tableSortID() {
                 return this.nodeSettings.getPath('data_object_tags.output_table_sort', '').toString();
             },
-            tableData() {
+            tableDataLive() {
                 let dataFrameID = getResultObjectID([this.nodeID, 'output_table', this.activeNodeSignature]);
+                // console.log('tableData', dataFrameID)
                 return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
             },
-            tableColumns() {
+            tableColumnsLive() {
                 let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.activeNodeSignature]);
                 let dataFrame = this.dataFrames[dataFrameID];
                 return typeof dataFrame!== "undefined" ? dataFrame['columns'] : []
             }
+        },
+        created() {
+            // this.updateData()
         }
     }
 </script>

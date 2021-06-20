@@ -1,6 +1,6 @@
 <template>
 <div
-        v-if="this.dataLoaded"
+
         :class="[{root: true, sidebarClose, sidebarStatic}, 'sing-dashboard', 'sidebar-' + sidebarColorName, 'sidebar-' + sidebarType]">
   <Sidebar />
   <div class="wrap">

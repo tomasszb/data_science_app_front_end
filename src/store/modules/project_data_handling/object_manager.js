@@ -113,17 +113,72 @@ export default {
                 typeCD,
                 selName=null,
                 existNodeID=null,
+                selPage= null,
                 params=null,
                 selPosition=null,
                 dataObjectTags=null
             }
         ) {
+            let filterID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+            let filterObject = {
+                'id': filterID,
+                "name": "table_filter",
+                "category": 2,
+                "group": 2000,
+                "type": 200004,
+                "tag": "output_table_filter",
+                "parameters": {
+                    "page_size": 10,
+                    "page_index": 1
+                }
+            }
+
+            let sortID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+            let sortObject = {
+                "id": sortID,
+                "category": 2,
+                "group": 2005,
+                "type": 200500,
+                "tag": "output_table_sort",
+                "parameters": {
+                    "columns": {}
+                }
+            }
+
+            let describeID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+            let describeObject = {
+                "id": describeID,
+                "category": 2,
+                "group": 2100,
+                "type": 210000,
+                "tag": "column_stats",
+                "parameters": {}
+            }
+
+            let describeQuickID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
+            let describeQuickObject = {
+                "id": describeQuickID,
+                "category": 2,
+                "group": 2100,
+                "type": 210002,
+                "tag": "output_table_quick_info",
+                "parameters": {}
+            }
+
+            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: filterID, Object: filterObject }, { root: true });
+            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: sortID, Object: sortObject }, { root: true });
+            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: describeID, Object: describeObject }, { root: true });
+            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: describeQuickID, Object: describeQuickObject }, { root: true });
+
             let rg = rootGetters;
             let project = store.state.proj.project;
             let nodeID = getOrDefault(existNodeID, genProjectObjectID());
             // let pageID = getOrDefault(selPage, rg['proj/activePage']);
-            let parameters = getOrDefault(params, {'page_id': rg['proj/activePage']});
-            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/nodeLists'][params.page_id]));
+            let parameters = getOrDefault(
+                params,
+                {'page_id': selPage, 'source_data_node': null, 'secondary_data_nodes': []}
+            );
+            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/nodeLists'][selPage]));
             let name = getOrDefault(selName, defaultNames[typeCD]);
 
             let emptyNode = {
@@ -132,12 +187,21 @@ export default {
                 'group': 3,
                 'type': typeCD,
                 "project_id": project.id,
-                "data_object_tags": dataObjectTags,
+                "data_object_tags": {
+                    ...dataObjectTags,
+                    ...{
+                        "output_table_filter": filterID,
+                        "output_table_sort": sortID,
+                        "column_stats": describeID,
+                        "output_table_quick_info": describeQuickID
+                    }
+                },
                 "relative_position": relativePosition,
                 'parameters': parameters,
                 "display_settings": {}
             };
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID:nodeID, Object: emptyNode}, { root: true });
+            dispatch("setActivePO", {selectedProcess:null, selectedPage:selPage, selectedNode:nodeID});
         },
         copyDataObject(
             {commit, dispatch, rootGetters},
@@ -232,7 +296,7 @@ export default {
                 let childType = childTypes[typeCD];
                 let dataObjectTags2 = {};
                 if (childType===300) {
-                    dataObjectTags2['query'] = null;
+                    // dataObjectTags2['query'] = null;
                 }
                 let name = defaultNames[childType];
                 dispatch('newNode', {typeCD: childType, selName: name, selPage: pageID, dataObjectTags: dataObjectTags2})

@@ -1,28 +1,8 @@
 <template>
-    <div>
-        <b-modal
-                id="new-connector-explorer"
-                title="Explore Database"
-                size="lg"
-                @hide="disableActive"
-                @show="newDataObject(existDataObjectID=null)"
-                body-class="flex-horizontal"
-                no-fade
-                hide-footer
-                hide-header>
-            <connector-form :dataObjectID="dataObjectID" :tag="tag" type="new"/>
-        </b-modal>
-        <b-modal
-                id="existing-connector-explorer"
-                title="Explore Database"
-                size="lg"
-                @hide="disableActive"
-                body-class="flex-horizontal"
-                no-fade
-                hide-footer
-                hide-header>
-            <connector-form :dataObjectID="activeDataObjectID" :tag="tag" type="existing"/>
-        </b-modal>
+    <div id="new-connector-explorer">
+        <connector-form :dataObjectID="dataObjectID" :tag="tag" type="new"/>
+<!--        <connector-form :dataObjectID="activeDataObjectID" :tag="tag" type="existing"/>-->
+        <button @click="goto('po-1160')">click here</button>
     </div>
 </template>
 
@@ -51,7 +31,7 @@
         },
         methods: {
             ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT'
+                'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT',
             ]),
             ...mapActions('proj/object_manager', [
                 'newPage'
@@ -59,19 +39,10 @@
             disableActive() {
                 // this.activeConnectorType = ''
             },
-            newDataObject(existDataObjectID=null) {
-                let newDataObjectID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-                let dataObjectID = existDataObjectID!==null ? existDataObjectID : newDataObjectID;
-                this.UPDATE_DATA_OBJECT({
-                    ObjectID: dataObjectID,
-                    Object: {
-                        'id': dataObjectID,
-                        'type': this.activeConnectorType,
-                        'tag': this.tag,
-                        'parameters': {}
-                    }
-                });
-                this.dataObjectID = dataObjectID;
+            goto(refName) {
+                let element = document.querySelector("#"+refName);
+                let content = document.querySelector("#testing-connector-bar");
+                content.scrollTop= element.offsetTop-content.offsetTop;
             }
         },
         computed: {

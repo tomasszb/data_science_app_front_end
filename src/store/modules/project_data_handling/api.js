@@ -15,6 +15,7 @@ export default {
     },
     actions: {
         createNewProject({commit, dispatch}, {data}) {
+            console.log('createNewProject')
             let newVariables = {version_number: null, id: null, parameters: data, status: "preparing request"}
             commit("proj/UNLOAD_PROJECT_DATA", {}, { root: true });
             dispatch("proj/project_manager/updateProjectVariables",
@@ -41,17 +42,19 @@ export default {
             })
         },
         saveProject({commit, dispatch}, {projectID, projectVersion, projectDataTree}) {
-            console.log(projectDataTree)
+            console.log('saveProject', '/project/'+projectID+'/'+projectVersion+'/', projectDataTree)
             const promise = new Promise((resolve, reject) => {
                 resolve(axios.post('/project/'+projectID+'/'+projectVersion+'/', projectDataTree));
             });
             promise.then(res => {
                 let data = res.data['Response'];
+                dispatch("loadProjectData", {projectID, projectVersion});
             }).catch(err => {
                 dispatch("callError", err.response.data);
             })
         },
         loadProjectData({commit, dispatch}, {projectID, projectVersion}) {
+            console.log('loadProjectData', '/project/'+projectID+'/'+projectVersion+'/objects/')
             commit("proj/UNLOAD_PROJECT_DATA", {}, { root: true });
             localStorage.setItem('project_id', projectID);
             localStorage.setItem('version_number', projectVersion);
@@ -65,7 +68,6 @@ export default {
             });
             promise.then(res => {
                 let data = res.data['Response'];
-                console.log('loadProjectData', data);
                 let newVariables = {version_number: 1, id: data.id, parameters: {}, status: "project loaded"}
                 dispatch("proj/project_manager/updateProjectVariables",
                     {newVariables},

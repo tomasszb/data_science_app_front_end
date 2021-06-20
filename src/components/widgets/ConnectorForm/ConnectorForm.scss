@@ -1,1 +1,6 @@
 @import '../../../styles/app';
+
+.input-group-transparent .form-control {
+  border: $gray-400 solid 1px!important;
+  border-left: none!important;
+}
