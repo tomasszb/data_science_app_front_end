@@ -1,4 +1,34 @@
 @import '../../../styles/app';
+
+.new-process-modal-header {
+  font-size: 13px!important;
+}
+
+.headerLink {
+  a {
+    align-items: center;
+    position: relative;
+    padding-left: 50px;
+    line-height: 35px;
+    border-top: 1px solid $sidebar-item-border-color;
+    display: block;
+    color: var(--sidebar-color);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .icon {
+    font-size: $font-size-larger;
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 11px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+  }
+}
+
 .sidebar {
   position: absolute;
   width: $sidebar-width-open;
@@ -19,6 +49,16 @@
   transition: width $sidebar-transition-time ease-in-out, left $sidebar-transition-time ease-in-out;
 
   @include sidebar-scrollbar();
+}
+
+.sidebar-wrapper-add-new {
+  &:focus {
+
+  }
+
+  background-color: transparent;
+  color: white;
+  border: 0;
 }
 
 .sidebar-transparent .sidebar-wrapper:hover::-webkit-scrollbar-thumb {

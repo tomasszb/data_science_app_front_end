@@ -39,6 +39,8 @@
     import DataObjectSettings from "../../layout/DataObjectSettings/DataObjectSettings";
     import ConnectorType from "@/components/widgets/ConnectorExplorer/ConnectorType/ConnectorType";
     import draggable from 'vuedraggable';
+    import {newDataLoadPage} from "@/core/newObjects/load";
+
     const R = require('ramda');
 
     export default {
@@ -59,46 +61,13 @@
             type: { type: String, default: null },
         },
         methods: {
-            ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT', 'UPDATE_DATA_OBJECT', 'UPDATE_DISPLAY_SETTINGS'
-            ]),
-            ...mapActions('proj/object_manager', [
-                'newPage', 'setActivePO'
-            ]),
+            ...mapMutations('proj', ['UPDATE_DISPLAY_SETTINGS']),
             selectConnectorTypeGroup(connectorType, connectorGroup) {
-                this.newDataObject();
-                let objectID = this.dataObjectID;
-                let object = R.clone(this.dataObjects[objectID]);
-                // console.log('selectConnectorTypeGroup',connectorType, connectorGroup, this.dataConnectorGroups)
-                // console.log('selectConnectorTypeGroup', this.dataObjectTypeMapping)
-                // console.log('selectConnectorTypeGroup', this.dataObjectGroupMapping)
-                object['type'] = connectorType;
-                object['type_text'] = this.dataObjectTypeMapping[connectorType];
-                object['group'] = connectorGroup;
-                object['group_text'] = this.dataObjectGroupMapping[connectorGroup];
-                object['parameters'] = {};
-                this.UPDATE_DATA_OBJECT({ObjectID: objectID, Object: object});
-                this.activeConnectorType = connectorType;
-                this.newPage({
-                    typeCD: 200,
-                    selName: 'New '+this.dataObjectTypeMapping[this.activeConnectorType]+' connector',
-                    dataObjectTags: {'connector': objectID}
+                newDataLoadPage({
+                    processID: this.activeProcess,
+                    connectorType: connectorType
                 });
                 this.resetProcessViewCode();
-            },
-            newDataObject(existDataObjectID=null) {
-                let newDataObjectID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-                let dataObjectID = existDataObjectID!==null ? existDataObjectID : newDataObjectID;
-                this.UPDATE_DATA_OBJECT({
-                    ObjectID: dataObjectID,
-                    Object: {
-                        'id': dataObjectID,
-                        'type': this.activeConnectorType,
-                        'tag': "connector",
-                        'parameters': {}
-                    }
-                });
-                this.dataObjectID = dataObjectID;
             },
             disableActive() {
                 this.activeConnectorType = ''

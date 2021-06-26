@@ -1,6 +1,6 @@
 @import '../../../../styles/app';
 
-.chart-type-option {
+.connector-type-option {
   border-bottom: 4px solid white;
   width: 150px;
   opacity: 80%;
@@ -17,7 +17,7 @@
 
 }
 
-.chart-type-option:hover {
+.connector-type-option:hover {
   opacity: 100%;
 
   img {
@@ -25,7 +25,7 @@
   }
 }
 
-.chart-type-option.active {
+.connector-type-option.active {
   opacity: 100%;
   border-bottom: 4px solid var(--sidebar-item-active)!important;
 }

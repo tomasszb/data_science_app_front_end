@@ -50,18 +50,19 @@
         />
         <div v-show="openSettings===1" class="p-2 chartbar-parameters">
             <div
-                    v-for="(prop, i) in filteredChartProperties"
-                    :key="'chart-form-container-'+activeNode+i"
+                v-for="(prop, i) in filteredChartProperties"
+                :key="'chart-form-container-'+activeNode+i"
             >
                 <div class="chartbar-parameters-form-container c-100 d-inline-flex pb-3 pt-3">
                     <div class=" c-40 mr-3 d-flex align-items-center align-content-center">
                         <div class="c-100 chartbar-parameters-form align-items-center align-content-center">
                             <FormContainer
-                                    :route="['template'].concat(prop.path).concat(prop.name.split('.').slice(0, -1))"
-                                    :parameterIndex="prop.name.split('.').slice(-1)[0]"
-                                    :typeSettings="prop.type"
-                                    :objectID="activeNodeSettings.data_object_tags.chart_template"
-                                    :showLabel="false"
+
+                                :route="['template'].concat(prop.path).concat(prop.name.split('.').slice(0, -1))"
+                                :parameterIndex="prop.name.split('.').slice(-1)[0]"
+                                :typeSettings="prop.type"
+                                :objectID="activeNodeSettings.data_object_tags.chart_template"
+                                :showLabel="false"
                             />
                         </div>
                     </div>
@@ -279,11 +280,11 @@
                 }
             },
             activeNodeSettings() {
-                return this.projectObjects[this.activeNode]
+                return this.projectObjects.getKeyOrDefault(this.activeNode, {})
             },
             activeChartType() {
                 // console.log(this.activeNodeSettings,this.activeNode,this.projectObjects);
-                return this.activeNodeSettings['display_settings']['active_chart_type']
+                return this.activeNodeSettings.getPath('display_settings.active_chart_type', null)
             }
 
         }

@@ -228,6 +228,7 @@ export default {
             Vue.set(state.selectedNodes, activePage, activeNode);
         },
         UPDATE_PROJECT_OBJECT(state, {ObjectID, Object}) {
+            console.log('UPDATE_PROJECT_OBJECT', Object)
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
             if (index === null) {
                 state.projectData['project_objects'].push(Object);
@@ -250,6 +251,7 @@ export default {
             Vue.delete(state.projectData['project_objects'], index);
         },
         UPDATE_DATA_OBJECT(state, {ObjectID, Object}) {
+            console.log('UPDATE_DATA_OBJECT', Object)
             let index = getObjectIndex(state.projectData['project_data_objects'], ObjectID);
             if (index === null) {
                 state.projectData['project_data_objects'].push(Object)

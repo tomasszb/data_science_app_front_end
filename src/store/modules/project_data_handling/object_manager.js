@@ -1,67 +1,11 @@
 import axios from "axios";
 import router from "../../../Routes";
+import {newFilterObject, newSortObject, newDescribeObject, newDescribeQuickObject} from "../../../core/newObjects/common";
 import TreeModel from 'tree-model'
 import {get_active_object} from "../../../core/projectManager";
 import store from "@/store";
 const R = require('ramda');
 
-function getOrDefault(providedValue, defaultValue) {
-    if (providedValue===null) {
-        return defaultValue
-    }
-    else if (typeof providedValue==='undefined') {
-        return defaultValue
-    }
-    return providedValue;
-}
-
-function genProjectObjectID() {
-    return 'po-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-}
-
-function genDataObjectID() {
-    return 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-}
-
-function getPosition(list) {
-    return typeof list !== 'undefined' ? list.length + 1 : 1
-}
-
-function getPrevious(ObjectID) {
-    return typeof list !== 'undefined' ? list.length + 1 : 1
-}
-
-const defaultNames = {
-    100: 'Load Data',
-    101: 'Prepare Data',
-    102: 'Export',
-    103: 'Visualize',
-    200: 'Connector',
-    201: 'Prepare',
-    202: 'Export',
-    203: 'Dashboard',
-    300: 'Query',
-    301: 'Action',
-    302: 'Export',
-    303: 'Chart',
-    400: 'Load Element',
-    401: 'Action Element',
-    402: 'Chart Element'
-};
-
-const childTypes = {
-    100: 200,
-    101: 201,
-    102: 202,
-    103: 203,
-    200: 300,
-    201: 301,
-    202: 302,
-    203: 303,
-    300: 400,
-    301: 401,
-    303: 402
-};
 
 export default {
     namespaced: true,
@@ -109,105 +53,65 @@ export default {
         },
         newNode(
             {commit, dispatch, rootGetters},
-            {
-                typeCD,
-                selName=null,
-                existNodeID=null,
-                selPage= null,
-                params=null,
-                selPosition=null,
-                dataObjectTags=null
-            }
+            {typeCD, name, nodeID, pageID, position, dataObjectTags, sourceNodeID=null}
         ) {
-            let filterID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            let filterObject = {
-                'id': filterID,
-                "name": "table_filter",
-                "category": 2,
-                "group": 2000,
-                "type": 200004,
-                "tag": "output_table_filter",
-                "parameters": {
-                    "page_size": 10,
-                    "page_index": 1
-                }
-            }
-
-            let sortID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            let sortObject = {
-                "id": sortID,
-                "category": 2,
-                "group": 2005,
-                "type": 200500,
-                "tag": "output_table_sort",
-                "parameters": {
-                    "columns": {}
-                }
-            }
-
-            let describeID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            let describeObject = {
-                "id": describeID,
-                "category": 2,
-                "group": 2100,
-                "type": 210000,
-                "tag": "column_stats",
-                "parameters": {}
-            }
-
-            let describeQuickID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-            let describeQuickObject = {
-                "id": describeQuickID,
-                "category": 2,
-                "group": 2100,
-                "type": 210002,
-                "tag": "output_table_quick_info",
-                "parameters": {}
-            }
-
-            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: filterID, Object: filterObject }, { root: true });
-            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: sortID, Object: sortObject }, { root: true });
-            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: describeID, Object: describeObject }, { root: true });
-            commit("proj/UPDATE_DATA_OBJECT", { ObjectID: describeQuickID, Object: describeQuickObject }, { root: true });
-
-            let rg = rootGetters;
-            let project = store.state.proj.project;
-            let nodeID = getOrDefault(existNodeID, genProjectObjectID());
-            // let pageID = getOrDefault(selPage, rg['proj/activePage']);
-            let parameters = getOrDefault(
-                params,
-                {'page_id': selPage, 'source_data_node': null, 'secondary_data_nodes': []}
-            );
-            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/nodeLists'][selPage]));
-            let name = getOrDefault(selName, defaultNames[typeCD]);
-
             let emptyNode = {
                 'id': nodeID,
                 'name': name,
                 'group': 3,
                 'type': typeCD,
-                "project_id": project.id,
-                "data_object_tags": {
-                    ...dataObjectTags,
-                    ...{
-                        "output_table_filter": filterID,
-                        "output_table_sort": sortID,
-                        "column_stats": describeID,
-                        "output_table_quick_info": describeQuickID
-                    }
+                "project_id": store.state.proj.project.id,
+                "data_object_tags": dataObjectTags,
+                "relative_position": position,
+                'parameters': {
+                    'page_id': pageID,
+                    'source_data_node': sourceNodeID,
+                    'secondary_data_nodes': []
                 },
-                "relative_position": relativePosition,
-                'parameters': parameters,
                 "display_settings": {}
             };
-            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID:nodeID, Object: emptyNode}, { root: true });
-            dispatch("setActivePO", {selectedProcess:null, selectedPage:selPage, selectedNode:nodeID});
+            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: nodeID, Object: emptyNode}, { root: true });
+            dispatch("setActivePO", {selectedProcess:null, selectedPage:pageID, selectedNode:nodeID});
+        },
+        newPage(
+            {commit, dispatch, rootGetters},
+            {typeCD, name, pageID, processID, position, dataObjectTags}
+        ) {
+            let emptyPage = {
+                'id': pageID,
+                'name': name,
+                'group': 2,
+                'type': typeCD,
+                "project_id": store.state.proj.project.id,
+                "data_object_tags": dataObjectTags,
+                "relative_position": position,
+                'parameters': {
+                    'process_id': processID,
+                },
+                "display_settings": {}
+            };
+            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: pageID, Object: emptyPage}, { root: true });
+        },
+        newProcess(
+            {commit, dispatch, rootGetters},
+            {typeCD, name, processID, position, dataObjectTags}
+        ) {
+            let emptyProcess = {
+                'id': processID,
+                'name': name,
+                'group': 1,
+                'type': typeCD,
+                "project_id": store.state.proj.project.id,
+                "data_object_tags": dataObjectTags,
+                "relative_position": position,
+                'parameters': {},
+                "display_settings": {}
+            };
+            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: processID, Object: emptyProcess}, { root: true });
         },
         copyDataObject(
             {commit, dispatch, rootGetters},
-            {
-               dataObjectID
-            }
+            {dataObjectID}
         ) {
             let dataObject = R.clone(rootGetters['proj/dataObjects'][dataObjectID]);
             let newDataObjectID = genDataObjectID();
@@ -217,9 +121,7 @@ export default {
         },
         copyProjectObject(
             {commit, dispatch, rootGetters},
-            {
-                projectObjectID
-            }
+            {projectObjectID}
         ) {
             let projectObject = R.clone(rootGetters['proj/projectObjects'][projectObjectID]);
             let newProjectObjectID = genProjectObjectID();
@@ -234,9 +136,7 @@ export default {
         },
         deleteProjectObject(
             {commit, dispatch, rootGetters},
-            {
-                projectObjectID
-            }
+            {projectObjectID}
         ) {
 
             let dictTree = rootGetters['proj/ProjectTree'];
@@ -245,7 +145,6 @@ export default {
             let selectedPO = ProjectTree.first(function (obj) {
                 return obj.model.id.toString() === projectObjectID.toString();
             });
-
 
             let projectObject = R.clone(rootGetters['proj/projectObjects'][projectObjectID]);
             for (const [tag, dataObjectID] of Object.entries(projectObject['data_object_tags'])) {
@@ -257,49 +156,6 @@ export default {
             for (const child of selectedPO.children) {
                 // deleteProjectObject({projectObjectID: child.model.id})
                 dispatch("deleteProjectObject", {projectObjectID:child.model.id});
-            }
-        },
-        newPage(
-            {commit, dispatch, rootGetters},
-            {
-                typeCD,
-                selName,
-                existPageID=null,
-                selProcess=null,
-                selPosition=null,
-                createChild=true,
-                dataObjectTags=null
-            }
-        ) {
-            let rg = rootGetters;
-            let project = store.state.proj.project;
-            let pageID = getOrDefault(existPageID, genProjectObjectID());
-            let processID = getOrDefault(selProcess, rg['proj/activeProcess']);
-            let relativePosition = getOrDefault(selPosition, getPosition(rg['proj/pageLists'][processID]));
-            let name = getOrDefault(selName, defaultNames[typeCD]);
-
-            let emptyPage = {
-                'id': pageID,
-                'name': name,
-                'group': 2,
-                'type': typeCD,
-                "project_id": project.id,
-                "relative_position": relativePosition,
-                "data_object_tags": dataObjectTags,
-                'parameters': {
-                    'process_id': processID,
-                },
-                "display_settings": {}
-            };
-            commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: pageID, Object: emptyPage}, { root: true });
-            if (createChild) {
-                let childType = childTypes[typeCD];
-                let dataObjectTags2 = {};
-                if (childType===300) {
-                    // dataObjectTags2['query'] = null;
-                }
-                let name = defaultNames[childType];
-                dispatch('newNode', {typeCD: childType, selName: name, selPage: pageID, dataObjectTags: dataObjectTags2})
             }
         }
     },

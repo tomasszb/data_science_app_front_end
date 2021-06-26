@@ -50,7 +50,7 @@
                 <!--                :columnStats="column"-->
                 <!--            />-->
             </div>
-            <div v-if="status === 'not_requested'" class="load-data-area flex-vertical-no-scroll align-items-center">
+            <div v-if="status === 'not_requested'" class="load-data-area align-items-center">
                 <b-button
                     squared
                     type="button"
@@ -62,7 +62,7 @@
                     Load Column Info
                 </b-button>
                 <p>
-                    column details are not loaded yet, click above to load
+                    click to load data details
                 </p>
 
             </div>

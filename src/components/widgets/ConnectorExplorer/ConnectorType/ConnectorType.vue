@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'active': active, 'chart-type-option': true}" :id="'connector-type-image-'+name">
+    <div :class="{'active': active, 'connector-type-option': true}" :id="'connector-type-image-'+name">
         <img :src="charts[name]" :alt="name"   class="m-2 mx-auto d-block">
 
         <b-tooltip :target="'connector-type-image-'+name" placement="bottom">

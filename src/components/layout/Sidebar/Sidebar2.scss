@@ -1,0 +1,19 @@
+@import '../../../styles/app';
+
+#new-process {
+  .modal-content {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .modal-footer {
+    border-top: none;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    h5 {
+      font-size: 14px;
+    }
+  }
+}

@@ -2,88 +2,36 @@
 
 .source-node-selector {
   cursor: pointer;
-  padding: 10px 10px 10px 15px;
-  margin: 3px 3px 3px 3px;
   display: flex;
-  align-items: center;
-  font-size: 12px;
+  width: 100%;
+  white-space:normal;
   background-color: var(--sidebar-item-active);
-  border-left: 7px solid var(--sidebar-item-active);
-  height: $prep-selector;
+  height: $source-node-selector;
 
-  .pill-buttons {
-    font-size: 14px;
-    line-height: 15px;
-    color: $gray-600;
-    min-width: 10px!important;
-    //margin-top: -6px;
-    //margin-left: 10px;
-    .fa-sort-down {
-      margin-top: -2px;
-    }
+  button {
+    background-color: transparent!important;
+    border: none;
+    white-space: normal;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+    max-width: calc(100% - 30px);
 
-    button {
-      padding: 0;
-    }
-
-    i {
-      margin-left: 12px;
-    }
   }
 
   .dropdown-toggle {
     background-color: transparent!important;
     border: none;
-  }
-
-
-  .source-node-selector-text {
-    line-height: 17px;
-  }
-
-  .source-node-selector-detail {
-    font-size: 12px;
-    font-weight: 500;
-    margin-top: 5px;
-  }
-
-  .source-node-selector-text {
-    margin-right: 5px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 0 12px 0 8px;
-    color: $gray-800;
-    font-size: 12px;
-    line-height: 15px;
-    font-weight: 600;
-    width: 100%;
-  }
-
-  .source-node-selector-detail {
-    padding: 0 12px 0 8px;
-    font-size: 10px;
-    line-height: 13px;
+    max-width: 30px!important;
   }
 
 }
 
-.source-node-selector.active {
-  //border-left: solid var(--sidebar-item-active) 5px;
-  background-color: white!important;
-  border-left: 7px solid var(--sidebar-item-active);
-
-  .pill-buttons, .source-node-selector-text {
-    color: $gray-700;
-  }
-
-  .input {
-    background-color: var(--sidebar-item-active-faded)!important;
-    box-shadow: none;
-
-    span {
-      outline: none;
-    }
-
-  }
+.source-node-selector-text {
+  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: hidden;
+  display: inline-block;
+  max-width: calc(100%);
 }
+

@@ -1,10 +1,10 @@
 
 export default {
   projectObjectSettings: {
-    [100]: {'sideIcon': 'flaticon-database-1', 'link': 'proc'},
-    [101]: {'sideIcon': 'flaticon-server-1', 'link': 'proc'},
-    [102]: {'sideIcon': 'flaticon-upload', 'link': 'proc'},
-    [103]: {'sideIcon': 'flaticon-controls', 'link': 'proc'},
+    [100]: {'sideIcon': 'fa-database', 'link': 'proc'},
+    [101]: {'sideIcon': 'fa-tasks', 'link': 'proc'},
+    [102]: {'sideIcon': 'fa-dashboard', 'link': 'proc'},
+    [103]: {'sideIcon': 'fa-dashboard', 'link': 'proc'},
   },
   // ################################  PROJECT OBJECTS  ################################
 

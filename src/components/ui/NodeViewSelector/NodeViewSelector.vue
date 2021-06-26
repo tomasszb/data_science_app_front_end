@@ -49,7 +49,8 @@
                 processViewMapping : {
                     100: [1,2],
                     101: [1,2],
-                    102: [1,2]
+                    102: [1,2],
+                    103: [1,2]
                 },
                 processViewNameCodes : {
                     1: 'existing_object',

@@ -1,55 +1,45 @@
 <template>
-    <div class="page-column-bar">
-        <b-dropdown :text="projectObjects[selectedInputNodeID].name" class="page-columnbar-picker mb-4">
-            <b-dropdown-item-button
-                    v-for="(nodeID, i) in inputNodeIDs"
-                    :key="'table-page_option-'+i"
-                    @click="selectInputNodeID(nodeID)"
+    <div class="page-column-bar flex-vertical-no-scroll pb-4">
+        <source-node-selector></source-node-selector>
+        <div class="text-gray-light small font-weight-bold mt-2 mb-2">
+            Columns
+        </div>
+        <div class="flex-vertical">
+            <draggable
+                v-model="columnList"
+                :group="{ name: 'columns', pull: 'clone', put: false }"
+                ghost-class="ghost"
+                drag-class="dragged"
+                animation="200"
             >
-                {{projectObjects[nodeID].name}}
-            </b-dropdown-item-button>
-        </b-dropdown>
-        <br>
-        <draggable
-            v-model="columnList"
-            :group="{ name: 'columns', pull: 'clone', put: false }"
-            ghost-class="ghost"
-            drag-class="dragged"
-            animation="200"
-        >
-            <ColumnButton
+                <ColumnButton
                     v-for="column in columnList"
                     :key="'po-column-'+column.name"
                     :name="column.name"
                     :type="column.type"
-            />
-        </draggable>
-        <Widget
-                class="mt-3"
-                title="<h6>Aggregated <span class='fw-semi-bold'>values</span></h6>"
-                collapse customHeader
-        >
-            <div class="chart-column-container p-3 pb-3">
-
-            </div>
-        </Widget>
+                />
+            </draggable>
+        </div>
     </div>
 </template>
 
 <script>
     import {mapGetters, mapMutations, mapState} from "vuex";
     import ColumnButton from "./ColumnButton/ColumnButton"
+    import SourceNodeSelector from "@/components/widgets/SourceNodeSelector/SourceNodeSelector";
     import { getResultObjectID } from '@/core/projectManager';
     import draggable from 'vuedraggable';
+    import Vue from "vue";
 
     export default {
         name: 'Pagecolumnbar',
         components: {
-            ColumnButton, draggable
+            ColumnButton, SourceNodeSelector, draggable
         },
         data() {
             return {
-                selectedInputNodeID: null
+                resultObjectID: null,
+                columnList: null
             }
         },
         prop: {
@@ -61,6 +51,18 @@
             ]),
             selectInputNodeID(inputNodeID) {
                 this.selectedInputNodeID = inputNodeID
+            },
+            getColumnList() {
+                let result = []
+                let columns = this.dataFrames[this.resultObjectID]["columns"];
+                let types = this.dataFrames[this.resultObjectID]["column_types"];
+                for (let i = 0; i < columns.length ;i++) {
+                    result.push({'name': columns[i], 'type': types[columns[i]]})
+                }
+                return result
+            },
+            getResultObjectID() {
+                return getResultObjectID([this.selectedInputNodeID, 'output_table_quick_info', this.nodeSignatures[this.selectedInputNodeID]])
             }
         },
         computed: {
@@ -73,52 +75,24 @@
             ...mapState('proj', [
                 'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements', 'dataFrames'
             ]),
-            inputNodeIDs() {
-                let processIndex = this.processList.indexOf(this.activeProcess);
-                let previousNodeIDs = [];
-
-                for (let i=0; i<processIndex; i++) {
-                    let previousProcessId = this.processList[i];
-                    let previousPageIDs = this.pageLists[previousProcessId];
-                    for (let pageID of previousPageIDs) {
-                        previousNodeIDs = previousNodeIDs.concat(this.nodeLists[pageID])
-                    }
-                }
-                return previousNodeIDs
-            },
-            resultObjectID() {
-                return getResultObjectID([this.selectedInputNodeID, 'output_table_quick_info', this.nodeSignatures[this.selectedInputNodeID]])
-            },
-            columnList() {
-                let result = []
-                console.log(this.resultObjectID, this.dataFrames)
-                let columns = this.dataFrames[this.resultObjectID]["columns"];
-                let types = this.dataFrames[this.resultObjectID]["column_types"];
-                for (let i = 0; i < columns.length ;i++) {
-                    result.push({'name': columns[i], 'type': types[columns[i]]})
-                }
-                return result
+            selectedInputNodeID() {
+                return this.projectObjects.getPath(this.activePage+".display_settings.selected_source_node", '')
             }
         },
         watch: {
-            activeNode: function(activeNodeID) {
-                if(this.activeNode!==null) {
-                    if (this.projectObjects.getPath(this.activeNode+'.parameters.source_data_node', null)!==null) {
-                        this.selectedInputNodeID = this.projectObjects[this.activeNode].parameters.source_data_node.toString()
-                    }
+            selectedInputNodeID(newValue, oldValue) {
+                if(newValue!==null) {
+                    Vue.set(this, 'resultObjectID', this.getResultObjectID());
+                    Vue.set(this, 'columnList', this.getColumnList());
                 }
             }
         },
-        created() {
-            if(this.activeNode!==null) {
-                if (this.projectObjects.getPath(this.activeNode+'.parameters.source_data_node', null)!==null) {
-                    this.selectedInputNodeID = this.projectObjects[this.activeNode].parameters.source_data_node.toString()
-                }
-            }
-            else {
-                this.selectedInputNodeID = this.inputNodeIDs[0]
-            }
+        mounted() {
+            if (this.selectedInputNodeID!==null) {
+                Vue.set(this, 'resultObjectID', this.getResultObjectID());
+                Vue.set(this, 'columnList', this.getColumnList());
 
+            }
         }
 
     };

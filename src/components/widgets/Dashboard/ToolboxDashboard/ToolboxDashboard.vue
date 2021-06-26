@@ -74,8 +74,8 @@ import BooleanIconForm from "@/components/forms/simple/BooleanIconForm/BooleanIc
         computed: {
             ...mapGetters('proj', ['activePage', 'projectObjects', 'dataObjects']),
             dataObjectID() {
-                let dataObjectTags =  getObjectSetting(this.projectObjects, this.activePage, 'data_object_tags',{});
-                return dataObjectTags["dashboard"].toString()
+                let dataObjectTags = this.projectObjects.getPath(this.activePage+'.data_object_tags', {});
+                return dataObjectTags.hasOwnProperty('dashboard') ? dataObjectTags['dashboard'].toString() : ''
             },
         },
         methods: {

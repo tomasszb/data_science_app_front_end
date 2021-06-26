@@ -214,7 +214,7 @@ export default {
         },
         {
           "id": 192,
-          "category": 2,
+          "category": 3,
           "group": 3200,
           "type": 320000,
           "category_text": "Visualization",

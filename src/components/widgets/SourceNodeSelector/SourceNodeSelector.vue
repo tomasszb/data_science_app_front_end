@@ -1,56 +1,39 @@
 <template>
-    <div class="source-node-selector mb-4">
-        <div class="c-100 d-inline-flex">
-            <div class="source-node-selector-position mt-2 mr-3">
-                <h4>#0</h4>
-            </div>
-            <div class="d-inline-flex c-100 align-items-center justify-content-between">
-                <div class="source-node-selector-text-area">
-                    <div
-                        class="source-node-selector-text">
-                        {{projectObjects[selectedInputNodeID]["name"]}}
-                    </div>
-                    <div class="source-node-selector-detail">
-                        Select Source Data
-                    </div>
-                </div>
-
-                <div class="pill-buttons  d-inline-flex align-items-center">
-                    <b-nav class="mx-1">
-                        <b-dropdown
-                            text=""
-                            block
-                            right
-                            offset="15"
-                            menu-class="c-95 mt-4"
-                            boundary="testing-connector-bar"
-                        >
-                            <div v-for="(nodes, processName) in inputNodeIDs">
-                                <b-dropdown-item disabled> <strong>{{processName}}</strong></b-dropdown-item>
-                                <b-dropdown-item
-                                    @click="selectedInputNodeID=nodeID"
-                                    v-for="(nodeName, nodeID) in nodes"
-                                >
-                                    {{nodeName}}
-                                </b-dropdown-item>
-                            </div>
-
-                        </b-dropdown>
-                    </b-nav>
-                </div>
-            </div>
+    <div>
+        <div class="text-gray-light small font-weight-bold mt-2 mb-2">
+            Data Source
         </div>
+        <div class="source-node-selector mb-4">
+            <b-dropdown
+                block
+                split
+                class="d-inline-flex c-100"
+                menu-class="w-100 mt-3"
+            >
+                <template slot="button-content">
+                    <div class="d-inline-flex c-100 align-items-center">
+                        <i class='fa fa-link mr-3'/>
+                        <div class="source-node-selector-text">
+                            {{projectObjects[selectedInputNodeID]['name']}}
+                        </div>
+                    </div>
 
+                </template>
+                <div v-for="(nodes, processName) in inputNodes[0]">
+                    <b-dropdown-group id="dropdown-group-1" :header="processName">
+                        <b-dropdown-item
+                            @click="selectedInputNodeID=nodeID"
+                            v-for="(nodeName, nodeID) in nodes"
+                        >
+                            {{nodeID}}-{{nodeName}}
+                        </b-dropdown-item>
+                    </b-dropdown-group>
+                    <b-dropdown-divider/>
+                </div>
+            </b-dropdown>
 
+        </div>
     </div>
-
-
-<!--    <advanced-select-->
-<!--        v-model="value"-->
-<!--        :options="options"-->
-<!--        :multiple="false"-->
-<!--        :collapse-headers="true"-->
-<!--    />-->
 </template>
 
 <script>
@@ -97,19 +80,26 @@
             ]),
             selectedInputNodeID: {
                 get() {
-                    return this.projectObjects[this.activeNode].parameters.source_data_node.toString()
+                    let result = this.projectObjects.getPath(
+                        this.activePage+".display_settings.selected_source_node",
+                        null
+                    );
+                    if (result===null) {
+                        Vue.set(this, 'selectedInputNodeID', this.inputNodes[1][0]);
+                    }
+                    return this.projectObjects[this.activePage]["display_settings"]["selected_source_node"]
                 },
                 set(newValue) {
-                    // console.log('setting new value selectedInputNodeID', newValue);
-                    let obj = R.clone(this.projectObjects[this.activeNode]);
-                    obj.parameters.source_data_node = newValue;
-                    this.UPDATE_PROJECT_OBJECT({ObjectID: this.activeNode, Object: obj})
+                    let obj = R.clone(this.projectObjects[this.activePage]);
+                    obj = obj.setPath('display_settings.selected_source_node', newValue);
+                    this.UPDATE_PROJECT_OBJECT({ObjectID: this.activePage, Object: obj})
                 }
             },
-            inputNodeIDs() {
+            inputNodes() {
                 let processIndex = this.processList.indexOf(this.activeProcess);
                 let pageIndex = this.pageLists[this.activeProcess].indexOf(this.activeProcess);
                 let previousNodeIDs = {};
+                let previousNodeIDsList = []
 
                 for (let i=0; i<=processIndex; i++) {
                     let previousProcessId = this.processList[i];
@@ -129,16 +119,18 @@
                             if (processGroup === 1) {
                                 for (let nodeID of this.nodeLists[pageID]) {
                                     previousNodeIDs[processName][nodeID] = this.projectObjects[nodeID]["name"];
+                                    previousNodeIDsList.push(nodeID);
                                 }
                             }
                             if (processGroup === 2) {
                                 let nodeID = this.nodeLists[pageID][-1];
                                 previousNodeIDs[processName][nodeID] = this.projectObjects[nodeID]["name"];
+                                previousNodeIDsList.push(nodeID);
                             }
                         }
                     }
                 }
-                return previousNodeIDs
+                return [previousNodeIDs, previousNodeIDsList]
             }
         },
         methods: {

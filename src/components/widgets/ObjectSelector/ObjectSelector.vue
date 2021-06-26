@@ -78,7 +78,14 @@
         data() {
             return {
                 editedObject: null,
-                maxInputTextLen: 40
+                maxInputTextLen: 40,
+                typeText: {
+                    '100000': 'MySQL',
+                    '100001': 'PostgreSQL',
+                    '100002': 'SQLite',
+                    '100100': 'CSV',
+                    '100101': 'Feather'
+                }
             }
         },
         directives: {
@@ -127,14 +134,14 @@
                 if (this.detailType==='connector_type') {
                     if (this.connectedDataObjects.hasOwnProperty('connector')) {
                         let connectorID = this.connectedDataObjects['connector'];
-                        detail = this.dataObjects[connectorID]['type_text'];
+                        detail = this.typeText[this.dataObjects[connectorID]['type']];
 
                     }
                 }
                 if (this.detailType==='action_description') {
                     if (this.connectedDataObjects.hasOwnProperty('action')) {
                         let actionID = this.connectedDataObjects['action'];
-                        detail = this.dataObjects[actionID]['type_text'];
+                        detail = this.typeText[this.dataObjects[actionID]['type']];
                     }
                 }
                 return detail

@@ -61,17 +61,29 @@
             <tool-header></tool-header>
             <div class="flex-vertical">
                 <div class="flex-horizontal">
-                    <nav-sidebar :defaultWidth="300" :minWidth="200" :maxWidth="700" settingPrefix="column">
+                    <nav-sidebar
+                        :defaultWidth="200"
+                        :minWidth="150"
+                        :maxWidth="250"
+                        settingPrefix="column"
+                    >
                         <page-columnbar/>
                     </nav-sidebar>
-                    <nav-sidebar :defaultWidth="400" :minWidth="130" :maxWidth="700" settingPrefix="chart" class="vis-sidebar-2">
+                    <nav-sidebar
+                        v-if="nodeTagsChartTemplate!==null"
+                        :defaultWidth="200"
+                        :minWidth="150"
+                        :maxWidth="250"
+                        settingPrefix="chart"
+                        class="vis-sidebar-2"
+                    >
                         <chartbar/>
                     </nav-sidebar>
                     <main-content>
                         <template v-slot:node-view-selector>
                             <node-view-selector/>
                         </template>
-<!--                        <dashboard></dashboard>-->
+                        <dashboard></dashboard>
                     </main-content>
                 </div>
                 <tool-footer>
@@ -149,6 +161,9 @@ export default {
         },
         pageDisplayTag() {
             return this.projectObjects.getPath(this.activeNode + '.display_settings.node_view', 0)
+        },
+        nodeTagsChartTemplate() {
+            return this.projectObjects.getPath(this.activeNode + '.data_object_tags.chart_template', null)
         },
         processDisplayTag() {
             return this.projectObjects.getPath(this.activeProcess + '.display_settings.process_view', 0)

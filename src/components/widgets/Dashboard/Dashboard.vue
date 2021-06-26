@@ -1,7 +1,6 @@
 <template>
     <div class="chart-dashboard r-100 c-100">
         <div class="chart-dashboard-grid-container r-95">
-            {{activeNodeSettings['data_object_tags']}}
             <section class="grid-stack">
                 <dashboard-item
                     v-for="(nodeID, index) in nodeLists[activePage]"
@@ -22,7 +21,7 @@
         </div>
         <toolbox-dashboard
             :grid="grid"
-            @add-dashboard-item="addNewWidget()"
+            @add-dashboard-item="addNewNode()"
         />
     </div>
 </template>
@@ -39,6 +38,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import {getObjectSetting} from "@/core/projectObjectParser";
     const R = require('ramda');
     import Vue from 'vue'
+import {newDataVisualizationNode} from "@/core/newObjects/visualize";
 
     export default {
         name: 'Dashboard',
@@ -77,10 +77,14 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                     selectedNode:nodeID
                 });
             },
-            addNewWidget: function () {
-                let visID = this.newDataObject(310000);
-                let pivotID = this.newDataObject(200601);
-                let temlateID = this.newDataObject(300000);
+            addNewNode: function () {
+                let result = newDataVisualizationNode({
+                    pageID: this.activePage,
+                    sourceNodeID: this.activeSourceNode
+                })
+
+                let visID = result.dataObjects.data_visualization
+
                 let newDashboardItem = {
                     id: 'do-vis-'+visID,
                     visualization_object: visID,
@@ -91,18 +95,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                         h: 20,
                     }
                 }
-                // let dashSettings = {type: 320000}
-                let newProjectObjectSettings = {
-                    typeCD: 303,
-                    name: '',
-                    dataObjectTags: {
-                        'data_visualization': visID,
-                        'visualization_pivot': pivotID,
-                        'chart_template': temlateID
-                    },
-                    params: {'page_id': this.activePage, source_data_node: this.activeSourceNode}
-                }
-                this.newNode(newProjectObjectSettings)
+
                 let charts = R.clone(this.dashboardItems);
                 charts[visID] = (newDashboardItem);
                 Vue.set(this, 'dashboardItems', charts);
@@ -112,8 +105,8 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                 });
             },
             getDataVisID(nodeID) {
-                let dataObjectTags = this.projectObjects[nodeID]['data_object_tags'];
-                return 'data_visualization' in dataObjectTags ? dataObjectTags['data_visualization'] : ''
+                let dataObjectTags = this.projectObjects.getPath(nodeID+'data_object_tags', {});
+                return dataObjectTags.hasOwnProperty('data_visualization') ? dataObjectTags['data_visualization'] : ''
             }
         },
         data() {
@@ -134,14 +127,17 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                 'selectedProcess', 'selectedPages', 'selectedNodes'
             ]),
             dataObjectID() {
-                let dataObjectTags =  getObjectSetting(this.projectObjects, this.activePage, 'data_object_tags',{});
-                return dataObjectTags["dashboard"].toString()
+                let dataObjectTags =  this.projectObjects.getPath(this.activePage+'.data_object_tags', {});
+                return dataObjectTags.hasOwnProperty('dashboard') ? dataObjectTags['dashboard'].toString() : ''
             },
             dataObjectParameters() {
                 return this.dataObjects[this.dataObjectID]['parameters']
             },
             activeSourceNode() {
-                return this.projectObjects[this.activeNode]['parameters']['source_data_node']
+                return this.projectObjects.getPath(
+                    this.activePage+".display_settings.selected_source_node",
+                    null
+                );
             },
             activeNodeSettings() {
                 return this.projectObjects[this.activeNode]

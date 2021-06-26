@@ -1,24 +1,25 @@
 <template>
     <div class="flex-vertical-no-scroll">
+        <div v-if="status === 'not_requested'" class="load-data-area align-items-center">
+            <b-button
+                squared
+                type="button"
+                size='sm'
+                variant="gray"
+                class="load-data-button mb-4"
+                @click="requestTable(true)"
+            >
+                Load Data
+            </b-button>
+            <p>
+                click to load data
+            </p>
+        </div>
         <div class="data-table" >
 <!--            <Loader v-if="status==='loading'" :class="'widget-loader'" :size="40"></Loader>-->
-            <table>
-                <div v-if="status === 'not_requested'" class="load-data-area flex-vertical-no-scroll align-items-center">
-                    <b-button
-                        squared
-                        type="button"
-                        size='sm'
-                        variant="gray"
-                        class="load-data-button mb-4"
-                        @click="requestTable(true)"
-                    >
-                        Load Data
-                    </b-button>
-                    <p>
-                        data not loaded yet, click above to load
-                    </p>
 
-                </div>
+            <table>
+
                 <div v-if="status === 'failed'" class="load-data-area flex-vertical-no-scroll align-items-center">
                     <p class="text-danger">
                         failed loading the data, please check your connector
