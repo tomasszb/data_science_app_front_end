@@ -198,11 +198,11 @@
             if (this.typeSettings.hasOwnProperty('default')) {
                 let parentParameters = this.dataObjects[this.objectID]['parameters']
                 if (typeof getObjectByRoute(this.route, parentParameters)[this.parameterIndex] === 'undefined') {
-                    this.SET_DO_PARAMETER({
-                        id: parseInt(this.objectID),
-                        route: this.route.concat(this.parameterIndex),
-                        value: this.typeSettings['default']
-                    })
+                    // this.SET_DO_PARAMETER({
+                    //     id: parseInt(this.objectID),
+                    //     route: this.route.concat(this.parameterIndex),
+                    //     value: this.typeSettings['default']
+                    // })
                 }
 
             }

@@ -117,12 +117,10 @@ export function getUpstreamNodes(nodeID, upstreamNodes) {
 }
 
 export function calculateNodeSignature(parentNodeID) {
-  // console.log('calculateNodeSignature start', parentNodeID)
   let projectObjects = store.getters['proj/projectObjects'];
   let dataObjects = store.getters['proj/dataObjects'];
   let nodeDataObjectTags = {};
   let nodeDataObjects = {};
-  // console.log('calculateNodeSignature mid', projectObjects, dataObjects, parentNodeID)
   let nodeIDs = getUpstreamNodes(parentNodeID, []).reverse().concat([parentNodeID]);
   for (const nodeID of nodeIDs) {
     let node = projectObjects[nodeID];

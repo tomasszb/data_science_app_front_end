@@ -10,6 +10,15 @@ const R = require('ramda');
 export default {
     namespaced: true,
     actions: {
+        setDataObjectParameter({state, commit, rootState, rootGetters}, {id, route, value}) {
+            commit("proj/SET_DO_PARAMETER", {id, route, value}, {root: true});
+        },
+        updateDataObject({state, commit, rootState, rootGetters}, {ObjectID, Object}) {
+            commit("proj/UPDATE_DATA_OBJECT", {ObjectID, Object}, {root: true});
+        },
+        newDataObjectsBulk({state, commit, rootState, rootGetters}, {Objects}) {
+            commit("proj/NEW_DATA_OBJECT_BULK", {Objects}, {root: true});
+        },
         setActivePO({state, commit, rootState, rootGetters}, {selectedProcess, selectedPage, selectedNode}) {
 
             let currentActiveProcess = rootState['proj']['selectedProcess'];

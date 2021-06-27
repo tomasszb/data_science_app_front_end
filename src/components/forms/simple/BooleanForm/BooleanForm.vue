@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import vSelect from 'vue-select';
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
@@ -47,7 +47,7 @@
                     return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
                 },
                 set(newValue) {
-                    this.SET_DO_PARAMETER({
+                    this.setDataObjectParameter({
                         id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
@@ -56,8 +56,8 @@
             }
         },
         methods: {
-            ...mapMutations('proj', [
-                'SET_DO_PARAMETER'
+            ...mapActions('proj/object_manager', [
+                'setDataObjectParameter'
             ]),
         },
         mounted() {

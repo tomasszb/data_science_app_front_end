@@ -6,12 +6,13 @@
             :label-cols="horizontal ? 5 : 0"
             :horizontal="horizontal"
     >
+        {{defaultValue}}
         <b-form-input class="color-form c-100 pr-2" v-model="value" type="color"></b-form-input>
     </b-form-group>
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import vSelect from 'vue-select';
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
@@ -26,6 +27,7 @@
         props: {
             objectID: {type: String, default: null},
             name: {type: String, default: ''},
+            defaultValue: {},
             horizontal: {type: Boolean, default: false},
             showLabel: {type: Boolean, default: true},
             parameterIndex: {type: [Number, String]},
@@ -50,7 +52,7 @@
                     return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
                 },
                 set(newValue) {
-                    this.SET_DO_PARAMETER({
+                    this.setDataObjectParameter({
                         id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
@@ -59,13 +61,14 @@
             }
         },
         methods: {
-            ...mapMutations('proj', [
-                'SET_DO_PARAMETER'
+            ...mapActions('proj/object_manager', [
+                'setDataObjectParameter'
             ]),
         },
         mounted() {
             if (typeof this.value==='undefined') {
-                Vue.set(this, 'value', this.defaultValue);
+                console.log(this.defaultValue)
+                Vue.set(this, 'value', this.defaultValue!==null ? this.defaultValue : '#111111');
             }
         }
     }

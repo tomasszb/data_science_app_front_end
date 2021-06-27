@@ -9,6 +9,8 @@ import {
 
 export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
 
+  console.log('newDataVisualizationNode')
+
   let filterObject = newFilterObject()
   let sortObject = newSortObject()
   let describeObject = newDescribeObject()
@@ -17,13 +19,22 @@ export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
   let visTemplate = newVisTemplateObject()
   let visPivot = newVisPivotObject()
 
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: filterObject, ObjectID: filterObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: sortObject, ObjectID: sortObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: describeObject, ObjectID: describeObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: describeQuickObject, ObjectID: describeQuickObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: visObject, ObjectID: visObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: visTemplate, ObjectID: visTemplate.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: visPivot, ObjectID: visPivot.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: filterObject, ObjectID: filterObject.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: sortObject, ObjectID: sortObject.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: describeObject, ObjectID: describeObject.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: describeQuickObject, ObjectID: describeQuickObject.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: visObject, ObjectID: visObject.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: visTemplate, ObjectID: visTemplate.id }, { root: true });
+  // store.dispatch("proj/object_manager/updateDataObject", { Object: visPivot, ObjectID: visPivot.id }, { root: true });
+
+  store.dispatch(
+      'proj/object_manager/newDataObjectsBulk',
+      { Objects: [
+          filterObject, sortObject, describeObject, describeQuickObject, visObject, visTemplate, visPivot
+        ]
+      },
+      { root: true }
+  )
 
   let nodeID = genProjectObjectID();
   store.dispatch('proj/object_manager/newNode', {
@@ -32,7 +43,7 @@ export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
     position: getPosition(store.getters['proj/nodeLists'][pageID]),
     name: getOrDefault(name, defaultNames['300']),
     pageID: pageID,
-    source_data_node: sourceNodeID,
+    sourceNodeID: sourceNodeID,
     dataObjectTags: {
       "output_table_filter": filterObject.id,
       "output_table_sort": sortObject.id,
@@ -43,6 +54,7 @@ export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
       'chart_template': visTemplate.id
     }
   })
+
   return {
     'nodeID': nodeID,
     'dataObjects': {
@@ -76,7 +88,7 @@ export function newDataVisalizationPage({processID, connectorType, name=''}) {
 export function newDataVisualizationProcess({name=''}) {
 
   let dashboardObject = newDashboardObject()
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: dashboardObject, ObjectID: dashboardObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: dashboardObject, ObjectID: dashboardObject.id }, { root: true });
 
   let processID = genProjectObjectID();
   store.dispatch('proj/object_manager/newProcess', {

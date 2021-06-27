@@ -7,6 +7,7 @@ import project_manager from './project_data_handling/project_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 const R = require('ramda');
+require('log-timestamp');
 
 function getObjectIndex(objectList, objectID) {
     let index = null;
@@ -260,7 +261,12 @@ export default {
                 Vue.set(state.projectData['project_data_objects'], index, Object)
             }
         },
+        NEW_DATA_OBJECT_BULK(state, {Objects}) {
+            console.log('NEW_DATA_OBJECT_BULK', Objects);
+            state.projectData['project_data_objects'].push(...Objects)
+        },
         SET_DO_PARAMETER(state, {id, route, value}) {
+            console.log('SET_DO_PARAMETER',new Date().getTime(), route, value)
             let index = getObjectIndex(state.projectData['project_data_objects'], id);
             if (index !== null) {
                 let projectObject = state.projectData['project_data_objects'][index];

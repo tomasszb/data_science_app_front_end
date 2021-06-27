@@ -36,49 +36,6 @@
                     renderer: 'canvas',
                     width: '400',
                     height: '180'
-                },
-                horizontalBar: {
-                    title: {
-                        show: false
-                    },
-                    grid: {
-                        show: false,
-                        top: '10',
-                        bottom: '20'
-                    },
-                    xAxis: {
-                        type: 'category',
-                        axisLabel: {
-                            color: axisColor
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: axisColor
-                            }
-                        },
-                        data: [1,2,3,4,5,6]
-                    },
-                    yAxis: {
-                        axisLabel: {
-                            color: axisColor
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        axisLine: {
-                            lineStyle: {
-                                color: axisColor
-                            }
-                        }
-                    },
-                    series: [{
-                        data: [50,60,70,80,90,100],
-                        type: 'bar'
-                    }],
-                    color: [yellow]
                 }
             }
         }

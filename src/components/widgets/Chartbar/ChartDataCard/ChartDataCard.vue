@@ -56,25 +56,26 @@
         },
         watch: {
             chartDataFields() {
-                // console.log('chartDataFields changed');
                 let pivotID = this.activeNodeSettings['data_object_tags']['visualization_pivot'];
                 let pivotSettings = this.dataObjects[pivotID]['parameters']['fields'];
                 let filteredPivotSettings = {};
 
-                for (let field of this.chartDataFields) {
-                    filteredPivotSettings[field.alias] = [];
-
-                    if (typeof pivotSettings[field.alias] !== 'undefined') {
-                        filteredPivotSettings[field.alias] = pivotSettings[field.alias];
-                    } else if(this.displaySettings['pivot_columns'][field.alias] !== 'undefined') {
-                        filteredPivotSettings[field.alias] = this.displaySettings['pivot_columns'][field.alias];
-                    }
-                    this.SET_DO_PARAMETER({
-                        id: pivotID,
-                        route: ['fields'],
-                        value: filteredPivotSettings
-                    });
-                }
+                // console.log('chartDataFields setting', this.displaySettings, this.chartDataFields)
+                // for (let field of this.chartDataFields) {
+                //     filteredPivotSettings[field.alias] = [];
+                //
+                //     if (typeof pivotSettings[field.alias] !== 'undefined') {
+                //         filteredPivotSettings[field.alias] = pivotSettings[field.alias];
+                //     } else if(this.displaySettings['pivot_columns'][field.alias] !== 'undefined') {
+                //         filteredPivotSettings[field.alias] = this.displaySettings['pivot_columns'][field.alias];
+                //     }
+                //
+                //     this.SET_DO_PARAMETER({
+                //         id: pivotID,
+                //         route: ['fields'],
+                //         value: filteredPivotSettings
+                //     });
+                // }
             }
         }
     }

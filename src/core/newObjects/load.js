@@ -12,10 +12,10 @@ export function newDataLoadNode({pageID, name=''}) {
   let sortObject = newSortObject()
   let describeObject = newDescribeObject()
   let describeQuickObject = newDescribeQuickObject()
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: filterObject, ObjectID: filterObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: sortObject, ObjectID: sortObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: describeObject, ObjectID: describeObject.id }, { root: true });
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: describeQuickObject, ObjectID: describeQuickObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: filterObject, ObjectID: filterObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: sortObject, ObjectID: sortObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: describeObject, ObjectID: describeObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: describeQuickObject, ObjectID: describeQuickObject.id }, { root: true });
 
   let nodeID = genProjectObjectID();
   store.dispatch('proj/object_manager/newNode', {
@@ -38,7 +38,7 @@ export function newDataLoadNode({pageID, name=''}) {
 export function newDataLoadPage({processID, connectorType, name=''}) {
 
   let connectorObject = newConnectorObject(connectorType)
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: connectorObject, ObjectID: connectorObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: connectorObject, ObjectID: connectorObject.id }, { root: true });
 
   let pageID = genProjectObjectID();
   store.dispatch('proj/object_manager/newPage', {

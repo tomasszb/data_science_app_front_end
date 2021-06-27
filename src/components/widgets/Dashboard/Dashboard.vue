@@ -55,20 +55,6 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             ...mapActions('proj/object_manager', [
                 'newNode', 'setActivePO'
             ]),
-            newDataObject(type, existDataObjectID=null) {
-                let newDataObjectID = 'do-'+(Date.now().toString(36) + Math.random().toString(36).substr(2, 5)).toUpperCase();
-                let dataObjectID = existDataObjectID!==null ? existDataObjectID : newDataObjectID;
-                this.UPDATE_DATA_OBJECT({
-                    ObjectID: dataObjectID,
-                    Object: {
-                        'id': dataObjectID,
-                        'type': type,
-                        'name': '',
-                        'parameters': {}
-                    }
-                });
-                return dataObjectID;
-            },
             activateNode(nodeID) {
                 // console.log('activating node')
                 this.setActivePO({
@@ -79,8 +65,8 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             },
             addNewNode: function () {
                 let result = newDataVisualizationNode({
-                    pageID: this.activePage,
-                    sourceNodeID: this.activeSourceNode
+                    pageID: this.projectObjects[this.activePage].id,
+                    sourceNodeID: this.projectObjects[this.activeSourceNode].id
                 })
 
                 let visID = result.dataObjects.data_visualization
@@ -95,7 +81,6 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                         h: 20,
                     }
                 }
-
                 let charts = R.clone(this.dashboardItems);
                 charts[visID] = (newDashboardItem);
                 Vue.set(this, 'dashboardItems', charts);
@@ -105,7 +90,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                 });
             },
             getDataVisID(nodeID) {
-                let dataObjectTags = this.projectObjects.getPath(nodeID+'data_object_tags', {});
+                let dataObjectTags = this.projectObjects.getPath(nodeID+'.data_object_tags', {});
                 return dataObjectTags.hasOwnProperty('data_visualization') ? dataObjectTags['data_visualization'] : ''
             }
         },
@@ -128,6 +113,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             ]),
             dataObjectID() {
                 let dataObjectTags =  this.projectObjects.getPath(this.activePage+'.data_object_tags', {});
+                console.log('dataObjectID', this.activePage, dataObjectTags, dataObjectTags.hasOwnProperty('dashboard'))
                 return dataObjectTags.hasOwnProperty('dashboard') ? dataObjectTags['dashboard'].toString() : ''
             },
             dataObjectParameters() {

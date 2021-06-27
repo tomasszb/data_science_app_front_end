@@ -3,7 +3,6 @@
         <b-button @click="requestTable">hello</b-button>
 
         <chart :chartData="tableData"></chart>
-        {{activeNodeSignature}}
     </div>
 </template>
 
@@ -67,7 +66,6 @@
             status() {
                 let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'run_visualization', this.nodeSignature]);
                 let outputTableID = getResultObjectID([this.nodeID, 'chart_data', this.nodeSignature]);
-
                 let status = this.nodeExecutionStatus[nodeExecutionStatusID];
                 let check1 = typeof this.dataFrames[outputTableID]!== "undefined";
 

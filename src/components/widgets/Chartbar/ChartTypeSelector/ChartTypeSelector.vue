@@ -32,7 +32,7 @@
                 return this.activeNodeSettings['display_settings']
             },
             activeChartType() {
-                return this.activeNodeSettings['display_settings']['active_chart_type']
+                return this.activeNodeSettings.getPath('display_settings.active_chart_type', null)
             }
         },
         data() {
