@@ -68,7 +68,7 @@
             vSelect, FormContainer, FormListContainer
         },
         props: {
-            objectID: { type: String, default: '' },
+            objectID: { type: [Number, String], default: '' },
             providedDataObjectID: {type: String, default: '' },
             tag: { type: String, default: 'action' },
             method: { type: String, default: '__init__' },

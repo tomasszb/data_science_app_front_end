@@ -6,8 +6,8 @@
             />
         </div>
         <div class="c-60">
-            <echart v-if="columnStats['type'] === 'Numeric'" :options="horizontalBar" :init-options="initOptions"></echart>
-            <echart v-if="columnStats['type'] === 'Categorical'" :options="verticalBar" :init-options="initOptions"></echart>
+            <echart v-if="columnStats['type'] === 'Numeric'" :option="horizontalBar" :init-options="initOptions"></echart>
+            <echart v-if="columnStats['type'] === 'Categorical'" :option="verticalBar" :init-options="initOptions"></echart>
         </div>
         <div class="c-40">
             <div
@@ -39,8 +39,11 @@
 <script>
     import Vue from 'vue';
     import InfoSectionTable from "@/components/data_widgets/DataColumnExplorer/InfoSectionTable/InfoSectionTable";
-    import ECharts from 'vue-echarts/components/ECharts';
-    import 'echarts/lib/chart/bar';
+
+    import ECharts from 'vue-echarts'
+    import { use } from 'echarts/core'
+
+    import "echarts";
     import config from '../../../../config';
     const {info, primary, danger, warning, success, textColor, yellow, secondary} = config.app.colors;
     const {axisColor} = config.app.chartColors;

@@ -1,9 +1,13 @@
 <template>
-    <div class="flex-vertical">
-        <b-button @click="requestTable">hello</b-button>
-
-        <chart :chartData="tableData"></chart>
+    <div class="c-100 r-100">
+        <div class="c-100 r-10">
+            <b-button @click="requestTable">hello</b-button>
+        </div>
+        <div class="c-100 r-90">
+            <chart :chartData="tableData"></chart>
+        </div>
     </div>
+
 </template>
 
 <script>

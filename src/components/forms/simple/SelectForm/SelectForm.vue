@@ -33,7 +33,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
             vSelect
         },
         props: {
-            objectID: {type: String, default: null},
+            objectID: {type: [Number, String], default: null},
             name: {type: String, default: ''},
             showLabel: {type: Boolean, default: true},
             horizontal: {type: Boolean, default: false},

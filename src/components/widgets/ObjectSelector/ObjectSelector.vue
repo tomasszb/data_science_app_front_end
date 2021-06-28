@@ -69,7 +69,7 @@
     export default {
         name: 'ObjectSelector',
         props: {
-            objectID: { type: String, default: null },
+            objectID: { type: [Number, String], default: null },
             showDetail: {type: Boolean, default: false},
             settingsButton: {type: Boolean, default: false},
             detailType: {type: String, default: ''},

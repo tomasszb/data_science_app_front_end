@@ -179,7 +179,7 @@
             parameterIndex: {type: [Number, String]},
             horizontal: {type: Boolean, default: false},
             typeSettings: {type: Object, default: function() {return {}} },
-            objectID: { type: String, default: null },
+            objectID: { type: [Number, String], default: null },
             name: {type: String, default: ''},
             showLabel: {type: Boolean, default: true},
             list: {type: Boolean, default: false}

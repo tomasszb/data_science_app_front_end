@@ -1,16 +1,15 @@
 <template>
-    <div>
-        <echart :options="chartData" :init-options="initOptions"></echart>
-
+    <div class="c-100 r-100">
+        <echart :autoresize="true"  class="c-100 r-100" :option="options" :init-options="initOptions"></echart>
     </div>
 </template>
 
 <script>
     import Vue from 'vue';
     import InfoSectionTable from "@/components/data_widgets/DataColumnExplorer/InfoSectionTable/InfoSectionTable";
-    import ECharts from 'vue-echarts/components/ECharts';
-    import 'echarts/lib/chart/bar';
-    import 'echarts/lib/chart/line';
+    import "echarts";
+    import ECharts from 'vue-echarts'
+    import { use } from 'echarts/core'
     import config from '../../../../config';
     const {info, primary, danger, warning, success, textColor, yellow, secondary} = config.app.colors;
     const {axisColor} = config.app.chartColors;
@@ -34,8 +33,18 @@
                 openedColumns: [],
                 initOptions: {
                     renderer: 'canvas',
-                    width: '400',
-                    height: '180'
+                    width: null,
+                    height: null
+                }
+            }
+        },
+        computed: {
+            options() {
+                return {
+                    ...{
+                        'animation': false
+                    },
+                    ...this.chartData
                 }
             }
         }

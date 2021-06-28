@@ -29,7 +29,7 @@
         },
         props: {
             chartType: { type: String, default: '' },
-            dataObjectId: { type: String, default: '' },
+            dataobjectID: { type: [Number, String], default: '' },
             chartDataFields: { type: Array },
         },
         data() {

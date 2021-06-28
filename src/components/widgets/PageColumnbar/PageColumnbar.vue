@@ -76,7 +76,7 @@
                 'selectedProcess', 'selectedPages', 'selectedNodes', 'selectedElements', 'dataFrames'
             ]),
             selectedInputNodeID() {
-                return this.projectObjects.getPath(this.activePage+".display_settings.selected_source_node", '')
+                return this.projectObjects.getPath(this.activePage+".parameters.source_node_id", '')
             }
         },
         watch: {

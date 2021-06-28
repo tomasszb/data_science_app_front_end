@@ -121,7 +121,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             },
             activeSourceNode() {
                 return this.projectObjects.getPath(
-                    this.activePage+".display_settings.selected_source_node",
+                    this.activePage+".parameters.source_node_id",
                     null
                 );
             },

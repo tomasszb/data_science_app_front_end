@@ -52,7 +52,7 @@
             VueFormulate
         },
         props: {
-            objectID: { type: String, default: null },
+            objectID: { type: [Number, String], default: null },
             showDetail: {type: Boolean, default: false},
             settingsButton: {type: Boolean, default: false},
             detailType: {type: String, default: ''},
@@ -81,17 +81,17 @@
             selectedInputNodeID: {
                 get() {
                     let result = this.projectObjects.getPath(
-                        this.activePage+".display_settings.selected_source_node",
+                        this.activePage+".parameters.source_node_id",
                         null
                     );
                     if (result===null) {
                         Vue.set(this, 'selectedInputNodeID', this.inputNodes[1][0]);
                     }
-                    return this.projectObjects[this.activePage]["display_settings"]["selected_source_node"]
+                    return this.projectObjects[this.activePage]["parameters"]["source_node_id"]
                 },
                 set(newValue) {
                     let obj = R.clone(this.projectObjects[this.activePage]);
-                    obj = obj.setPath('display_settings.selected_source_node', newValue);
+                    obj = obj.setPath('parameters.source_node_id', newValue);
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activePage, Object: obj})
                 }
             },

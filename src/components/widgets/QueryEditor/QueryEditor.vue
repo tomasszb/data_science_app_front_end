@@ -26,7 +26,7 @@
             FormContainer
         },
         props: {
-            objectID: { type: String, default: '' },
+            objectID: { type: [Number, String], default: '' },
             providedDataObjectID: {type: String, default: '' },
             tag: { type: String, default: 'connector' },
         },

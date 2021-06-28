@@ -1,6 +1,5 @@
 <template>
   <div class="projects-page">
-      {{dataLoaded}}
     <b-container>
       <h5 class="auth-logo">
         <i class="fa fa-circle text-primary"></i>

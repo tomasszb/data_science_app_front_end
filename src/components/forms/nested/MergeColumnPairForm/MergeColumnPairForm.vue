@@ -37,7 +37,7 @@
             NumericForm, ColumnForm
         },
         props: {
-            objectID: {type: String, default: null},
+            objectID: {type: [Number, String], default: null},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},
             parameterIndex: {type: [Number, String]},

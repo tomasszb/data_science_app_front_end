@@ -20,7 +20,7 @@
             vSelect
         },
         props: {
-            objectID: {type: String, default: null},
+            objectID: {type: [Number, String], default: null},
             iconClassName: {type: String, default: null},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},

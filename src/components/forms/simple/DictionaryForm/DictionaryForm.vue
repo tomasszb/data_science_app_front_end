@@ -32,7 +32,7 @@
             vSelect
         },
         props: {
-            objectID: {type: String, default: null},
+            objectID: {type: [Number, String], default: null},
             name: {type: String, default: ''},
             horizontal: {type: Boolean, default: false},
             showLabel: {type: Boolean, default: true},

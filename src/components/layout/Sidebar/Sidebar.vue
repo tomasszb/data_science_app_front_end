@@ -30,7 +30,7 @@
                 isHeader
         />
         <li class="headerLink mt-3" v-b-modal="'new-process'">
-            <a class="sidebar-link text-warning font-weight-bold">
+            <a class="sidebar-link text-warning small font-weight-bold">
                 <span class="icon">
                     <i class="fa fa-plus"></i>
                 </span>

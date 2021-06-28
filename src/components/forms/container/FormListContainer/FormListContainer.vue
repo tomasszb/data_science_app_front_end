@@ -33,7 +33,7 @@
         },
         props: {
             typeSettings: {type: Object, default: function() {return {}} },
-            objectID: { type: String, default: null },
+            objectID: { type: [Number, String], default: null },
             route: {type: Array, default: function() {return []}},
             defaultValue: {},
             parameterIndex: {type: [Number, String]},
