@@ -64,7 +64,7 @@
             ...mapMutations('proj', ['UPDATE_DISPLAY_SETTINGS']),
             selectConnectorTypeGroup(connectorType, connectorGroup) {
                 newDataLoadPage({
-                    processID: this.activeProcess,
+                    processID: this.projectObjects[this.activeProcess].id,
                     connectorType: connectorType
                 });
                 this.resetProcessViewCode();

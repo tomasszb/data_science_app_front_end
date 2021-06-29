@@ -69,7 +69,7 @@ export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
 export function newDataVisalizationPage({processID, connectorType, name=''}) {
 
   let dashboardObject = newDashboardObject()
-  store.commit("proj/UPDATE_DATA_OBJECT", { Object: dashboardObject, ObjectID: dashboardObject.id }, { root: true });
+  store.dispatch("proj/object_manager/updateDataObject", { Object: dashboardObject, ObjectID: dashboardObject.id }, { root: true });
 
   let pageID = genProjectObjectID();
   store.dispatch('proj/object_manager/newPage', {
@@ -86,10 +86,6 @@ export function newDataVisalizationPage({processID, connectorType, name=''}) {
 
 
 export function newDataVisualizationProcess({name=''}) {
-
-  let dashboardObject = newDashboardObject()
-  store.dispatch("proj/object_manager/updateDataObject", { Object: dashboardObject, ObjectID: dashboardObject.id }, { root: true });
-
   let processID = genProjectObjectID();
   store.dispatch('proj/object_manager/newProcess', {
     processID: processID,

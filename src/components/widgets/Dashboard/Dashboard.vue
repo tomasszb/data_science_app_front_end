@@ -8,9 +8,10 @@
                     @activate-node="activateNode(nodeID)"
                     :class="nodeID===activeNode ? 'active' : ''"
                     :grid="grid"
-                    :dataObjectID="dataObjectID"
+                    :dataVisID="getDataVisID(nodeID)"
+                    :dashboardID="dataObjectID"
                     :key="'dashboard-item-node-'+nodeID"
-                    :index="getDataVisID(nodeID)"
+                    :index="index"
                 >
                     <data-visualization
                         :nodeID="nodeID"
@@ -68,12 +69,12 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                     pageID: this.projectObjects[this.activePage].id,
                     sourceNodeID: this.projectObjects[this.activeSourceNode].id
                 })
-
+                console.log('addNewNode', result)
                 let visID = result.dataObjects.data_visualization
 
                 let newDashboardItem = {
                     id: 'do-vis-'+visID,
-                    visualization_object: visID,
+                    // visualization_object: visID,
                     layout: {
                         x: 0,
                         y: 0,
@@ -82,7 +83,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                     }
                 }
                 let charts = R.clone(this.dashboardItems);
-                charts[visID] = (newDashboardItem);
+                charts.push(newDashboardItem);
                 Vue.set(this, 'dashboardItems', charts);
 
                 this.$nextTick(() => {
@@ -121,7 +122,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             },
             activeSourceNode() {
                 return this.projectObjects.getPath(
-                    this.activePage+".parameters.source_node_id",
+                    this.activePage+".parameters.source_data_node",
                     null
                 );
             },
@@ -130,7 +131,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             },
             dashboardItems: {
                 get() {
-                    return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'] : {}
+                    return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'] : []
                 },
                 set(newValue) {
                     this.SET_DO_PARAMETER({

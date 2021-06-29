@@ -15,21 +15,22 @@
             // dashboardItemSettings: { type: Object },
             index: {},
             grid: {},
-            dataObjectID: {}
+            dataVisID: {},
+            dashboardID: {}
         },
         computed: {
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects'
             ]),
-            dataObjectParameters() {
-                return this.dataObjects[this.dataObjectID]['parameters']
+            dashboardParameters() {
+                return this.dataObjects[this.dashboardID]['parameters']
             },
             dashboardItemSettings() {
-                return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'][this.index] : []
+                return 'items' in this.dashboardParameters ? this.dashboardParameters['items'][this.index] : []
             },
             gridStackAttributes() {
                 return {
-                    id: this.dashboardItemSettings['id'],
+                    id: 'do-vis-'+this.dataVisID,
                     "gs-id": this.dashboardItemSettings["id"],
                     "gs-x": this.dashboardItemSettings["layout"]["x"],
                     "gs-y": this.dashboardItemSettings["layout"]["y"],

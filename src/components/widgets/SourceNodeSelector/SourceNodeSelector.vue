@@ -22,7 +22,7 @@
                 <div v-for="(nodes, processName) in inputNodes[0]">
                     <b-dropdown-group id="dropdown-group-1" :header="processName">
                         <b-dropdown-item
-                            @click="selectedInputNodeID=nodeID"
+                            @click="selectedInputNodeID=projectObjects[nodeID].id"
                             v-for="(nodeName, nodeID) in nodes"
                         >
                             {{nodeID}}-{{nodeName}}
@@ -81,17 +81,17 @@
             selectedInputNodeID: {
                 get() {
                     let result = this.projectObjects.getPath(
-                        this.activePage+".parameters.source_node_id",
+                        this.activePage+".parameters.source_data_node",
                         null
                     );
                     if (result===null) {
                         Vue.set(this, 'selectedInputNodeID', this.inputNodes[1][0]);
                     }
-                    return this.projectObjects[this.activePage]["parameters"]["source_node_id"]
+                    return this.projectObjects[this.activePage]["parameters"]["source_data_node"]
                 },
                 set(newValue) {
                     let obj = R.clone(this.projectObjects[this.activePage]);
-                    obj = obj.setPath('parameters.source_node_id', newValue);
+                    obj = obj.setPath('parameters.source_data_node', newValue);
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activePage, Object: obj})
                 }
             },
