@@ -96,16 +96,17 @@ export function getUpstreamNodes(nodeID, upstreamNodes) {
     let upstreamNodeID = srcNodeID.toString();
     upstreamNodes.push(upstreamNodeID);
     getUpstreamNodes(upstreamNodeID, upstreamNodes);
-  } else {
-    let nodes = R.clone(store.getters['proj/nodeLists'][parentPageID]);
-    let sortedNodes = nodes.sort((a, b) => (objects[a].relative_position < objects[b].relative_position ? 1 : -1));
-    let pageUpstreamNodes = sortedNodes.filter((a)=>{if(objects[a].relative_position<node.relative_position){return a}});
-    if (pageUpstreamNodes.length>0) {
-      let upstreamNodeID = objects[pageUpstreamNodes[0].id].toString();
-      upstreamNodes.push(upstreamNodeID);
-      getUpstreamNodes(upstreamNodeID, upstreamNodes);
-    }
   }
+  // else {
+  //   let nodes = R.clone(store.getters['proj/nodeLists'][parentPageID]);
+  //   let sortedNodes = nodes.sort((a, b) => (objects[a].relative_position < objects[b].relative_position ? 1 : -1));
+  //   let pageUpstreamNodes = sortedNodes.filter((a)=>{if(objects[a].relative_position<node.relative_position){return a}});
+  //   if (pageUpstreamNodes.length>0) {
+  //     let upstreamNodeID = objects[pageUpstreamNodes[0].id].toString();
+  //     upstreamNodes.push(upstreamNodeID);
+  //     getUpstreamNodes(upstreamNodeID, upstreamNodes);
+  //   }
+  // }
   if (secNodeIDs) {
     for (let secNodeID of secNodeIDs) {
       let upstreamNodeID = secNodeID.toString();
@@ -116,7 +117,7 @@ export function getUpstreamNodes(nodeID, upstreamNodes) {
   return upstreamNodes
 }
 
-export function calculateNodeSignature(parentNodeID) {
+export function calculateNodeSignature(parentNodeID, considerPage=true) {
   let projectObjects = store.getters['proj/projectObjects'];
   let dataObjects = store.getters['proj/dataObjects'];
   let nodeDataObjectTags = {};
@@ -124,8 +125,11 @@ export function calculateNodeSignature(parentNodeID) {
   let nodeIDs = getUpstreamNodes(parentNodeID, []).reverse().concat([parentNodeID]);
   for (const nodeID of nodeIDs) {
     let node = projectObjects[nodeID];
-    let page = projectObjects[node.parameters['page_id']];
-    let tags = {...page['data_object_tags'], ...node['data_object_tags']};
+    let tags = node['data_object_tags'];
+    if (considerPage) {
+      let page = projectObjects[node.parameters['page_id']];
+      tags = {...page['data_object_tags'], ...tags};
+    }
 
     nodeDataObjects[nodeID] = [];
     for (const [tagName, tagID] of Object.entries(tags)) {

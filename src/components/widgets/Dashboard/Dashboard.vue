@@ -69,7 +69,6 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                     pageID: this.projectObjects[this.activePage].id,
                     sourceNodeID: this.projectObjects[this.activeSourceNode].id
                 })
-                console.log('addNewNode', result)
                 let visID = result.dataObjects.data_visualization
 
                 let newDashboardItem = {
@@ -85,10 +84,8 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                 let charts = R.clone(this.dashboardItems);
                 charts.push(newDashboardItem);
                 Vue.set(this, 'dashboardItems', charts);
-                console.log('addNewNode dashboardItems',this.dashboardItems)
 
                 this.$nextTick(() => {
-                    console.log('making widget')
                     this.grid.makeWidget('do-vis-'+visID);
                 });
             },
@@ -116,7 +113,6 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             ]),
             dataObjectID() {
                 let dataObjectTags =  this.projectObjects.getPath(this.activePage+'.data_object_tags', {});
-                console.log('dataObjectID', this.activePage, dataObjectTags, dataObjectTags.hasOwnProperty('dashboard'))
                 return dataObjectTags.hasOwnProperty('dashboard') ? dataObjectTags['dashboard'] : ''
             },
             dataObjectParameters() {
@@ -133,11 +129,9 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             },
             dashboardItems: {
                 get() {
-                    console.log('dashboardItems get', this.dataObjectParameters)
                     return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'] : []
                 },
                 set(newValue) {
-                    console.log('dashboardItems set', newValue)
                     this.SET_DO_PARAMETER({
                         id: this.dataObjectID,
                         route: 'items',

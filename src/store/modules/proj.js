@@ -7,7 +7,7 @@ import project_manager from './project_data_handling/project_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 const R = require('ramda');
-require('log-timestamp');
+// require('log-timestamp');
 
 function getObjectIndex(objectList, objectID) {
     let index = null;
@@ -94,8 +94,11 @@ export default {
             let result = {};
             for (const projectObject of state.projectData['project_objects']) {
                 if (projectObject.group===3) {
-                    // console.log('nodeSignatures', projectObject, projectObject.id)
-                    result[projectObject.id] = calculateNodeSignature(projectObject.id);
+                    if (projectObject.type===303) {
+                        result[projectObject.id] = calculateNodeSignature(projectObject.id, false);
+                    } else {
+                        result[projectObject.id] = calculateNodeSignature(projectObject.id);
+                    }
                 }
             }
             return result
@@ -229,7 +232,6 @@ export default {
             Vue.set(state.selectedNodes, activePage, activeNode);
         },
         UPDATE_PROJECT_OBJECT(state, {ObjectID, Object}) {
-            console.log('UPDATE_PROJECT_OBJECT', Object)
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
             if (index === null) {
                 state.projectData['project_objects'].push(Object);
@@ -252,7 +254,7 @@ export default {
             Vue.delete(state.projectData['project_objects'], index);
         },
         UPDATE_DATA_OBJECT(state, {ObjectID, Object}) {
-            console.log('UPDATE_DATA_OBJECT', Object)
+            // console.log('UPDATE_DATA_OBJECT', Object)
             let index = getObjectIndex(state.projectData['project_data_objects'], ObjectID);
             if (index === null) {
                 state.projectData['project_data_objects'].push(Object)
@@ -262,12 +264,12 @@ export default {
             }
         },
         NEW_DATA_OBJECT_BULK(state, {Objects}) {
-            console.log('NEW_DATA_OBJECT_BULK', Objects);
+            // console.log('NEW_DATA_OBJECT_BULK', Objects);
             state.projectData['project_data_objects'].push(...Objects)
         },
         SET_DO_PARAMETER(state, {id, route, value}) {
-            console.log('SET_DO_PARAMETER',id, route, value)
-            console.log(state.projectData['project_data_objects'])
+            // console.log('SET_DO_PARAMETER',id, route, value)
+            // console.log(state.projectData['project_data_objects'])
             let index = getObjectIndex(state.projectData['project_data_objects'], id);
             if (index !== null) {
                 let projectObject = state.projectData['project_data_objects'][index];

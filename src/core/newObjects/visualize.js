@@ -9,8 +9,6 @@ import {
 
 export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
 
-  console.log('newDataVisualizationNode')
-
   let filterObject = newFilterObject()
   let sortObject = newSortObject()
   let describeObject = newDescribeObject()

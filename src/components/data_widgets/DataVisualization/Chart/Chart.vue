@@ -1,6 +1,6 @@
 <template>
     <div class="c-100 r-100">
-        <echart :autoresize="true"  class="c-100 r-100" :option="options" :init-options="initOptions"></echart>
+        <echart :autoresize="true" class="c-100 r-100" :option="options" :init-options="initOptions"></echart>
     </div>
 </template>
 

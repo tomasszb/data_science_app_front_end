@@ -1,11 +1,11 @@
 <template>
     <div class="c-100 r-100">
-        <div class="c-100 r-10">
-            <b-button @click="requestTable">hello</b-button>
-        </div>
-        <div class="c-100 r-90">
+<!--        <div class="c-100 r-10">-->
+<!--            <b-button @click="requestTable">hello</b-button>-->
+<!--        </div>-->
+<!--        <div class="c-100 r-90">-->
             <chart :chartData="tableData"></chart>
-        </div>
+<!--        </div>-->
     </div>
 
 </template>
@@ -52,6 +52,13 @@
                     status: 'requested'});
                 this.$webSocketSend(request);
             },
+            updateData(status) {
+                if (status==='ready') {
+                    if(this.tableDataLive!==this.tableData) {
+                        this.tableData = this.tableDataLive
+                    }
+                }
+            }
         },
         computed: {
             ...mapState('proj', [
@@ -69,30 +76,36 @@
             },
             status() {
                 let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'run_visualization', this.nodeSignature]);
-                let outputTableID = getResultObjectID([this.nodeID, 'chart_data', this.nodeSignature]);
+                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data', this.nodeSignature]);
                 let status = this.nodeExecutionStatus[nodeExecutionStatusID];
-                let check1 = typeof this.dataFrames[outputTableID]!== "undefined";
+                let check1 = typeof this.dataFrames[dataFrameID]!== "undefined";
 
                 if (status==='success' && check1) {
-                    Vue.set(this, 'activeNodeSignature', this.nodeSignature);
+                    this.activeNodeSignature = this.nodeSignature;
+                    this.updateData('ready')
                     return 'ready'
                 }
-                else if (status==='requested') {
-                    Vue.set(this, 'activeNodeSignature', this.nodeSignature);
+                else if (status==='requested' || status==='success') {
+                    this.activeNodeSignature = this.nodeSignature;
                     return 'loading'
                 }
                 return 'not_requested'
-
+            },
+            tableDataLive() {
+                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data', this.activeNodeSignature]);
+                return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
             }
         },
         watch: {
-            status() {
-                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data', this.activeNodeSignature]);
-                Vue.set(
-                    this,
-                    'tableData',
-                    typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : {}
-                )
+            status(newValue) {
+                if(newValue==='ready') {
+                    this.updateData('ready')
+                }
+            }
+        },
+        mounted() {
+            if(this.status==='not_requested') {
+                this.requestTable()
             }
         }
     }

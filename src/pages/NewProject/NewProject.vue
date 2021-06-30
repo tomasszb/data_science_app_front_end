@@ -61,7 +61,7 @@ export default {
         }
     },
     computed: {
-        ...mapState('proj', ['projectList', 'project', 'projectExecutionStatus']),
+        ...mapState('proj', ['projectList', 'project', 'projectExecutionStatus', 'dataLoaded']),
           newProjectData() {
             return {
                 "name": this.name,
@@ -77,7 +77,7 @@ export default {
           }
     },
     methods: {
-        ...mapActions('proj/api', ['createNewProject']),
+        ...mapActions('proj/api', ['createNewProject','loadProjectData','loadObjectDefinitions']),
         ...mapMutations('proj', ['SET_PROJECT_VARIABLE']),
         newProject(project) {
             localStorage.removeItem('project_id');
@@ -86,6 +86,11 @@ export default {
         }
     },
     watch:{
+        dataLoaded(value) {
+            if (value) {
+                router.push('/app/main');
+            }
+        },
         project(value) {
             if (value.status ==='project registered') {
                 let request = createProjectFlowRequest(
@@ -96,7 +101,8 @@ export default {
                 this.$webSocketSend(request);
             }
             if (value.status === 'ready') {
-                router.push('/app/main');
+                this.loadObjectDefinitions();
+                this.loadProjectData({projectID: this.project.id, projectVersion: 1});
             }
         },
         createFoldersStatus(value) {

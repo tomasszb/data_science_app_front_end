@@ -84,17 +84,14 @@
                     return this.providedDataObjectID
                 }
                 else {
-                    return this.projectObjects[this.objectID]['data_object_tags'][this.tag].toString()
+                    return this.projectObjects.getPath(this.objectID+'.data_object_tags.'+this.tag, '').toString()
                 }
             },
             dataObjectSettings() {
-                return this.dataObjects[this.dataObjectID]
-            },
-            dataObjectParameters() {
-                return this.dataObjectSettings['parameters']
+                return this.dataObjects.getKeyOrDefault(this.dataObjectID, {})
             },
             requiredParameters() {
-                return this.dataObjectSettings['type']!==null ? this.dataObjectParameterMapping[this.dataObjectSettings['type']][this.method]: []
+                return this.dataObjectSettings.hasOwnProperty('type')? this.dataObjectParameterMapping[this.dataObjectSettings['type']][this.method]: []
             },
         }
     };

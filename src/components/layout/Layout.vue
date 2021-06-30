@@ -1,17 +1,23 @@
 <template>
-<div
+    <div
+        :class="[
+            {root: true, sidebarClose, sidebarStatic},
+            'sing-dashboard',
+            'sidebar-' + sidebarColorName,
+            'sidebar-' + sidebarType
+            ]"
+        v-if="dataLoaded"
+    >
+      <Sidebar />
+      <div class="wrap">
+    <!--    <ToolHeader />-->
+        <v-touch class="content" @swipe="handleSwipe" :swipe-options="{direction: 'horizontal'}">
 
-        :class="[{root: true, sidebarClose, sidebarStatic}, 'sing-dashboard', 'sidebar-' + sidebarColorName, 'sidebar-' + sidebarType]">
-  <Sidebar />
-  <div class="wrap">
-<!--    <ToolHeader />-->
-    <v-touch class="content" @swipe="handleSwipe" :swipe-options="{direction: 'horizontal'}">
+            <router-view />
 
-        <router-view />
-
-    </v-touch>
-  </div>
-</div>
+        </v-touch>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -54,8 +60,9 @@ export default {
         let projectID = this.project.id;
         let projectVersion= 1;
         if (this.dataLoaded===false) {
-            this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
             this.loadObjectDefinitions();
+            this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
+
         }
         const staticSidebar = JSON.parse(localStorage.getItem('sidebarStatic'));
 

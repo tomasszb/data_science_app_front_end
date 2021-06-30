@@ -1,7 +1,7 @@
 @import '../../../../styles/app';
 
-.grid-stack-item-content:hover {
-  background-color: $gray-200;
+.grid-stack-item:hover {
+  border: 2px solid $gray-300;
 }
 
 .grid-stack {
@@ -10,14 +10,15 @@
 }
 
 .grid-stack-item-content {
-  background-color: $gray-100;
+  background-color: white;
 }
 
 .grid-stack-item {
-  border: 3px solid transparent;
+  border: 2px solid $gray-200;
   padding: 0;
+
 }
 
 .grid-stack-item.active {
-  border: 3px solid $gray-300;
+  border: 2px solid $gray-300;
 }

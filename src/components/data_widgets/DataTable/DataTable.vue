@@ -123,8 +123,6 @@
                     if(this.tableColumnsLive!==this.tableColumns) {
                         this.tableColumns = this.tableColumnsLive
                     }
-                }
-                if (status==='ready') {
                     if(this.tableDataLive!==this.tableData) {
                         this.tableData = this.tableDataLive
                     }

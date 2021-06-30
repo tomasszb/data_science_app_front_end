@@ -67,7 +67,6 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
         },
         mounted() {
             if (typeof this.value==='undefined') {
-                console.log(this.defaultValue)
                 Vue.set(this, 'value', this.defaultValue!==null ? this.defaultValue : '#111111');
             }
         }
