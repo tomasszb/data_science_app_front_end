@@ -10,7 +10,7 @@
     import {mapActions, mapGetters} from "vuex";
 
     export default {
-        name: 'ColumnButton',
+        name: 'DashboardItem',
         props: {
             // dashboardItemSettings: { type: Object },
             index: {},
@@ -23,12 +23,15 @@
                 'projectObjects', 'dataObjects'
             ]),
             dashboardParameters() {
+                console.log('dashboardParameters', this.dataObjects, this.dashboardID)
                 return this.dataObjects[this.dashboardID]['parameters']
             },
             dashboardItemSettings() {
+                console.log('dashboardItemSettings', this.dashboardParameters)
                 return 'items' in this.dashboardParameters ? this.dashboardParameters['items'][this.index] : []
             },
             gridStackAttributes() {
+                console.log('gridStackAttributes', this.dashboardItemSettings, this.dataVisID)
                 return {
                     id: 'do-vis-'+this.dataVisID,
                     "gs-id": this.dashboardItemSettings["id"],

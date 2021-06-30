@@ -96,6 +96,7 @@ export default {
                 "relative_position": position,
                 'parameters': {
                     'process_id': processID,
+                    'source_data_node': null
                 },
                 "display_settings": {}
             };

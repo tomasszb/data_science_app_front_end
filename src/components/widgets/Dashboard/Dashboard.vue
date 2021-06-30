@@ -3,19 +3,19 @@
         <div class="chart-dashboard-grid-container r-95">
             <section class="grid-stack">
                 <dashboard-item
-                    v-for="(nodeID, index) in nodeLists[activePage]"
-                    v-if="getDataVisID(nodeID) !== '' "
-                    @activate-node="activateNode(nodeID)"
-                    :class="nodeID===activeNode ? 'active' : ''"
+                    v-for="(dashboardItem, index) in dashboardItems"
+                    v-if="getDataVisID(nodeLists[activePage][index]) !== '' "
+                    @activate-node="activateNode(nodeLists[activePage][index])"
+                    :class="nodeLists[activePage][index]===activeNode ? 'active' : ''"
                     :grid="grid"
-                    :dataVisID="getDataVisID(nodeID)"
+                    :dataVisID="getDataVisID(nodeLists[activePage][index])"
                     :dashboardID="dataObjectID"
-                    :key="'dashboard-item-node-'+nodeID"
+                    :key="'dashboard-item-node-'+nodeLists[activePage][index]"
                     :index="index"
                 >
                     <data-visualization
-                        :nodeID="nodeID"
-                        :key="'dashboard-item-vis-'+nodeID"
+                        :nodeID="nodeLists[activePage][index]"
+                        :key="'dashboard-item-vis-'+nodeLists[activePage][index]"
                     />
                 </dashboard-item>
             </section>
@@ -85,8 +85,10 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                 let charts = R.clone(this.dashboardItems);
                 charts.push(newDashboardItem);
                 Vue.set(this, 'dashboardItems', charts);
+                console.log('addNewNode dashboardItems',this.dashboardItems)
 
                 this.$nextTick(() => {
+                    console.log('making widget')
                     this.grid.makeWidget('do-vis-'+visID);
                 });
             },
@@ -115,7 +117,7 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             dataObjectID() {
                 let dataObjectTags =  this.projectObjects.getPath(this.activePage+'.data_object_tags', {});
                 console.log('dataObjectID', this.activePage, dataObjectTags, dataObjectTags.hasOwnProperty('dashboard'))
-                return dataObjectTags.hasOwnProperty('dashboard') ? dataObjectTags['dashboard'].toString() : ''
+                return dataObjectTags.hasOwnProperty('dashboard') ? dataObjectTags['dashboard'] : ''
             },
             dataObjectParameters() {
                 return this.dataObjects[this.dataObjectID]['parameters']
@@ -131,11 +133,13 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
             },
             dashboardItems: {
                 get() {
+                    console.log('dashboardItems get', this.dataObjectParameters)
                     return 'items' in this.dataObjectParameters ? this.dataObjectParameters['items'] : []
                 },
                 set(newValue) {
+                    console.log('dashboardItems set', newValue)
                     this.SET_DO_PARAMETER({
-                        id: parseInt(this.dataObjectID),
+                        id: this.dataObjectID,
                         route: 'items',
                         value: newValue
                     });

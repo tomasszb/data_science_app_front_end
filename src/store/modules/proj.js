@@ -266,7 +266,8 @@ export default {
             state.projectData['project_data_objects'].push(...Objects)
         },
         SET_DO_PARAMETER(state, {id, route, value}) {
-            console.log('SET_DO_PARAMETER',new Date().getTime(), route, value)
+            console.log('SET_DO_PARAMETER',id, route, value)
+            console.log(state.projectData['project_data_objects'])
             let index = getObjectIndex(state.projectData['project_data_objects'], id);
             if (index !== null) {
                 let projectObject = state.projectData['project_data_objects'][index];
