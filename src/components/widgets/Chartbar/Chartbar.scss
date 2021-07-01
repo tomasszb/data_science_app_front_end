@@ -5,9 +5,9 @@
   height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 50px);
 
   .btn {
-    border-radius: 0;
-    background-color: $gray-100;
-    color: $gray-500;
+    //border-radius: 0;
+    //background-color: $gray-100;
+    //color: $gray-500;
   }
   .btn:focus,  .btn:hover{
     background-color: white;
@@ -24,14 +24,29 @@
   }
 
   .multiselect__tag, .multiselect__option--highlight, .multiselect__tag-icon, .multiselect__tag-icon:after{
-    color: white!important;
-    background-color: $gray-700!important;
+    color: $gray-900!important;
+    background-color: $gray-100!important;
+
+  }
+  .multiselect__single {
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+
+  .multiselect__content-wrapper {
+    max-height: 200px!important;
+  }
+
+  .multiselect__tags, .multiselect__select, .multiselect__option {
+    height: 30px!important;
+    min-height: 30px!important;
+    max-height: 30px!important;
   }
 }
 
 .chartbar-parameters {
   overflow: auto!important;
-  max-height: calc(100vh - 280px);
+  max-height: calc(100vh - 150px);
 
   .form-group {
     margin: 0;
@@ -48,12 +63,19 @@
 
 
 .chartbar-parameters-form-container {
-  border-bottom: $gray-200 1px solid;
+  //border-bottom: $gray-200 1px solid;
+
+  h6 {
+    font-size: $font-size-sm;
+    color: $gray-700;
+    font-weight: 600;
+  }
 }
 
 
 .chartbar-parameters-form {
   text-align:center;
+  width: 200px!important;
   //display: flex;
   //justify-content: center;
   //align-items: center;

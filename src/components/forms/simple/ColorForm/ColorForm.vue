@@ -5,9 +5,9 @@
             label-class="pb-1"
             :label-cols="horizontal ? 5 : 0"
             :horizontal="horizontal"
+
     >
-        {{defaultValue}}
-        <b-form-input class="color-form c-100 pr-2" v-model="value" type="color"></b-form-input>
+        <b-form-input size="sm" class="color-form c-100 pr-2" v-model="value" type="color"></b-form-input>
     </b-form-group>
 </template>
 

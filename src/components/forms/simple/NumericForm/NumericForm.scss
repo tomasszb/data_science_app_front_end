@@ -6,6 +6,10 @@
     background-color: white!important;
     border: none!important;
   }
+  .numeric-input {
+    background-color: white!important;
+    font-size: 0.8rem!important;
+  }
 
   .btn-decrement .btn-icon {
     border-color: $gray-500 transparent transparent!important;
@@ -15,9 +19,9 @@
     border-color: transparent transparent $gray-500 !important;
   }
 
-  .vue-numeric-input input {
-    height: 31px;
-    border-radius: 3px;
-  }
+  //.vue-numeric-input input {
+  //  height: 31px;
+  //  border-radius: 3px;
+  //}
 
 }

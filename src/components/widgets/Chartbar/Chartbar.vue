@@ -23,41 +23,35 @@
                 :DataObjectId="activeNodeSettings['data_object_tags']"/>
 <!--        <img :src="" />-->
 
-
-        <multiselect
-                v-show="openSettings===1"
-                v-model="settingsFilterChartParts"
-                :options="['title', 'y_axis', 'x_axis', 'label']"
-                :searchable="false"
-                :close-on-select="true"
-                :show-labels="false"
-                class="my-2"
-                placeholder="Filter Chart Parts"
-                :hideSelected="true"
-                :multiple="true"
-        />
-        <multiselect
-                v-show="openSettings===1"
-                v-model="settingsFilterParameterType"
-                :options="['name', 'font', 'color', 'show']"
-                :searchable="false"
-                :close-on-select="true"
-                :show-labels="false"
-                class="mb-4"
-                placeholder="Filter Parameter Type"
-                :hideSelected="true"
-                :multiple="true"
-        />
-        <div v-show="openSettings===1" class="p-2 chartbar-parameters">
+<!--        <b-form-group-->
+<!--            :label="name"-->
+<!--            label-class="pt-1"-->
+<!--        >-->
+<!--            <b-dropdown-->
+<!--                block-->
+<!--                size="sm"-->
+<!--                variant="info-light"-->
+<!--                :text="value"-->
+<!--                class="d-inline-flex c-100"-->
+<!--                menu-class="w-100 mt-3"-->
+<!--            >-->
+<!--                <b-dropdown-item-->
+<!--                    @click="value=settingsFilterChartParts"-->
+<!--                    v-for="option in options"-->
+<!--                >-->
+<!--                    {{option}}-->
+<!--                </b-dropdown-item>-->
+<!--            </b-dropdown>-->
+<!--        </b-form-group>-->
+        <div v-show="openSettings===1" class="p-2 chartbar-parameters mt-3">
             <div
                 v-for="(prop, i) in filteredChartProperties"
                 :key="'chart-form-container-'+activeNode+i"
             >
-                <div class="chartbar-parameters-form-container c-100 d-inline-flex pb-3 pt-3">
+                <div class="chartbar-parameters-form-container c-100 d-inline-flex pb-3 pt-2">
                     <div class=" c-40 mr-3 d-flex align-items-center align-content-center">
-                        <div class="c-100 chartbar-parameters-form align-items-center align-content-center">
+                        <div class="chartbar-parameters-form align-items-center align-content-center">
                             <FormContainer
-
                                 :route="['template'].concat(prop.path).concat(prop.name.split('.').slice(0, -1))"
                                 :parameterIndex="prop.name.split('.').slice(-1)[0]"
                                 :typeSettings="prop.type"
@@ -66,9 +60,11 @@
                             />
                         </div>
                     </div>
-                    <div class="c-60">
-                        <strong>{{prop.name.split('.').slice(-1)[0]}}</strong><br>
-                        {{prop.name.split('.').slice(0,-1).join(' > ')}}
+                    <div class="c-60 text-gray align-items-center align-content-center d-inline-flex pt-1">
+                        <h6>
+                            {{prop.name.split('.').slice(-1)[0]}}
+                        </h6>
+<!--                        {{prop.name.split('.').slice(0,-1).join(' > ')}}-->
                     </div>
                 </div>
 

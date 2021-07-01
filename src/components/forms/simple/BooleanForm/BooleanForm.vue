@@ -1,5 +1,5 @@
 <template>
-    <b-form-group class="boolean-form abc-checkbox pr-2 mt-2">
+    <b-form-group class="boolean-form abc-checkbox pr-2">
         <input
                 type="checkbox"
                 id="checkbox-default"

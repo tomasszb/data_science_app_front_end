@@ -4,6 +4,20 @@
         <div class="text-gray-light small font-weight-bold mt-2 mb-2">
             Columns
         </div>
+
+        <b-input-group id="transparent-field" class="input-group-transparent mb-3" size="sm">
+            <b-input-group-text class="bg-white" slot="prepend">
+                <i class="fa fa-search" />
+            </b-input-group-text>
+            <b-form-input
+                type="text"
+                class="px-2"
+                size="sm"
+                autocomplete="off"
+                v-model="columnFilter"
+                placeholder="Filter Columns"
+            ></b-form-input>
+        </b-input-group>
         <div class="flex-vertical">
             <draggable
                 v-model="columnList"
@@ -13,6 +27,7 @@
                 animation="200"
             >
                 <ColumnButton
+                    v-if="checkColumnFilter(column)"
                     v-for="column in columnList"
                     :key="'po-column-'+column.name"
                     :name="column.name"
@@ -39,7 +54,8 @@
         data() {
             return {
                 resultObjectID: null,
-                columnList: null
+                columnList: null,
+                columnFilter: ''
             }
         },
         prop: {
@@ -63,6 +79,12 @@
             },
             getResultObjectID() {
                 return getResultObjectID([this.selectedInputNodeID, 'output_table_quick_info', this.nodeSignatures[this.selectedInputNodeID]])
+            },
+            checkColumnFilter(column) {
+                let f1 = column.name.toLowerCase().includes(this.columnFilter.toLowerCase())
+                //let f2 = column.type.toLowerCase().includes(this.columnFilter.toLowerCase())
+                let f3 = this.columnFilter===''
+                return f1 || f3
             }
         },
         computed: {

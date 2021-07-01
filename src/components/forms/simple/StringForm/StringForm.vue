@@ -7,7 +7,7 @@
                 :label-cols="horizontal ? 5 : 0"
                 :horizontal="horizontal"
         >
-            <b-form-input v-model="value"></b-form-input>
+            <b-form-input size="sm" v-model="value"></b-form-input>
         </b-form-group>
     </div>
 </template>

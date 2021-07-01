@@ -7,14 +7,21 @@
                 :label-cols="horizontal ? 5 : 0"
                 :horizontal="horizontal"
         >
-            <v-select
-                    :id="'condition-select'+objectID"
-                    append-to-body
-                    class="c-100"
-                    v-model="value"
-                    :options="options"
-                    :clearable="false"
-            />
+            <b-dropdown
+                block
+                size="sm"
+                variant="info-light"
+                :text="value"
+                class="d-inline-flex c-100"
+                menu-class="w-100 mt-3"
+            >
+                <b-dropdown-item
+                    @click="value=option"
+                    v-for="option in options"
+                >
+                    {{option}}
+                </b-dropdown-item>
+            </b-dropdown>
         </b-form-group>
     </div>
 </template>
