@@ -4,20 +4,6 @@
 .chartbar {
   height: calc(100vh - #{$navbar-height} - #{$toolfooter-height} - 50px);
 
-  .btn {
-    //border-radius: 0;
-    //background-color: $gray-100;
-    //color: $gray-500;
-  }
-  .btn:focus,  .btn:hover{
-    background-color: white;
-  }
-  .btn.active {
-    background-color: white!important;
-    box-shadow: none!important;
-    font-weight: 600;
-  }
-
   input {
     background-color: inherit;
     border: 0;

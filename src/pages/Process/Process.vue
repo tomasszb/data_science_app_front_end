@@ -60,24 +60,30 @@
         <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">
             <tool-header></tool-header>
             <div class="flex-vertical">
-                <div class="flex-horizontal">
-                    <nav-sidebar
-                        :defaultWidth="200"
-                        :minWidth="150"
-                        :maxWidth="250"
-                        settingPrefix="column"
-                    >
-                        <page-columnbar/>
-                    </nav-sidebar>
+                <div class="flex-horizontal-no-scroll">
                     <nav-sidebar
                         v-if="nodeTagsChartTemplate!==null"
-                        :defaultWidth="200"
-                        :minWidth="150"
-                        :maxWidth="250"
-                        settingPrefix="chart"
+                        :defaultWidth="600"
+                        :minWidth="400"
+                        :maxWidth="700"
+                        settingPrefix="chart-column"
                         class="vis-sidebar-2"
                     >
-                        <chartbar/>
+                        <div class="flex-vertical-no-scroll">
+                            <ChartTypeSelector
+                                :sidebarPrefixes="['chart-column']"
+                                settingPrefix="chart-column"
+                                :chartsSettings="chartsSettings"
+                            />
+                            <div class="flex-horizontal-no-scroll">
+                                <div class="c-40 border-right">
+                                    <page-columnbar/>
+                                </div>
+                                <div class="c-60">
+                                    <chartbar/>
+                                </div>
+                            </div>
+                        </div>
                     </nav-sidebar>
                     <main-content>
                         <template v-slot:node-view-selector>
@@ -111,11 +117,14 @@ import NodeViewSelector from "../../components/ui/NodeViewSelector/NodeViewSelec
 import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 import QueryEditor from "@/components/widgets/QueryEditor/QueryEditor";
 import Dashboard from "@/components/widgets/Dashboard/Dashboard";
+import ChartTypeSelector from "@/components/widgets/Chartbar/ChartTypeSelector/ChartTypeSelector";
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createDataFlowRequest, getUpstreamElements } from '@/core/projectManager';
 import dsw_config from "../../dsw_config";
 import ConnectorExplorer from "@/components/widgets/ConnectorExplorer/ConnectorExplorer";
+import {chartsSettings} from '@/components/widgets/Chartbar/chartsSettings_new';
+import {getObjectSetting} from "@/core/projectObjectParser";
 
 export default {
     name: 'Process',
@@ -126,7 +135,8 @@ export default {
         // DataTable, DataColumnExplorer_old, MainContent,
         // Sheetbar
         DataColumnExplorer, DataTable, QueryEditor,
-        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector, Chartbar,
+        NavSidebar, ToolHeader, ToolFooter, MainContent, Connectorbar, Sheetbar, NodeViewSelector,
+        Chartbar, ChartTypeSelector,
         Prepbar,
         PageColumnbar,
         Dashboard
@@ -135,6 +145,7 @@ export default {
         return {
             request: null,
             processKey: 0,
+            chartsSettings: chartsSettings,
         }
     },
     methods: {
@@ -170,7 +181,16 @@ export default {
         },
         activeConnectorGroup() {
             return this.projectObjects.getPath(this.activePage + '.data_object_tags.connector.group', null)
-        }
+        },
+        processDisplaySettings() {
+            // console.log('displaySettings', getObjectSetting(this.projectObjects, this.activeProcess, 'display_settings', {}));
+            return getObjectSetting(
+                this.projectObjects,
+                this.activeProcess,
+                'display_settings',
+                {}
+            );
+        },
     },
     directives: {
         focus: {

@@ -1,7 +1,26 @@
 @import '../../../../styles/app';
 
 .chart-type-selector {
-  //background-color: white;
-  display: block;
-  position: relative;
+  background-color: white;
+  //display: block;
+  //position: relative;
+
+  .btn {
+    background-color: white!important;
+    border-bottom: 2px solid white!important;
+    border-top: 1px solid $gray-200!important;
+
+    //border-radius: 0;
+    //background-color: $gray-100;
+    //color: $gray-500;
+  }
+  .btn:focus,  .btn:hover{
+    background-color: white;
+  }
+  .btn.active {
+    border-bottom: 2px solid var(--sidebar-item-active)!important;
+    background-color: white!important;
+    box-shadow: none!important;
+    font-weight: 600;
+  }
 }

@@ -7,7 +7,7 @@
 <script>
 
     export default {
-        name: "ChartTypeSelector",
+        name: "ChartType",
         props: {
             src: { type: String, default: '' },
             name: { type: String, default: '' },

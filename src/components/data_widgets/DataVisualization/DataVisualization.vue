@@ -89,6 +89,9 @@
                     this.activeNodeSignature = this.nodeSignature;
                     return 'loading'
                 }
+                else if (status==='failed') {
+                    return 'failed'
+                }
                 return 'not_requested'
             },
             tableDataLive() {
@@ -100,6 +103,9 @@
             status(newValue) {
                 if(newValue==='ready') {
                     this.updateData('ready')
+                }
+                if(newValue==='not_requested') {
+                    this.requestTable()
                 }
             }
         },

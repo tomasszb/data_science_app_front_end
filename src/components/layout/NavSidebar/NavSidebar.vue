@@ -9,10 +9,14 @@
                 :disableAttributes="['h']"
                 class="nav-sidebar-wrapper flex-vertical-no-scroll"
                 @resize:end="storeWidth"
+                @mount="storeWidth"
         >
-            <slot></slot>
+
+                <slot>
+                </slot>
         </vue-resizable>
     </div>
+
 </template>
 
 <script>

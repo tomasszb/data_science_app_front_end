@@ -1,48 +1,12 @@
 <template>
-    <div class="chartbar p-2">
-        <b-button-group class="c-100">
-            <b-button
-                    variant="default" @click="changeOpenSettings(0)"
-                    size="sm"
-                    class="c-50 border-0"
-                    :class="{ active: openSettings === 0 }"
-            >Layout & Data</b-button>
-            <b-button
-                    variant="default" @click="changeOpenSettings(1)"
-                    size="sm"
-                    class="c-50 border-0 "
-                    :class="{ active: openSettings === 1 }"
-            >Design</b-button>
-        </b-button-group>
+    <div class="chartbar p-2 c-100 flex-vertical-no-scroll">
+
 
         <!--        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>-->
-        <ChartTypeSelector v-show="openSettings===0" :chartsSettings="chartsSettings"/>
         <ChartDataCard
                 v-show="openSettings===0"
                 :chartDataFields="chartDataFields"
                 :DataObjectId="activeNodeSettings['data_object_tags']"/>
-<!--        <img :src="" />-->
-
-<!--        <b-form-group-->
-<!--            :label="name"-->
-<!--            label-class="pt-1"-->
-<!--        >-->
-<!--            <b-dropdown-->
-<!--                block-->
-<!--                size="sm"-->
-<!--                variant="info-light"-->
-<!--                :text="value"-->
-<!--                class="d-inline-flex c-100"-->
-<!--                menu-class="w-100 mt-3"-->
-<!--            >-->
-<!--                <b-dropdown-item-->
-<!--                    @click="value=settingsFilterChartParts"-->
-<!--                    v-for="option in options"-->
-<!--                >-->
-<!--                    {{option}}-->
-<!--                </b-dropdown-item>-->
-<!--            </b-dropdown>-->
-<!--        </b-form-group>-->
         <div v-show="openSettings===1" class="p-2 chartbar-parameters mt-3">
             <div
                 v-for="(prop, i) in filteredChartProperties"
@@ -70,33 +34,6 @@
 
             </div>
         </div>
-
-
-<!--        <div class="chart-settings p-1">-->
-
-<!--            <div class="card panel mb-xs" v-for="(card, index) in chartCards">-->
-<!--                <div class="card-header panel-header py-2 px-3 mb-0" role="button" @click="toggleAccordion(index)">-->
-<!--                    <a class="accordion-toggle" role="button">-->
-<!--                        <h5 v-if="card === 'chart-data-card'">chart <strong>Data</strong></h5>-->
-<!--                        <h5 v-if="card === 'chart-layout-card'">chart <strong>Layout</strong></h5>-->
-<!--                        <i :class="`fa fa-angle-down ${(openSettings === card) ? 'expanded' : ''}`" />-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <b-collapse id="accordion-second" class="panel-body" :visible="openSettings === card">-->
-<!--                    <div v-if="card === 'chart-data-card'" class="card-body py-1">-->
-<!--                        <ChartDataCard :chartDataFields="chartDataFields"/>-->
-<!--                    </div>-->
-<!--                    <div v-if="card === 'chart-layout-card'" class="card-body py-1">-->
-<!--                        <ChartLayoutCard-->
-<!--                                :chartsLayoutSettings="chartLayoutSettings"-->
-<!--                                :chartLayoutPartPictures="chartLayoutPartPictures"-->
-<!--                                :chartLayoutTypePictures="chartLayoutTypePictures"-->
-<!--                        />-->
-<!--                    </div>-->
-<!--                </b-collapse>-->
-<!--                <div v-if="index===0" class="separator"/>-->
-<!--            </div>-->
-<!--        </div>-->
 
 
     </div>
@@ -131,7 +68,7 @@
     export default {
         name: 'Chartbar',
         components: {
-            ChartTypeSelector, ChartDataCard, ChartSettingSelector, ChartLayoutCard, FormContainer, Multiselect,
+            ChartDataCard, ChartSettingSelector, ChartLayoutCard, FormContainer, Multiselect,
             draggable
         },
         prop: {
@@ -140,10 +77,7 @@
         methods: {
             ...mapMutations('proj', [
                 'UPDATE_PROJECT_OBJECT'
-            ]),
-            changeOpenSettings(value) {
-                Vue.set(this,'openSettings', value);
-            },
+            ])
         },
         data() {
             return {
@@ -152,7 +86,6 @@
                 chartLayoutPartPictures: chartLayoutPartPictures,
                 chartLayoutTypePictures: chartLayoutTypePictures,
                 chartCards: ['chart-data-card', 'chart-layout-card'],
-                openSettings: 0,
                 settingsFilterChartParts: [],
                 settingsFilterParameterType: []
 
@@ -281,6 +214,15 @@
             activeChartType() {
                 // console.log(this.activeNodeSettings,this.activeNode,this.projectObjects);
                 return this.activeNodeSettings.getPath('display_settings.active_chart_type', null)
+            },
+            activeProcessSettings() {
+                return this.projectObjects.getKeyOrDefault(this.activeProcess, {})
+            },
+            displayProcessSettings() {
+                return this.activeProcessSettings['display_settings']
+            },
+            openSettings() {
+                return this.displayProcessSettings.getKeyOrDefault('active_chart_setting_selector', 0)
             }
 
         }

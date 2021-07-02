@@ -1,7 +1,7 @@
 @import '../../../../../styles/app';
 
 .chart-type-option {
-  border-bottom: 4px solid white;
+  border-bottom: 3px solid white;
   opacity: 40%;
   background-color: white;
   display: inline-block;
@@ -19,5 +19,5 @@
 
 .chart-type-option.active {
   opacity: 100%;
-  border-bottom: 4px solid var(--sidebar-item-active)!important;
+  border-bottom: 3px solid var(--sidebar-item-active)!important;
 }
