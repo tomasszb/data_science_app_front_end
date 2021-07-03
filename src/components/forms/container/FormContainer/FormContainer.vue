@@ -82,6 +82,7 @@
                 :name="name"
                 :horizontal="horizontal"
                 :route="route"
+                :settings="passSettings"
                 :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
         />
@@ -179,6 +180,7 @@
             parameterIndex: {type: [Number, String]},
             horizontal: {type: Boolean, default: false},
             typeSettings: {type: Object, default: function() {return {}} },
+            passSettings: {type: Object, default: function() {return {}} },
             objectID: { type: [Number, String], default: null },
             name: {type: String, default: ''},
             showLabel: {type: Boolean, default: true},

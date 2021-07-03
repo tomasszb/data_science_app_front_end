@@ -6,7 +6,7 @@
         :label-cols="horizontal ? 3 : 0"
         :horizontal="horizontal"
     >
-        <div class="chart-column-container-outer p-3 pb-3 mb-3">
+        <div class="chart-column-container-outer bg-white p-3 pb-3 mb-3">
             <div class="chart-column-container">
                 <draggable
                         class="dragArea list-group"
@@ -14,11 +14,14 @@
                         group="columns"
                         ghost-class="ghost"
                         animation="200"
+                        :disabled="disabled"
                         @change="checkChangedColumn"
                 >
                     <ColumnButton
                         v-for="(column, index) in columnList"
-                        :key="'po-column-form-'+column.name+index"
+                        @remove="removeColumn(index)"
+                        :parent="name"
+                        :key="'po-column-form-'+name+'-'+column.name+'-'+index"
                         :name="column.name"
                         :type="column.type"
                         :agrFunction="column.aggregate_function"
@@ -51,6 +54,7 @@
             horizontal: {type: Boolean, default: false},
             showLabel: {type: Boolean, default: true},
             parameterIndex: {type: [Number, String]},
+            settings: {type: Object, default: function() {return {}} },
             route: {type: Array, default: function() {return []}},
             defaultValue: {},
         },
@@ -74,6 +78,14 @@
             },
             inactiveChartSettings() {
                 return (this.displaySettings['inactive_chart_settings'] = this.displaySettings['inactive_chart_settings'] || [])
+            },
+            disabled() {
+                if(this.columnList.length>=this.settings.max_columns) {
+                    return true
+                }
+                else {
+                    return false
+                }
             },
             columnList: {
                 get() {
@@ -102,6 +114,11 @@
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER', 'UPDATE_DISPLAY_SETTINGS'
             ]),
+            removeColumn(index) {
+                let columnList = this.columnList;
+                columnList.splice(index, 1);
+                Vue.set(this, 'columnList', columnList);
+            },
             checkChangedColumn(event) {
                 let columnList = this.columnList;
                 if (event.hasOwnProperty('moved') || event.hasOwnProperty('added')) {
@@ -110,8 +127,13 @@
                     let column = this.columnList[columnIndex];
                     // console.log('checkChangedColumn', event, columnIndex, column, 'end');
                     if (column.type==='float64' || column.type==='int64') {
-                        if (typeof column['aggregate_function'] === 'undefined') {
+                        if (this.settings.aggregate) {
                             columnList[columnIndex]['aggregate_function'] = 'sum';
+                            Vue.set(this, 'columnList', columnList);
+                            // console.log('hello there', this.columnList);
+                        }
+                        else if (!this.settings.aggregate) {
+                            columnList[columnIndex]['aggregate_function'] = null;
                             Vue.set(this, 'columnList', columnList);
                             // console.log('hello there', this.columnList);
                         }

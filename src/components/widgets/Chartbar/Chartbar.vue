@@ -8,31 +8,7 @@
                 :chartDataFields="chartDataFields"
                 :DataObjectId="activeNodeSettings['data_object_tags']"/>
         <div v-show="openSettings===1" class="p-2 chartbar-parameters mt-3">
-            <div
-                v-for="(prop, i) in filteredChartProperties"
-                :key="'chart-form-container-'+activeNode+i"
-            >
-                <div class="chartbar-parameters-form-container c-100 d-inline-flex pb-3 pt-2">
-                    <div class=" c-40 mr-3 d-flex align-items-center align-content-center">
-                        <div class="chartbar-parameters-form align-items-center align-content-center">
-                            <FormContainer
-                                :route="['template'].concat(prop.path).concat(prop.name.split('.').slice(0, -1))"
-                                :parameterIndex="prop.name.split('.').slice(-1)[0]"
-                                :typeSettings="prop.type"
-                                :objectID="activeNodeSettings.data_object_tags.chart_template"
-                                :showLabel="false"
-                            />
-                        </div>
-                    </div>
-                    <div class="c-60 text-gray align-items-center align-content-center d-inline-flex pt-1">
-                        <h6>
-                            {{prop.name.split('.').slice(-1)[0]}}
-                        </h6>
-<!--                        {{prop.name.split('.').slice(0,-1).join(' > ')}}-->
-                    </div>
-                </div>
-
-            </div>
+            <chart-template-settings/>
         </div>
 
 
@@ -50,25 +26,13 @@
     import ChartTypeSelector from "./ChartTypeSelector/ChartTypeSelector";
     import ChartDataCard from "./ChartDataCard/ChartDataCard";
     import ChartSettingSelector from './ChartSettingSelector/ChartSettingSelector'
+    import ChartTemplateSettings from "@/components/widgets/Chartbar/ChartTemplateSettings/ChartTemplateSettings";
     import {chartsDataFields, chartsSettings, chartLayoutPartPictures, chartLayoutTypePictures, chartsLayoutSettings} from "./chartsSettings_new"
-
-    function getNestedValues(obj, result, rootPath) {
-        let path = R.clone(rootPath);
-        Object.keys(obj).forEach(key => {
-            if (typeof obj[key] === "object" && obj[key] !== null) {
-                if(obj[key].hasOwnProperty('type')) {
-                    result.push({'name': key, 'type': obj[key], 'path': path});
-                } else {
-                    getNestedValues(obj[key], result, path.concat([key]));
-                }
-            }
-        })
-    }
 
     export default {
         name: 'Chartbar',
         components: {
-            ChartDataCard, ChartSettingSelector, ChartLayoutCard, FormContainer, Multiselect,
+            ChartDataCard, ChartSettingSelector, ChartLayoutCard, FormContainer, Multiselect, ChartTemplateSettings,
             draggable
         },
         prop: {
@@ -101,52 +65,6 @@
             ...mapState('proj', [
                 'selectedProcess', 'selectedPages', 'selectedNodes'
             ]),
-
-            chartProperties() {
-                let result = [];
-                getNestedValues(this.dataObjectParameterMapping["300000"]['__init__'][0]["dtype"], result, []);
-                // console.log(result);
-                return result;
-            },
-            filteredChartProperties() {
-                let result = [];
-                for (let prop of this.chartProperties) {
-                    let matchChartParts = false;
-                    let matchChartParameters = false;
-
-                    if (this.settingsFilterChartParts.length>0) {
-                        for (let partFilter of this.settingsFilterChartParts) {
-                            if (prop.name.includes(partFilter)) {
-                                matchChartParts = true;
-                            }
-                        }
-                    }
-                    else {
-                        matchChartParts=true;
-                    }
-
-                    if (this.settingsFilterParameterType.length>0) {
-                        for (let parameterFitler of this.settingsFilterParameterType) {
-                            if (prop.name.includes(parameterFitler)) {
-                                matchChartParameters = true;
-                            }
-                        }
-                    }
-                    else {
-                        matchChartParameters=true;
-                    }
-
-                    if (matchChartParameters && matchChartParts) {
-                        result.push(prop)
-                    }
-                }
-                return result
-            },
-
-
-
-
-
             chartSettings() {
                 return this.activeChartType in this.chartsSettings ? this.chartsSettings[this.activeChartType] : {}
             },

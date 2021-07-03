@@ -64,8 +64,8 @@
                     <nav-sidebar
                         v-if="nodeTagsChartTemplate!==null"
                         :defaultWidth="600"
-                        :minWidth="400"
-                        :maxWidth="700"
+                        :minWidth="500"
+                        :maxWidth="650"
                         settingPrefix="chart-column"
                         class="vis-sidebar-2"
                     >
@@ -76,10 +76,10 @@
                                 :chartsSettings="chartsSettings"
                             />
                             <div class="flex-horizontal-no-scroll">
-                                <div class="c-40 border-right">
+                                <div class="c-45 border-right">
                                     <page-columnbar/>
                                 </div>
-                                <div class="c-60">
+                                <div class="c-55">
                                     <chartbar/>
                                 </div>
                             </div>

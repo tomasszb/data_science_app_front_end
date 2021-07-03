@@ -6,6 +6,7 @@
                         :route="['fields']"
                         :parameterIndex="settings.alias"
                         :horizontal="false"
+                        :pass-settings="settings"
                         :typeSettings="{type: 'column_list'}"
                         :objectID="activeNodeSettings['data_object_tags']['visualization_pivot']"
                         :name="settings.name"

@@ -73,25 +73,25 @@ export let chartsSettings = {
 
 
 export let chartsDataFields = [
-        {'name': 'x grid', 'alias': 'xgrid', 'selector': 'grid'},
-        {'name': 'y grid', 'alias': 'ygrid', 'selector': 'grid'},
+        {'name': 'x grid', 'alias': 'xgrid', 'selector': 'grid', 'aggregate': false, 'max_columns': 1},
+        {'name': 'y grid', 'alias': 'ygrid', 'selector': 'grid', 'aggregate': false, 'max_columns': 1},
 
-        {'name': 'main axis', 'alias': 'row', 'selector': null},
-        {'name': 'x axis', 'alias': 'row', 'selector': null},
-        {'name': 'rows', 'alias': 'row', 'selector': null},
-        {'name': 'long', 'alias': 'row', 'selector': null},
+        {'name': 'main axis', 'alias': 'row', 'selector': null, 'aggregate': false, 'max_columns': 1},
+        {'name': 'x axis', 'alias': 'row', 'selector': null, 'aggregate': false, 'max_columns': 1},
+        {'name': 'rows', 'alias': 'row', 'selector': null, 'aggregate': false, 'max_columns': 5},
+        {'name': 'long', 'alias': 'row', 'selector': null, 'aggregate': false, 'max_columns': 1},
 
-        {'name': 'category', 'alias': 'col', 'selector': null},
-        {'name': 'y axis', 'alias': 'col', 'selector': null},
-        {'name': 'columns', 'alias': 'col', 'selector': null},
-        {'name': 'lat', 'alias': 'col', 'selector': null},
+        {'name': 'category', 'alias': 'col', 'selector': null, 'aggregate': false, 'max_columns': 5},
+        {'name': 'y axis', 'alias': 'col', 'selector': null, 'aggregate': false, 'max_columns': 5},
+        {'name': 'columns', 'alias': 'col', 'selector': null, 'aggregate': false, 'max_columns': 5},
+        {'name': 'lat', 'alias': 'col', 'selector': null, 'aggregate': false, 'max_columns': 1},
 
-        {'name': 'values', 'alias': 'value', 'selector': null},
-        {'name': 'marker color', 'alias': 'markerC', 'selector': 'marker'},
-        {'name': 'marker size', 'alias': 'markerS', 'selector': 'marker'},
-        {'name': 'tooltip', 'alias': 'tooltip', 'selector': 'tooltip'},
-        {'name': 'color', 'alias': 'color', 'selector': null},
-        {'name': 'size', 'alias': 'size', 'selector': null}
+        {'name': 'values', 'alias': 'value', 'selector': null, 'aggregate': true, 'max_columns': 50},
+        {'name': 'marker color', 'alias': 'markerC', 'selector': 'marker', 'aggregate': false, 'max_columns': 1},
+        {'name': 'marker size', 'alias': 'markerS', 'selector': 'marker', 'aggregate': false, 'max_columns': 1},
+        {'name': 'tooltip', 'alias': 'tooltip', 'selector': 'tooltip', 'aggregate': false, 'max_columns': 50},
+        {'name': 'color', 'alias': 'color', 'selector': null, 'aggregate': false, 'max_columns': 1},
+        {'name': 'size', 'alias': 'size', 'selector': null, 'aggregate': false, 'max_columns': 1}
     ];
 
 

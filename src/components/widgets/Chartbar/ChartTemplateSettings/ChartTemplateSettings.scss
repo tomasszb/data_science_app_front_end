@@ -1,0 +1,40 @@
+@import '../../../../styles/app';
+
+
+.chart-template-settings {
+
+  .card-header {
+    background-color: $gray-200;
+  }
+
+  h6 {
+    font-size: $font-size-sm;
+    color: $gray-700;
+    font-weight: 600;
+  }
+
+  h5 {
+    font-size: $font-size-base* 0.85;
+    color: $gray-600;
+    font-weight: 600;
+  }
+
+  h4 {
+    font-size: $font-size-base* 0.9;
+    color: $gray-800;
+    font-weight: 600;
+  }
+
+  .chartbar-parameters-form {
+    text-align:center;
+    width: 120px!important;
+    //display: flex;
+    //justify-content: center;
+    //align-items: center;
+  }
+
+}
+
+
+
+

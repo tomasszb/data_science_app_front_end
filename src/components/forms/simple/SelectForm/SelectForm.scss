@@ -1,1 +1,13 @@
 @import '../../../../styles/app';
+
+.select-form .v-select {
+  font-size: $font-size-sm!important;
+}
+
+.menu-item {
+  font-size: $font-size-sm;
+}
+
+.vs__dropdown-menu {
+  min-width: 100px!important;
+}

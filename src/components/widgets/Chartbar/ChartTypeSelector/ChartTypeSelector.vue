@@ -5,7 +5,7 @@
                 Chart type
             </strong>
         </h5>
-        <div class="px-4 mb-3">
+        <div class="px-4 py-2 border-top border-light border-bottom border-light">
             <ChartType
                 v-for="(chart, alias) in chartsSettings"
                 :src="chart.chartPicture"
@@ -15,7 +15,7 @@
                 @click.native="setActiveChartType(alias)"
             />
         </div>
-        <b-button-group class="c-100 border-top border-light">
+        <b-button-group class="c-100 pt-3">
             <b-button
                 variant="default"
                 @click="changeOpenSettings(0)"
@@ -77,7 +77,8 @@
             ]),
             setActiveChartType(activeChartAlias) {
                 let activeNodeSettings = R.clone(this.activeNodeSettings);
-                activeNodeSettings.displaySettings['active_chart_type'] = activeChartAlias;
+                console.log('setActiveChartType', activeNodeSettings)
+                activeNodeSettings['display_settings']['active_chart_type'] = activeChartAlias;
                 this.UPDATE_PROJECT_OBJECT({ObjectID: activeNodeSettings.id, Object: activeNodeSettings});
             },
             changeOpenSettings(value) {

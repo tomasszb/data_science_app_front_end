@@ -1,19 +1,21 @@
 <template>
-    <div class="column-selector">
+    <div
+        :class="{
+            'column-selector': true,
+            'bg-success': agrFunction!==null && parent!==null,
+            'bg-primary': agrFunction===null && parent!==null
+        }"
+    >
         <div class="d-inline-flex c-100 align-items-center">
             <div class="column-selector-type">
-                <span class="m-0">{{type}}</span>
+                <span v-if="agrFunction!==null" class="m-0 font-weight-bolder">{{agrFunction.toUpperCase()}}</span>
+                <span v-if="agrFunction===null" class="m-0">{{type}}</span>
             </div>
-            <div class="c-100">
+            <div class="c-100 d-inline-flex align-items-center">
                 <div class="column-selector-text">
-                    <strong v-if="agrFunction!==null" class="column-selector-text">
-                        {{agrFunction}}(
-                    </strong>
                     {{name}}
-                    <strong v-if="agrFunction!==null" class="column-selector-text">
-                        )
-                    </strong>
                 </div>
+                <i v-if="parent!==null" @click="emitEvent('remove')" class="la la-remove"/>
             </div>
 
         </div>
@@ -27,6 +29,7 @@
         name: 'ColumnButton',
         props: {
             name: { type: String, default: null },
+            parent: { type: String, default: null },
             agrFunction: {type: String, default: null},
             type: { type: String, default: null },
         },
@@ -49,6 +52,9 @@
             ...mapActions('proj/object_manager', [
                 'setActivePO', 'deletePO'
             ]),
+            emitEvent(eventName) {
+                this.$emit(eventName)
+            },
         }
     };
 </script>

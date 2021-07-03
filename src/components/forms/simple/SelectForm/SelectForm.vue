@@ -1,5 +1,5 @@
 <template>
-    <div class="select-form pr-2">
+    <div class="pr-2 select-form">
         <b-form-group
                 :label="name"
                 :label-sr-only="!showLabel"
@@ -7,21 +7,20 @@
                 :label-cols="horizontal ? 5 : 0"
                 :horizontal="horizontal"
         >
-            <b-dropdown
-                block
-                size="sm"
-                variant="info-light"
-                :text="value"
-                class="d-inline-flex c-100"
-                menu-class="w-100 mt-3"
+            <v-select
+                    :id="'condition-select'+objectID"
+                    append-to-body
+                    class="c-100"
+                    v-model="value"
+                    :options="options"
+                    :clearable="false"
             >
-                <b-dropdown-item
-                    @click="value=option"
-                    v-for="option in options"
-                >
-                    {{option}}
-                </b-dropdown-item>
-            </b-dropdown>
+                <template slot="option" slot-scope="option">
+                    <div class="menu-item">
+                        {{ option.label }}
+                    </div>
+                </template>
+            </v-select>
         </b-form-group>
     </div>
 </template>
