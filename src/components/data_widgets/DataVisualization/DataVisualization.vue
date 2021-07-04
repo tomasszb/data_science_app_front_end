@@ -1,5 +1,5 @@
 <template>
-    <div class="c-100 r-100">
+    <div class="c-100 r-100 data-visualization">
 <!--        <div class="c-100 r-10">-->
 <!--            <b-button @click="requestTable">hello</b-button>-->
 <!--        </div>-->

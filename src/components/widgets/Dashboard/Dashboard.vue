@@ -1,24 +1,47 @@
 <template>
-    <div class="chart-dashboard r-100 c-100">
-        <div class="chart-dashboard-grid-container r-95">
-            <section class="grid-stack">
-                <dashboard-item
-                    v-for="(dashboardItem, index) in dashboardItems"
-                    v-if="getDataVisID(nodeLists[activePage][index]) !== '' "
-                    @activate-node="activateNode(nodeLists[activePage][index])"
-                    :class="nodeLists[activePage][index]===activeNode ? 'active' : ''"
-                    :grid="grid"
-                    :dataVisID="getDataVisID(nodeLists[activePage][index])"
-                    :dashboardID="dataObjectID"
-                    :key="'dashboard-item-node-'+nodeLists[activePage][index]"
-                    :index="index"
+    <div class="chart-dashboard flex-vertical-no-scroll c-100 r-100 justify-content-between">
+        <div
+            class="chart-dashboard-grid-container overflow-auto py-5"
+        >
+            <div
+                :style="{
+                'height': dataObjectParameters.height+100+'px',
+                'width': dataObjectParameters.width+100+'px',
+                'margin': 'auto'
+                }"
+            >
+                <div
+                    class="overflow-auto"
+                    :style="{
+                'height': dataObjectParameters.height+'px',
+                'width': dataObjectParameters.width+'px',
+                'margin': 'auto'
+                }"
                 >
-                    <data-visualization
-                        :nodeID="nodeLists[activePage][index]"
-                        :key="'dashboard-item-vis-'+nodeLists[activePage][index]"
-                    />
-                </dashboard-item>
-            </section>
+                    <section
+                        class="grid-stack c-100 r-100 border"
+                    >
+                        <dashboard-item
+                            v-for="(dashboardItem, index) in dashboardItems"
+                            v-if="getDataVisID(nodeLists[activePage][index]) !== '' "
+                            @activate-node="activateNode(nodeLists[activePage][index])"
+                            :class="nodeLists[activePage][index]===activeNode ? 'active' : ''"
+                            :grid="grid"
+                            :dataVisID="getDataVisID(nodeLists[activePage][index])"
+                            :dashboardID="dataObjectID"
+                            :key="'dashboard-item-node-'+nodeLists[activePage][index]"
+                            :index="index"
+                        >
+                            <data-visualization
+                                :nodeID="nodeLists[activePage][index]"
+                                :key="'dashboard-item-vis-'+nodeLists[activePage][index]"
+                            />
+                        </dashboard-item>
+                    </section>
+                </div>
+            </div>
+
+
         </div>
         <toolbox-dashboard
             :grid="grid"
@@ -65,9 +88,13 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                 });
             },
             addNewNode: function () {
+                // let result = newDataVisualizationNode({
+                //     pageID: this.projectObjects[this.activePage].id,
+                //     sourceNodeID: this.projectObjects[this.activeSourceNode].id
+                // })
                 let result = newDataVisualizationNode({
                     pageID: this.projectObjects[this.activePage].id,
-                    sourceNodeID: this.projectObjects[this.activeSourceNode].id
+                    sourceNodeID: null
                 })
                 let visID = result.dataObjects.data_visualization
 

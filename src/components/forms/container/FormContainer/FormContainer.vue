@@ -10,7 +10,7 @@
                 :defaultValue="typeSettings.default"
                 :showLabel="showLabel"
                 :precision="null"
-                :step="1"
+                :step="10"
         />
         <numeric-form
                 v-if="typeSettings.type === 'float'"

@@ -1,11 +1,23 @@
 @import '../../../styles/app';
 .chart-dashboard .chart-dashboard-grid-container {
-  overflow-y: auto;
-  overflow-x: auto;
-  width:100%;
+  //overflow-y: auto!important;
+  //overflow-x: auto!important;
+  background-color: $gray-300
 }
-
 
 .chart-dashboard .ui-resizable-se, .chart-dashboard .ui-resizable-sw {
   opacity: 0;
+}
+
+.chart-dashboard {
+  height: calc(100vh - 55px - 40px);
+}
+
+.grid-stack {
+  box-shadow: var(--shadow);
+  //background-color: #ffc240;
+  background:
+          repeating-linear-gradient(to right, transparent 0  calc(10px - 1px), $gray-300 calc(10px - 1px) 10px),
+          repeating-linear-gradient(to bottom, transparent 0 calc(10px - 1px), $gray-300 calc(10px - 1px) 10px)
+          white;
 }

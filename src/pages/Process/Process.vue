@@ -59,10 +59,10 @@
         </div>
         <div v-if="processType===this.dsw_config.DATA_VIS_PROCESS_CD" class="flex-vertical" :key="processKey">
             <tool-header></tool-header>
-            <div class="flex-vertical">
+            <div class="flex-vertical vis-process">
                 <div class="flex-horizontal-no-scroll">
                     <nav-sidebar
-                        v-if="nodeTagsChartTemplate!==null"
+                        v-if="activeNode!==null"
                         :defaultWidth="600"
                         :minWidth="500"
                         :maxWidth="650"
@@ -71,6 +71,7 @@
                     >
                         <div class="flex-vertical-no-scroll">
                             <ChartTypeSelector
+                                v-if="activeNode!==null"
                                 :sidebarPrefixes="['chart-column']"
                                 settingPrefix="chart-column"
                                 :chartsSettings="chartsSettings"
@@ -79,7 +80,7 @@
                                 <div class="c-45 border-right">
                                     <page-columnbar/>
                                 </div>
-                                <div class="c-55">
+                                <div class="c-55" >
                                     <chartbar/>
                                 </div>
                             </div>
