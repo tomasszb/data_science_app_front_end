@@ -245,6 +245,11 @@ export default {
             // console.log('UPDATE_DISPLAY_SETTINGS', state.projectData['project_objects'][index], 'display_settings', displaySettings)
             Vue.set(state.projectData['project_objects'][index], 'display_settings', displaySettings)
         },
+        UPDATE_TEMPORARY_SETTINGS(state, {ObjectID, temporarySettings}) {
+            let index = getObjectIndex(state.projectData['project_objects'], ObjectID);
+            // console.log('UPDATE_TEMPORARY_SETTINGS', state.projectData['project_objects'][index], 'display_settings', displaySettings)
+            Vue.set(state.projectData['project_objects'][index], 'temporary_settings', temporarySettings)
+        },
         UPDATE_DATAFRAME(state, {nodeID, resultTag, nodeSignature, data}) {
             let dataFrameID = getResultObjectID([nodeID,resultTag,nodeSignature])
             Vue.set(state.dataFrames, dataFrameID,  data);

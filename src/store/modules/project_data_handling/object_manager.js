@@ -77,7 +77,8 @@ export default {
                     'source_data_node': sourceNodeID,
                     'secondary_data_nodes': []
                 },
-                "display_settings": {}
+                "display_settings": {},
+                "temporary_settings": {}
             };
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: nodeID, Object: emptyNode}, { root: true });
             dispatch("setActivePO", {selectedProcess:null, selectedPage:pageID, selectedNode:nodeID});
@@ -98,7 +99,8 @@ export default {
                     'process_id': processID,
                     'source_data_node': null
                 },
-                "display_settings": {}
+                "display_settings": {},
+                "temporary_settings": {}
             };
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: pageID, Object: emptyPage}, { root: true });
         },
@@ -115,7 +117,8 @@ export default {
                 "data_object_tags": dataObjectTags,
                 "relative_position": position,
                 'parameters': {},
-                "display_settings": {}
+                "display_settings": {},
+                "temporary_settings": {}
             };
             commit("proj/UPDATE_PROJECT_OBJECT", {ObjectID: processID, Object: emptyProcess}, { root: true });
         },

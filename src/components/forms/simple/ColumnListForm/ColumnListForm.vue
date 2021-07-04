@@ -34,7 +34,7 @@
 </template>
 
 <script>
-    import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import Vue from 'vue';
     import draggable from "vuedraggable";
     import vSelect from 'vue-select';
@@ -65,7 +65,7 @@
         },
         computed: {
             ...mapGetters('proj', [
-                'dataObjects', 'projectObjects', 'activeNode'
+                'dataObjects', 'projectObjects', 'activePage', 'activeNode'
             ]),
             parentParameters() {
                 return this.dataObjects[this.objectID]['parameters']
@@ -73,8 +73,14 @@
             activeNodeSettings() {
                 return this.projectObjects[this.activeNode]
             },
+            activePageSettings() {
+                return this.projectObjects[this.activePage]
+            },
             displaySettings() {
                 return this.activeNodeSettings['display_settings']
+            },
+            temporarySettings() {
+                return this.activeNodeSettings['temporary_settings']
             },
             inactiveChartSettings() {
                 return (this.displaySettings['inactive_chart_settings'] = this.displaySettings['inactive_chart_settings'] || [])
@@ -89,30 +95,44 @@
             },
             columnList: {
                 get() {
-                    let list = getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex];
-                    return typeof list !== 'undefined' ? list : []
+                    let temporaryFields = this.activeNodeSettings.getPath('temporary_settings.pivot_columns.'+this.activeNodeSettings['parameters']['source_data_node'], {})
+                    let parentParameters =this.parentParameters
+                    let list = parentParameters.getPath(this.route+'.'+this.parameterIndex, null);
+                    let list2 = temporaryFields.getPath(this.parameterIndex, null)
+                    console.log('columnList2', list, list2, this.route, temporaryFields)
+
+                    if (list === null && list2 !==null) {
+                        Vue.set(this, 'columnList', list2)
+                        return list2
+                    }
+                    return list !== null ? list : []
                 },
                 set(newValue) {
-                    this.SET_DO_PARAMETER({
+                    this.setDataObjectParameter({
                         id: this.objectID,
                         route: this.route.concat(this.parameterIndex),
                         value: newValue
                     });
-                    let displaySettings = R.clone(this.displaySettings);
-                    let pivotColumns = typeof displaySettings['pivot_columns']!=='undefined' ? displaySettings['pivot_columns'] : {};
-                    pivotColumns[this.parameterIndex] = newValue;
-                    displaySettings['pivot_columns'] = pivotColumns;
+                    let temporarySettings = R.clone(this.temporarySettings);
+                    let pivotColumns = typeof temporarySettings['pivot_columns']!=='undefined' ? temporarySettings['pivot_columns'] : {};
+                    this.setDeep(pivotColumns, [this.activePageSettings['parameters']['source_data_node'],this.parameterIndex], newValue);
+                    pivotColumns = pivotColumns.setPath(this.activePageSettings['parameters']['source_data_node']+'.'+this.parameterIndex, newValue)
 
-                    this.UPDATE_DISPLAY_SETTINGS({
+                    temporarySettings['pivot_columns'] = pivotColumns;
+
+                    this.UPDATE_TEMPORARY_SETTINGS({
                         ObjectID: this.activeNode,
-                        displaySettings: displaySettings
+                        temporarySettings: temporarySettings
                     });
                 }
             }
         },
         methods: {
             ...mapMutations('proj', [
-                'SET_DO_PARAMETER', 'UPDATE_DISPLAY_SETTINGS'
+                'SET_DO_PARAMETER', 'UPDATE_TEMPORARY_SETTINGS', 'UPDATE_DATA_OBJECT'
+            ]),
+            ...mapActions('proj/object_manager', [
+                'setDataObjectParameter'
             ]),
             removeColumn(index) {
                 let columnList = this.columnList;

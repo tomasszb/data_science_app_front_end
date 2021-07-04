@@ -74,21 +74,6 @@
     import {mapGetters, mapMutations} from "vuex";
     import FormContainer from "../../../forms/container/FormContainer/FormContainer";
 
-    function setDeep(obj, path, value, setrecursively = true) {
-        path.reduce((a, b, level) => {
-            if (setrecursively && typeof a[b] === "undefined" && level !== path.length){
-                a[b] = {};
-                return a[b];
-            }
-
-            if (level === path.length){
-                a[b] = value;
-                return value;
-            }
-            return a[b];
-        }, obj);
-    }
-
     function getNestedValues(obj, result, rootPath) {
         let path = R.clone(rootPath);
         Object.keys(obj).forEach(key => {
@@ -142,7 +127,7 @@
                         names.splice(1, 0, names[names.length-1])
                     }
                 // console.log(names)
-                    setDeep(tree, names, 0)
+                    this.setDeep(tree, names, 0)
                 }
                 return tree
             }

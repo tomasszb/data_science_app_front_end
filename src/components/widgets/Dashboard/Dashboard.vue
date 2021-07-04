@@ -11,7 +11,7 @@
                 }"
             >
                 <div
-                    class="overflow-auto"
+                    class=" p-2"
                     :style="{
                 'height': dataObjectParameters.height+'px',
                 'width': dataObjectParameters.width+'px',
@@ -32,6 +32,7 @@
                             :key="'dashboard-item-node-'+nodeLists[activePage][index]"
                             :index="index"
                         >
+
                             <data-visualization
                                 :nodeID="nodeLists[activePage][index]"
                                 :key="'dashboard-item-vis-'+nodeLists[activePage][index]"
@@ -62,7 +63,7 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import {getObjectSetting} from "@/core/projectObjectParser";
     const R = require('ramda');
     import Vue from 'vue'
-import {newDataVisualizationNode} from "@/core/newObjects/visualize";
+    import {newDataVisualizationNode} from "@/core/newObjects/visualize";
 
     export default {
         name: 'Dashboard',
@@ -86,6 +87,41 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                     selectedPage:null,
                     selectedNode:nodeID
                 });
+            },
+            initGrid(dataObjectParameters) {
+                this.grid = GridStack.init(
+                    {
+                        float: !dataObjectParameters.vertical_align,
+                        acceptWidgets: true,
+                        cellHeight: '10px',
+                        cellWidth: '10px',
+                        margin: '1px',
+                        disableOneColumnMode: true,
+                        draggable: {handle: '.grid-stack-item-content', scroll: false, appendTo: 'body', containment: null},
+                        resizable: {autoHide: true, handles: 'n,ne,e,se,s,sw,w,nw'},
+                        dragOut: false,
+                    }
+                );
+                this.grid.on('change', (event, items) => {
+                    let dashboardItems = R.clone(this.dashboardItems);
+                    items.forEach(function(item) {
+                        for(let i=0; i<dashboardItems.length; i++) {
+                            let dashboardItem = dashboardItems[i];
+                            if (item.id === dashboardItem.id) {
+                                dashboardItem.layout.x = item.x;
+                                dashboardItem.layout.y = item.y;
+                                dashboardItem.layout.w = item.w;
+                                dashboardItem.layout.h = item.h;
+
+                            }
+                        }
+                    });
+                    // console.log(dashboardItems)
+                    Vue.set(this, 'dashboardItems', dashboardItems);
+                })
+            },
+            updateGrid(dataObjectParameters) {
+                this.grid.float(!dataObjectParameters.vertical_align)
             },
             addNewNode: function () {
                 // let result = newDataVisualizationNode({
@@ -168,39 +204,16 @@ import {newDataVisualizationNode} from "@/core/newObjects/visualize";
                 }
             }
         },
+        watch: {
+            dataObjectParameters(newValue) {
+                console.log('watch', newValue)
+                this.updateGrid(newValue)
+            }
+        },
         mounted: function () {
             // Provides access to the GridStack instance across the Vue component.
-            this.grid = GridStack.init(
-                {
-                    float: false,
-                    acceptWidgets: true,
-                    cellHeight: '20px',
-                    cellWidth: '20px',
-                    margin: '1px',
-                    disableOneColumnMode: true,
-                    draggable: {handle: '.grid-stack-item-content', scroll: false, appendTo: 'body', containment: null},
-                    resizable: {autoHide: true, handles: 'n,ne,e,se,s,sw,w,nw'}
-                }
-            );
-
+            this.initGrid(this.dataObjectParameters)
             // Use an arrow function so that `this` is bound to the Vue instance. Alternatively, use a custom Vue directive on the `.grid-stack` container element: https://vuejs.org/v2/guide/custom-directive.html
-            this.grid.on('change', (event, items) => {
-                let dashboardItems = R.clone(this.dashboardItems);
-                items.forEach(function(item) {
-                    for(let i=0; i<dashboardItems.length; i++) {
-                        let dashboardItem = dashboardItems[i];
-                        if (item.id === dashboardItem.id) {
-                            dashboardItem.layout.x = item.x;
-                            dashboardItem.layout.y = item.y;
-                            dashboardItem.layout.w = item.w;
-                            dashboardItem.layout.h = item.h;
-
-                        }
-                    }
-                });
-                // console.log(dashboardItems)
-                Vue.set(this, 'dashboardItems', dashboardItems);
-            })
         },
     };
 </script>

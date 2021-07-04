@@ -93,6 +93,15 @@
                     let obj = R.clone(this.projectObjects[this.activePage]);
                     obj = obj.setPath('parameters.source_data_node', newValue);
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activePage, Object: obj})
+
+                    let obj2 = R.clone(this.projectObjects[this.activeNode]);
+                    console.log(obj2)
+                    let pivotID = obj2.getPath('data_object_tags.visualization_pivot')
+                    let pivot = R.clone(this.dataObjects[pivotID])
+                    pivot = pivot.setPath('parameters', {})
+                    obj2 = obj2.setPath('parameters.source_data_node', newValue);
+                    this.UPDATE_PROJECT_OBJECT({ObjectID: this.activeNode, Object: obj2})
+                    this.UPDATE_DATA_OBJECT({ObjectID: pivot.id, Object: pivot})
                 }
             },
             inputNodes() {
@@ -138,7 +147,7 @@
                 'setActivePO', 'copyProjectObject', 'deleteProjectObject'
             ]),
             ...mapMutations('proj', [
-                'UPDATE_PROJECT_OBJECT', 'UPDATE_NODE_EXECUTION_STATUS'
+                'UPDATE_PROJECT_OBJECT', 'UPDATE_NODE_EXECUTION_STATUS', 'UPDATE_DATA_OBJECT'
             ])
         }
     };

@@ -112,6 +112,20 @@ Vue.mixin({
                 return defaultValue
             }
             return providedValue;
+        },
+        setDeep(obj, path, value, setrecursively = true) {
+            path.reduce((a, b, level) => {
+                if (setrecursively && typeof a[b] === "undefined" && level !== path.length){
+                    a[b] = {};
+                    return a[b];
+                }
+
+                if (level === path.length){
+                    a[b] = value;
+                    return value;
+                }
+                return a[b];
+            }, obj);
         }
     }
 })

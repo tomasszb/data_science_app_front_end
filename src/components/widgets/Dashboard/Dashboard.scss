@@ -17,7 +17,7 @@
   box-shadow: var(--shadow);
   //background-color: #ffc240;
   background:
-          repeating-linear-gradient(to right, transparent 0  calc(10px - 1px), $gray-300 calc(10px - 1px) 10px),
-          repeating-linear-gradient(to bottom, transparent 0 calc(10px - 1px), $gray-300 calc(10px - 1px) 10px)
+          repeating-linear-gradient(to right, transparent 0  calc(10px - 1px), $gray-200 calc(10px - 1px) 10px),
+          repeating-linear-gradient(to bottom, transparent 0 calc(10px - 1px), $gray-200 calc(10px - 1px) 10px)
           white;
 }
