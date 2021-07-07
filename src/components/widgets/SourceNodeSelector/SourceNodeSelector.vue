@@ -85,7 +85,7 @@
                         null
                     );
                     if (result===null) {
-                        Vue.set(this, 'selectedInputNodeID', this.inputNodes[1][0]);
+                        Vue.set(this, 'selectedInputNodeID', this.projectObjects.getPath(this.inputNodes[1][0]+'.id'));
                     }
                     return this.projectObjects[this.activePage]["parameters"]["source_data_node"]
                 },

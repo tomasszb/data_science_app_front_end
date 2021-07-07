@@ -15,7 +15,7 @@
         <h3>Objects Statuses</h3><hr><div>{{ nodeExecutionStatus }}</div><br>
         <h3>Data Object Type Mapping</h3><hr><div>{{ dataObjectTypeMapping }}</div><br>
         <h3>Data Object Group Mapping</h3><hr><div>{{ dataObjectGroupMapping }}</div><br>
-        <h3>Dataframes</h3><hr><div>{{ dataFrames }}</div><br>
+        <h3>Dataframes</h3><hr><div>{{ dataFrames.keys }}</div><br>
         <br>
     </div>
 </template>

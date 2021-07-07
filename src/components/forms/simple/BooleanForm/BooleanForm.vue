@@ -2,10 +2,10 @@
     <b-form-group class="boolean-form abc-checkbox pr-2">
         <input
                 type="checkbox"
-                id="checkbox-default"
+                :id="[...[objectID], ...route, ...[parameterIndex]].join('-')"
                 v-model="value"
         />
-        <label for="checkbox-default">{{name}}</label>
+        <label :for="[...[objectID], ...route, ...[parameterIndex]].join('-')">{{name}}</label>
     </b-form-group>
 </template>
 

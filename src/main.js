@@ -173,6 +173,8 @@ Vue.use(webSocketService, store);
 Vue.config.productionTip = false;
 Vue.use(VueFormulate)
 
+Vue.config.performance = true
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

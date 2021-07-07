@@ -20,7 +20,7 @@ export default {
             commit("proj/NEW_DATA_OBJECT_BULK", {Objects}, {root: true});
         },
         setActivePO({state, commit, rootState, rootGetters}, {selectedProcess, selectedPage, selectedNode}) {
-
+            console.log('setActivePO start')
             let currentActiveProcess = rootState['proj']['selectedProcess'];
             let currentActivePages = rootState['proj']['selectedPages'];
             let currentActiveNodes = rootState['proj']['selectedNodes'];
@@ -35,9 +35,11 @@ export default {
             let activeNode = get_active_object(selectedNode, currentActiveNodes[activePage], nodeLists[activePage]);
 
             commit("proj/SET_SELECTED_PROCESS", activeProcess, { root: true });
+            console.log('setActivePO mid1')
             commit("proj/SET_SELECTED_PAGE", {activePage, activeProcess}, { root: true });
+            console.log('setActivePO mid2')
             commit("proj/SET_SELECTED_NODE", {activeNode, activePage}, { root: true });
-
+            console.log('setActivePO end')
         },
         updatePO({commit}, {ProjectObjectID, ProjectObject}) {
             commit("proj/UPDATE_PROJECT_OBJECT", {ProjectObjectID, ProjectObject}, { root: true });

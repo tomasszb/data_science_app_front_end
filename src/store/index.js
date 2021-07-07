@@ -12,6 +12,7 @@ import * as Cookies from 'js-cookie'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  strict: false,
   modules: {
     layout,
     auth,

@@ -53,6 +53,7 @@
                 this.$webSocketSend(request);
             },
             updateData(status) {
+                console.log('running update data')
                 if (status==='ready') {
                     if(this.tableDataLive!==this.tableData) {
                         this.tableData = this.tableDataLive
@@ -62,7 +63,7 @@
         },
         computed: {
             ...mapState('proj', [
-                    'dataFrames', 'projectData', 'dataFrameMapping', 'nodeExecutionStatus'
+                    'dataFrames', 'projectData', 'nodeExecutionStatus'
                 ]),
             ...mapGetters('proj', [
                 'projectObjects', 'dataObjects', 'ProjectTree',
@@ -110,9 +111,11 @@
             }
         },
         mounted() {
+            console.log('mounted start')
             if(this.status==='not_requested') {
                 this.requestTable()
             }
+            console.log('mounted end')
         }
     }
 </script>

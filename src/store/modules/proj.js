@@ -7,7 +7,7 @@ import project_manager from './project_data_handling/project_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 const R = require('ramda');
-// require('log-timestamp');
+require('log-timestamp');
 
 function getObjectIndex(objectList, objectID) {
     let index = null;
@@ -252,7 +252,7 @@ export default {
         },
         UPDATE_DATAFRAME(state, {nodeID, resultTag, nodeSignature, data}) {
             let dataFrameID = getResultObjectID([nodeID,resultTag,nodeSignature])
-            Vue.set(state.dataFrames, dataFrameID,  data);
+            Vue.set(state.dataFrames, dataFrameID, data);
         },
         DELETE_PROJECT_OBJECT(state, {ObjectID}) {
             let index = getObjectIndex(state.projectData['project_objects'], ObjectID);

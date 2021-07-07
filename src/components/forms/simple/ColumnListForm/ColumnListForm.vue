@@ -99,7 +99,6 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                     let parentParameters =this.parentParameters
                     let list = parentParameters.getPath(this.route+'.'+this.parameterIndex, null);
                     let list2 = temporaryFields.getPath(this.parameterIndex, null)
-                    console.log('columnList2', list, list2, this.route, temporaryFields)
 
                     if (list === null && list2 !==null) {
                         Vue.set(this, 'columnList', list2)

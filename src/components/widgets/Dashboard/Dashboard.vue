@@ -124,13 +124,9 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                 this.grid.float(!dataObjectParameters.vertical_align)
             },
             addNewNode: function () {
-                // let result = newDataVisualizationNode({
-                //     pageID: this.projectObjects[this.activePage].id,
-                //     sourceNodeID: this.projectObjects[this.activeSourceNode].id
-                // })
                 let result = newDataVisualizationNode({
                     pageID: this.projectObjects[this.activePage].id,
-                    sourceNodeID: null
+                    sourceNodeID: this.activeSourceNode!== null ? this.projectObjects[this.activeSourceNode].id : null
                 })
                 let visID = result.dataObjects.data_visualization
 

@@ -4,10 +4,10 @@
 
         <!--        <h4 class="mb-4"><span class='fw-semi-bold'>Chart</span> Settings</h4>-->
         <ChartDataCard
-                v-show="openSettings===0"
+                v-if="openSettings===0"
                 :chartDataFields="chartDataFields"
                 :DataObjectId="activeNodeSettings['data_object_tags']"/>
-        <div v-show="openSettings===1" class="p-2 chartbar-parameters mt-3">
+        <div v-if="openSettings===1" class="p-2 chartbar-parameters mt-3">
             <chart-template-settings/>
         </div>
 

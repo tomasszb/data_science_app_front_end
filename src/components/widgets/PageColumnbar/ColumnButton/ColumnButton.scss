@@ -1,17 +1,32 @@
 @import '../../../../styles/app';
 
-.column-selector  {
+.column-selector {
   margin-bottom: 3px;
   cursor: pointer;
   display: flex;
-  font-size: $font-size-sm;
+  font-size: $font-size-sm!important;
   background-color: $gray-200;
   //border-radius: 5px;
   padding: 0 10px 0 10px;
   align-items: center;
-  justify-content: center;
   //border-bottom: 1px rgba(215, 223, 230, 0.7) solid;
   height: 25px;
+  width: 100%;
+  white-space:normal;
+
+
+
+  .btn-group.special {
+    display: flex;
+  }
+
+  .special .btn {
+    flex: 1
+  }
+
+  .btn {
+    font-size: $font-size-sm!important;
+  }
 
   &:last-child {
     border-bottom: none;
