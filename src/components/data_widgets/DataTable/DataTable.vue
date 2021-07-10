@@ -144,9 +144,9 @@
                 return this.nodeSignatures[this.nodeID]
             },
             status() {
-                let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'get_output_table', this.nodeSignature]);
-                let outputTableID = getResultObjectID([this.nodeID, 'output_table', this.nodeSignature]);
-                let outputTableQuickInfoID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.nodeSignature]);
+                let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'get_output_table']);
+                let outputTableID = getResultObjectID([this.nodeID, 'output_table']);
+                let outputTableQuickInfoID = getResultObjectID([this.nodeID, 'output_table_quick_info']);
 
                 let status = this.nodeExecutionStatus[nodeExecutionStatusID];
                 let check1 = typeof this.dataFrames[outputTableID]!== "undefined";
@@ -175,12 +175,12 @@
                 return this.nodeSettings.getPath('data_object_tags.output_table_sort', '').toString();
             },
             tableDataLive() {
-                let dataFrameID = getResultObjectID([this.nodeID, 'output_table', this.activeNodeSignature]);
+                let dataFrameID = getResultObjectID([this.nodeID, 'output_table']);
                 // console.log('tableData', dataFrameID)
                 return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
             },
             tableColumnsLive() {
-                let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.activeNodeSignature]);
+                let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info']);
                 let dataFrame = this.dataFrames[dataFrameID];
                 return typeof dataFrame!== "undefined" ? dataFrame['columns'] : []
             }

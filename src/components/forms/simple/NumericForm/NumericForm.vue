@@ -9,10 +9,12 @@
             <vue-numeric-input
                     controls-type="updown"
                     v-model="value"
+                    placeholder="--auto--"
                     :precision="precision"
                     :min="min"
                     :max="max"
                     :step="step"
+                    align="left"
                     class="c-100"
             />
         </b-form-group>
@@ -59,25 +61,11 @@
             },
             value: {
                 get() {
-                    return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex];
+                    return this.parentParameters.getPath(this.route.join('.')+'.'+this.parameterIndex, null)
                 },
                 set(newValue) {
-                    this.setDataObjectParameter({
-                        id: this.objectID,
-                        route: this.route.concat(this.parameterIndex),
-                        value: newValue
-                    })
+                    this.$emit('value-changed', newValue);
                 }
-            }
-        },
-        methods: {
-            ...mapActions('proj/object_manager', [
-                'setDataObjectParameter'
-            ]),
-        },
-        mounted() {
-            if (typeof this.value==='undefined') {
-                Vue.set(this, 'value', this.defaultValue);
             }
         }
     };

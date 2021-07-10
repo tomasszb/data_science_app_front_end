@@ -35,7 +35,7 @@
               'processList', 'pageLists', 'nodeLists',
               'activeProcess', 'activePage', 'activeNode'
           ]),
-          ...mapState('proj', ['projectObjectStatuses', 'dataFrames', 'dataObjectDefinitions', 'dataFrames', 'nodeExecutionStatus'])
+          ...mapState('proj', ['projectObjectStatuses', 'dataObjectDefinitions', 'dataFrames', 'nodeExecutionStatus'])
       }
     };
 </script>

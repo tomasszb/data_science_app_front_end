@@ -95,7 +95,6 @@
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activePage, Object: obj})
 
                     let obj2 = R.clone(this.projectObjects[this.activeNode]);
-                    console.log(obj2)
                     let pivotID = obj2.getPath('data_object_tags.visualization_pivot')
                     let pivot = R.clone(this.dataObjects[pivotID])
                     pivot = pivot.setPath('parameters', {})

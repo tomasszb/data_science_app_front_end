@@ -21,8 +21,8 @@ export default new Vuex.Store({
   },
   plugins: [
     createPersistedState({
-      getState: (key) => Cookies.getJSON(key),
-      setState: (key, state) => Cookies.set(key, state, { expires: 3, secure: true })
+      // getState: (key) => Cookies.getJSON(key),
+      // setState: (key, state) => Cookies.set(key, state, { expires: 3, secure: true })
     })
   ],
 });

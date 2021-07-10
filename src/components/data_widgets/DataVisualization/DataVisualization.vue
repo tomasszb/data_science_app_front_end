@@ -1,5 +1,6 @@
 <template>
     <div class="c-100 r-100 data-visualization">
+        {{<pre><code>{{JSON.stringify(tableData, null, 4)}}</code></pre>}}
 <!--        <div class="c-100 r-10">-->
 <!--            <b-button @click="requestTable">hello</b-button>-->
 <!--        </div>-->
@@ -31,7 +32,7 @@
         },
         data() {
             return {
-                activeNodeSignature: '',
+                activeNodeSignature: null,
                 tableData: {}
             }
         },
@@ -53,7 +54,6 @@
                 this.$webSocketSend(request);
             },
             updateData(status) {
-                console.log('running update data')
                 if (status==='ready') {
                     if(this.tableDataLive!==this.tableData) {
                         this.tableData = this.tableDataLive
@@ -76,27 +76,25 @@
                 return this.nodeSignatures[this.nodeID]
             },
             status() {
-                let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'run_visualization', this.nodeSignature]);
-                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data', this.nodeSignature]);
+                let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'run_visualization']);
+                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data']);
                 let status = this.nodeExecutionStatus[nodeExecutionStatusID];
                 let check1 = typeof this.dataFrames[dataFrameID]!== "undefined";
-
-                if (status==='success' && check1) {
-                    this.activeNodeSignature = this.nodeSignature;
+                let check2 = this.activeNodeSignature === this.nodeSignature
+                if (status==='success' && check1 && check2) {
                     this.updateData('ready')
                     return 'ready'
                 }
-                else if (status==='requested' || status==='success') {
-                    this.activeNodeSignature = this.nodeSignature;
+                else if ((status==='requested' || status==='success')&& check2) {
                     return 'loading'
                 }
-                else if (status==='failed') {
+                else if (status==='failed' && check2) {
                     return 'failed'
                 }
                 return 'not_requested'
             },
             tableDataLive() {
-                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data', this.activeNodeSignature]);
+                let dataFrameID = getResultObjectID([this.nodeID, 'chart_data']);
                 return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
             }
         },
@@ -106,16 +104,21 @@
                     this.updateData('ready')
                 }
                 if(newValue==='not_requested') {
-                    this.requestTable()
+                    this.activeNodeSignature = this.nodeSignature;
+                    this.requestTable();
+
                 }
             }
         },
         mounted() {
-            console.log('mounted start')
-            if(this.status==='not_requested') {
-                this.requestTable()
+            if (this.activeNodeSignature===null) {
+                this.activeNodeSignature = this.nodeSignature;
+                this.requestTable();
             }
-            console.log('mounted end')
+            else if(this.status==='not_requested') {
+                this.activeNodeSignature = this.nodeSignature;
+                this.requestTable();
+            }
         }
     }
 </script>

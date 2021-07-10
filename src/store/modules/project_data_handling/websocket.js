@@ -79,7 +79,7 @@ export default {
             let action = payload["action"];
 
             if (action.startsWith('project - ')) {
-                console.log('processNotifications - project', payload);
+                // console.log('processNotifications - project', payload);
                 commit(
                     "proj/UPDATE_PROJECT_EXECUTION_STATUS",
                     {
@@ -96,7 +96,7 @@ export default {
                 let status = payload["result"]["status"];
 
                 if (action === 'data - report_data') {
-                    console.log('processNotifications - data', payload);
+                    // console.log('processNotifications - data', payload["result"]["result_tag"], JSON.parse(payload["result"]["data"]));
                     commit(
                         "proj/UPDATE_DATAFRAME",
                         {
@@ -108,7 +108,7 @@ export default {
                         { root: true });
                 }
                 else if(lastCommandTask && status!=='running') {
-                    console.log('processNotifications', payload);
+                    // console.log('processNotifications', payload);
                     commit(
                         "proj/UPDATE_NODE_EXECUTION_STATUS",
                         {

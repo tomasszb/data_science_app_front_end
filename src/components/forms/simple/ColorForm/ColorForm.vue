@@ -5,9 +5,36 @@
             label-class="pb-1"
             :label-cols="horizontal ? 5 : 0"
             :horizontal="horizontal"
-
     >
-        <b-form-input size="sm" class="color-form c-100 pr-2" v-model="value" type="color"></b-form-input>
+        <div :style="{'background-color': color}" class="mr-2 border">
+            <b-dropdown
+                no-caret
+                variant="link"
+                toggle-class="text-decoration-none p-0"
+                block
+                ref="dropdown"
+
+            >
+                <template slot="button-content" >
+                    <div class="color-form d-flex align-items-center text-light" >
+                        <span v-if="color==null" >
+                            --auto--
+                        </span>
+                    </div>
+                </template>
+                <b-dropdown-form class="custom-ui-class p-0">
+                    <v-swatches
+                        inline
+                        popover-x="left"
+                        :swatch-style="swatchStyle"
+                        :wrapper-style="wrapperStyle"
+                        v-model="color"
+                    />
+                </b-dropdown-form>
+            </b-dropdown>
+        </div>
+
+
     </b-form-group>
 </template>
 
@@ -16,13 +43,14 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
     import vSelect from 'vue-select';
     import 'vue-select/dist/vue-select.css';
     import {getObjectByRoute} from "../../../../core/projectManager";
+import VSwatches from 'vue-swatches'
     const R = require('ramda');
     import Vue from 'vue'
 
     export default {
         name: 'ColorForm',
         components: {
-            vSelect
+            vSelect, VSwatches
         },
         props: {
             objectID: {type: [Number, String], default: null},
@@ -38,7 +66,27 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
             },
         },
         data() {
-            return {}
+            return {
+                color: null,
+                // swatches: [
+                //     { color: '#F493A7', showBorder: true, swatchStyle: {float: left} },
+                //     { color: '#F891A6', disabled: true, swatchStyle: {float: left} }
+                // ],
+                swatches: [
+                    { color: '#111'}, { color:'#F891A6'}
+                ],
+                swatchStyle: {
+                    'float': 'left',
+                    'width':'25px',
+                    'height':'20px',
+                    'margin': '1px',
+                    'border-radius': '2px'
+                },
+                wrapperStyle: {
+                    'margin-left': '5px',
+                    'margin-top': '5px'
+                }
+            }
         },
         computed: {
             ...mapGetters('proj', [
@@ -49,28 +97,36 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
             },
             value: {
                 get() {
-                    return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
+                    return this.parentParameters.getPath(this.route.join('.')+'.'+this.parameterIndex, null)
                 },
                 set(newValue) {
-                    this.setDataObjectParameter({
-                        id: this.objectID,
-                        route: this.route.concat(this.parameterIndex),
-                        value: newValue
-                    })
+                    this.$emit('value-changed', newValue);
                 }
             }
         },
         methods: {
-            ...mapActions('proj/object_manager', [
-                'setDataObjectParameter'
-            ]),
-        },
-        mounted() {
-            if (typeof this.value==='undefined') {
-                Vue.set(this, 'value', this.defaultValue!==null ? this.defaultValue : '#111111');
+            openDropdown() {
+                this.$refs.dropdown.show()
+            },
+            closeDropdown() {
+                this.$refs.dropdown.hide()
             }
         }
     }
 </script>
 
 <style src="./ColorForm.scss" lang="scss"></style>
+<style scoped>
+.custom-ui-class {
+    width: 200px;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+.vue-swatches__swatch {
+    float: left!important;
+}
+.b-dropdown-form {
+    padding: 0!important;
+}
+</style>

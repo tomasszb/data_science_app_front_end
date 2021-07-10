@@ -152,7 +152,6 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
                             // console.log('hello there', this.columnList);
                         }
                         else if (!this.settings.aggregate) {
-                            columnList[columnIndex]['aggregate_function'] = null;
                             Vue.set(this, 'columnList', columnList);
                             // console.log('hello there', this.columnList);
                         }

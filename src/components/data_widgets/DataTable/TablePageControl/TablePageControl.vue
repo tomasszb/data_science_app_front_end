@@ -82,7 +82,7 @@
                 return this.pageIndex * this.pageSize
             },
             dataSizeLive() {
-                let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info', this.nodeSignature]);
+                let dataFrameID = getResultObjectID([this.nodeID, 'output_table_quick_info']);
                 let dataFrame = this.dataFrames[dataFrameID];
                 return typeof dataFrame!== "undefined" ? dataFrame['size'] : '--'
             }

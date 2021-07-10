@@ -77,7 +77,6 @@
             ]),
             setActiveChartType(activeChartAlias) {
                 let activeNodeSettings = R.clone(this.activeNodeSettings);
-                console.log('setActiveChartType', activeNodeSettings)
                 activeNodeSettings['display_settings']['active_chart_type'] = activeChartAlias;
                 this.UPDATE_PROJECT_OBJECT({ObjectID: activeNodeSettings.id, Object: activeNodeSettings});
             },

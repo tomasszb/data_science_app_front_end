@@ -61,8 +61,9 @@ export default {
         let projectVersion= 1;
         if (this.dataLoaded===false) {
             this.loadObjectDefinitions();
-            this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
-
+            if (Object.keys(this.project).length>0) {
+                this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
+            }
         }
         const staticSidebar = JSON.parse(localStorage.getItem('sidebarStatic'));
 

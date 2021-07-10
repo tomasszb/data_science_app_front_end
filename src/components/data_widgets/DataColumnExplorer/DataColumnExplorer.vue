@@ -152,8 +152,8 @@
                 return this.nodeSignatures[this.nodeID]
             },
             status() {
-                let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'get_data_stats', this.nodeSignature]);
-                let columnStatsID = getResultObjectID([this.nodeID, 'column_stats', this.nodeSignature]);
+                let nodeExecutionStatusID = getResultObjectID([this.nodeID, 'get_data_stats']);
+                let columnStatsID = getResultObjectID([this.nodeID, 'column_stats']);
 
                 let status = this.nodeExecutionStatus[nodeExecutionStatusID];
                 let check1 = typeof this.dataFrames[columnStatsID]!== "undefined";
@@ -170,7 +170,7 @@
 
             },
             columnStatsData() {
-                let dataFrameID = getResultObjectID([this.nodeID, 'column_stats', this.activeNodeSignature]);
+                let dataFrameID = getResultObjectID([this.nodeID, 'column_stats']);
                 return typeof this.dataFrames[dataFrameID]!== "undefined" ? this.dataFrames[dataFrameID] : []
             },
         },

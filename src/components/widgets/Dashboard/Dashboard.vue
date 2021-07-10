@@ -202,7 +202,6 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
         },
         watch: {
             dataObjectParameters(newValue) {
-                console.log('watch', newValue)
                 this.updateGrid(newValue)
             }
         },

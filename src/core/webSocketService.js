@@ -4,7 +4,7 @@ webSocketService.install = function (Vue, store) {
     let ws = "";
 
     Vue.prototype.$webSocketConnect = (options) => {
-        console.log('$webSocketConnect')
+        // console.log('$webSocketConnect')
         ws = new WebSocket(options.url);
         let reconnectInterval = options.reconnectInterval || 1000;
 
@@ -35,21 +35,21 @@ webSocketService.install = function (Vue, store) {
         };
 
         ws.onerror = (error) => {
-            console.log(error);
+            // console.log(error);
             ws.close()
         }
     };
 
     Vue.prototype.$webSocketDisconnect = () => {
         // Our custom disconnect event
-        console.log('$webSocketDisconnect')
+        // console.log('$webSocketDisconnect')
         ws.close()
     };
 
     function sendMessage(msg){
         // Wait until the state of the socket is not ready and send the message when it is...
         waitForSocketConnection(ws, function(){
-            console.log("message sent!!!", msg);
+            // console.log("message sent!!!", msg);
             ws.send(msg);
         });
     }
@@ -71,7 +71,7 @@ webSocketService.install = function (Vue, store) {
     }
 
     Vue.prototype.$webSocketSend = (data) => {
-        console.log('$webSocketSend', data)
+        // console.log('$webSocketSend', data)
         waitForSocketConnection(ws, function(){
             ws.send(JSON.stringify(data));
         });

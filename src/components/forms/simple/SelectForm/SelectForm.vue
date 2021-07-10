@@ -12,7 +12,8 @@
                     append-to-body
                     class="c-100"
                     v-model="value"
-                    :options="options"
+                    :key="JSON.stringify(value).hashCode()"
+                    :options="optionsSettings"
                     :clearable="false"
             >
                 <template slot="option" slot-scope="option">
@@ -59,27 +60,23 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
             parentParameters() {
                 return this.dataObjects[this.objectID]['parameters']
             },
+            optionsSettings() {
+                let result = [{'value': null, 'label': '--auto--'}];
+                for (let value of this.options) {
+                    result.push({'value': value, 'label': value})
+                }
+                return result
+            },
             value: {
                 get() {
-                    return getObjectByRoute(this.route, this.parentParameters)[this.parameterIndex]
+                    return this.parentParameters.getPath(
+                        this.route.join('.')+'.'+this.parameterIndex,
+                        {'value': null, 'label': '--auto--'}
+                    )
                 },
                 set(newValue) {
-                    this.setDataObjectParameter({
-                        id: this.objectID,
-                        route: this.route.concat(this.parameterIndex),
-                        value: newValue
-                    })
+                    this.$emit('value-changed', newValue['value']);
                 }
-            }
-        },
-        methods: {
-            ...mapActions('proj/object_manager', [
-                'setDataObjectParameter'
-            ]),
-        },
-        mounted() {
-            if (typeof this.value==='undefined') {
-                Vue.set(this, 'value', this.defaultValue);
             }
         }
     };

@@ -7,7 +7,7 @@ import project_manager from './project_data_handling/project_manager'
 import TreeModel from 'tree-model'
 import Vue from 'vue'
 const R = require('ramda');
-require('log-timestamp');
+// require('log-timestamp');
 
 function getObjectIndex(objectList, objectID) {
     let index = null;
@@ -251,7 +251,7 @@ export default {
             Vue.set(state.projectData['project_objects'][index], 'temporary_settings', temporarySettings)
         },
         UPDATE_DATAFRAME(state, {nodeID, resultTag, nodeSignature, data}) {
-            let dataFrameID = getResultObjectID([nodeID,resultTag,nodeSignature])
+            let dataFrameID = getResultObjectID([nodeID,resultTag])
             Vue.set(state.dataFrames, dataFrameID, data);
         },
         DELETE_PROJECT_OBJECT(state, {ObjectID}) {
@@ -279,9 +279,24 @@ export default {
             if (index !== null) {
                 let projectObject = state.projectData['project_data_objects'][index];
                 let parameterObject = R.clone(projectObject['parameters']);
-                // // console.log(parameterObject, route, value);
                 let newParameterObject = parameterObject.setPath(route, value);
                 Vue.set(projectObject, 'parameters', newParameterObject)
+            }
+        },
+        DROP_DO_PARAMETER(state, {id, route}) {
+            // console.log('DROP_DO_PARAMETER',id, route)
+            // console.log(state.projectData['project_data_objects'])
+            let index = getObjectIndex(state.projectData['project_data_objects'], id);
+            if (index !== null) {
+                let projectObject = state.projectData['project_data_objects'][index];
+                let parameterObject = R.clone(projectObject['parameters']);
+
+                let valuePath = route.slice(0, route.length-1).join('.');
+                let valueName = route[route.length-1];
+                let parameter = parameterObject.getPath(valuePath, {});
+                delete parameter[valueName];
+                parameterObject.setPath(valuePath, parameter)
+                Vue.set(projectObject, 'parameters', parameterObject)
             }
         },
         DELETE_DATA_OBJECT(state, {ObjectID}) {
@@ -289,11 +304,11 @@ export default {
             Vue.delete(state.projectData['project_data_objects'], index);
         },
         UPDATE_DATAFRAME_STATUS(state, {nodeID, resultTag, nodeSignature, status}) {
-            let dataFrameID = getResultObjectID([nodeID, resultTag, nodeSignature]);
+            let dataFrameID = getResultObjectID([nodeID, resultTag]);
             Vue.set(state.dataFrameStatus, dataFrameID,  status);
         },
         UPDATE_NODE_EXECUTION_STATUS(state, {nodeID, executionTemplate, nodeSignature, status}) {
-            let nodeExecutionID = getResultObjectID([nodeID, executionTemplate, nodeSignature]);
+            let nodeExecutionID = getResultObjectID([nodeID, executionTemplate]);
             Vue.set(state.nodeExecutionStatus, nodeExecutionID,  status);
         },
         UPDATE_PROJECT_EXECUTION_STATUS(state, {projectID, command, status}) {

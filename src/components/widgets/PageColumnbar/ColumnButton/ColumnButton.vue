@@ -99,7 +99,6 @@
                 this.$emit(eventName)
             },
             closeDropdown() {
-                console.log('hello', this.$refs.dropdown)
                 this.$refs.dropdown.show()
             }
         }

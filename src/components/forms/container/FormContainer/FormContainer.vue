@@ -3,6 +3,7 @@
         <numeric-form
                 v-if="typeSettings.type === 'integer'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -15,6 +16,7 @@
         <numeric-form
                 v-if="typeSettings.type === 'float'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -27,6 +29,7 @@
         <color-form
                 v-if="typeSettings.type === 'color'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -37,6 +40,7 @@
         <select-form
                 v-if="typeSettings.type === 'string' && typeSettings.options !== null"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :options="typeSettings.options"
@@ -48,6 +52,7 @@
         <string-form
                 v-if="typeSettings.type === 'string' && typeSettings.options === null"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -58,6 +63,7 @@
         <boolean-form
                 v-if="typeSettings.type === 'boolean'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -68,6 +74,7 @@
         <column-form
                 v-if="typeSettings.type === 'column'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -78,6 +85,7 @@
         <column-list-form
                 v-if="typeSettings.type === 'column_list'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -89,6 +97,7 @@
         <merge-column-pair-form
                 v-if="typeSettings.type === 'column_pair'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -99,6 +108,7 @@
         <formula-form
                 v-if="typeSettings.type === 'formula'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -109,6 +119,7 @@
         <dictionary-form
                 v-if="typeSettings.type === 'dictionary'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -119,6 +130,7 @@
         <condition-form
                 v-if="typeSettings.type === 'condition'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -130,6 +142,7 @@
         <script-form
                 v-if="typeSettings.type === 'query'"
                 :objectID="objectID"
+                @value-changed="setValue"
                 :parameterIndex="parameterIndex"
                 :name="name"
                 :horizontal="horizontal"
@@ -140,6 +153,7 @@
         <constant-form
             v-if="typeSettings.type === 'constant'"
             :objectID="objectID"
+            @value-changed="setValue"
             :parameterIndex="parameterIndex"
             :name="name"
             :horizontal="horizontal"
@@ -164,8 +178,9 @@
     import SelectForm from "../../simple/SelectForm/SelectForm";
     import ScriptForm from "../../simple/ScriptForm/ScriptForm";
     import ColumnListForm from "../../simple/ColumnListForm/ColumnListForm";
-    import {mapGetters, mapMutations} from "vuex";
+    import {mapActions, mapGetters, mapMutations} from "vuex";
     import {getObjectByRoute} from "@/core/projectManager";
+    import Vue from "vue";
 
     export default {
         name: "FormContainer",
@@ -173,6 +188,13 @@
             ColumnForm, ConstantForm, NumericForm, FormulaForm, ColorForm,
             ConditionForm, BooleanForm, DictionaryForm, StringForm, SelectForm,
             MergeColumnPairForm, ColumnListForm, ScriptForm
+        },
+        data() {
+            return {
+                liveValue: null,
+                frozenValue: null,
+                pauseUpdates: false
+            }
         },
         props: {
             route: {type: Array, default: function() {return []}},
@@ -189,25 +211,59 @@
         methods: {
             ...mapMutations('proj', [
                 'SET_DO_PARAMETER'
-            ])
+            ]),
+            ...mapActions('proj/object_manager', [
+                'setDataObjectParameter', 'dropDataObjectParameter'
+            ]),
+            setValue(newValue) {
+                Vue.set(this, 'liveValue', newValue)
+            },
+            setPauseTimer() {
+                this.pauseUpdates = true;
+                setTimeout(() => {
+                    this.pauseUpdates = false
+                }, 500)
+            },
+            updateValue(newValue, oldValue) {
+                if (newValue!==oldValue) {
+                    if ((isNaN(newValue) && typeof newValue=='number') || newValue===null) {
+                        // console.log('newValue', newValue)
+                        this.dropDataObjectParameter(
+                            {
+                                id: this.objectID,
+                                route: this.route.concat(this.parameterIndex)
+                            }
+                        )
+                    } else {
+                        this.setDataObjectParameter({
+                            id: this.objectID,
+                            route: this.route.concat(this.parameterIndex),
+                            value: newValue
+                        })
+                    }
+                }
+            }
+        },
+        watch: {
+            liveValue(newValue, oldValue) {
+                if(this.pauseUpdates===false) {
+                    this.updateValue(this.liveValue, this.frozenValue);
+                    this.frozenValue = this.liveValue;
+                    this.setPauseTimer()
+                }
+            },
+            pauseUpdates(value) {
+                if(value===false) {
+                    this.updateValue(this.liveValue, this.frozenValue);
+                    this.frozenValue = this.liveValue;
+                }
+            }
         },
         computed: {
             ...mapGetters('proj', [
                 'dataObjects'
             ]),
-        },
-        created() {
-            if (this.typeSettings.hasOwnProperty('default')) {
-                let parentParameters = this.dataObjects[this.objectID]['parameters']
-                if (typeof getObjectByRoute(this.route, parentParameters)[this.parameterIndex] === 'undefined') {
-                    // this.SET_DO_PARAMETER({
-                    //     id: parseInt(this.objectID),
-                    //     route: this.route.concat(this.parameterIndex),
-                    //     value: this.typeSettings['default']
-                    // })
-                }
 
-            }
         }
     }
 </script>

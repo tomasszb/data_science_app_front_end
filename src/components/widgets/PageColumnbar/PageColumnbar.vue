@@ -78,7 +78,7 @@
                 return result
             },
             getResultObjectID() {
-                return getResultObjectID([this.selectedInputNodeID, 'output_table_quick_info', this.nodeSignatures[this.selectedInputNodeID]])
+                return getResultObjectID([this.selectedInputNodeID, 'output_table_quick_info'])
             },
             checkColumnFilter(column) {
                 let f1 = column.name.toLowerCase().includes(this.columnFilter.toLowerCase())

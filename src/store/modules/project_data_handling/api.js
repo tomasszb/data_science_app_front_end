@@ -15,7 +15,6 @@ export default {
     },
     actions: {
         createNewProject({commit, dispatch}, {data}) {
-            console.log('createNewProject')
             let newVariables = {version_number: null, id: null, parameters: data, status: "preparing request"}
             commit("proj/UNLOAD_PROJECT_DATA", {}, { root: true });
             dispatch("proj/project_manager/updateProjectVariables",

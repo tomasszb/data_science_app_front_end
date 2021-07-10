@@ -1,6 +1,13 @@
 <template>
     <div class="c-100 r-100">
-        <echart :autoresize="true" class="c-100 r-100" :option="options" :init-options="initOptions"></echart>
+<!--        <pre><code>{{JSON.stringify(options, null, 4)}}</code></pre>-->
+        <echart
+            :autoresize="true"
+            class="c-100 r-100"
+            :option="options"
+            :init-options="initOptions"
+            :key="JSON.stringify(options).hashCode()"
+        ></echart>
     </div>
 </template>
 
