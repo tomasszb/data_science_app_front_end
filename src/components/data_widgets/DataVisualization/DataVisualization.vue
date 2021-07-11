@@ -1,6 +1,7 @@
 <template>
     <div class="c-100 r-100 data-visualization">
-        {{<pre><code>{{JSON.stringify(tableData, null, 4)}}</code></pre>}}
+<!--        {{activeNodeSignature}}-->
+<!--        {{<pre><code>{{JSON.stringify(tableData, null, 4)}}</code></pre>}}-->
 <!--        <div class="c-100 r-10">-->
 <!--            <b-button @click="requestTable">hello</b-button>-->
 <!--        </div>-->

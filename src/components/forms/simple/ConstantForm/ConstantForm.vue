@@ -14,7 +14,7 @@
     import Vue from 'vue';
 
     export default {
-        name: 'StringForm',
+        name: 'ConstantForm',
         components: {
             vSelect
         },

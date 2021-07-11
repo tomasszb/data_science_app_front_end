@@ -2,7 +2,7 @@
     <div class="chart-template-settings">
 <!--        <pre><code>{{JSON.stringify(chartCommonProperties, null, 4)}}</code></pre>-->
 <!--        <pre><code>{{JSON.stringify(chartTypeProperties, null, 4)}}</code></pre>-->
-<!--        <pre><code>{{JSON.stringify(chartSeriesProperties, null, 4)}}</code></pre>-->
+<!--        <pre><code>{{JSON.stringify(chartConstantProperties, null, 4)}}</code></pre>-->
         <h5 class="pb-3">
             General Settings
         </h5>
@@ -16,7 +16,8 @@
             Series Settings
         </h5>
         <ChartTemplateFormGroup
-            :properties="chartSeriesProperties"
+            v-for="(prop, i) in chartSeriesProperties['series']"
+            :properties="{'series' : prop}"
         />
     </div>
 
@@ -26,31 +27,39 @@
     import Vue from 'vue'
     const R = require('ramda');
     import draggable from 'vuedraggable';
-    import {mapGetters, mapMutations} from "vuex";
+    import {mapActions, mapGetters, mapMutations} from "vuex";
     import FormContainer from "../../../forms/container/FormContainer/FormContainer";
     import ChartTemplateFormGroup from "@/components/widgets/Chartbar/ChartTemplateSettings/ChartTemplateFormGroup/ChartTemplateFormGroup";
 
-    function parseSettings(settings) {
-        let result = {}
-        for (let setting of Object.keys(settings)) {
-            let split = setting.split('.')
-            let name = split[split.length-1]
-            let path = split.splice(0, split.length-1)
+    function parseSettings(settings, prepend='', result=null) {
+        if (result===null) {
+            result = {}
+        }
+        for (let settingName of Object.keys(settings)) {
+            let setting = R.clone(settings[settingName])
+            if (!settingName.includes('constants.')) {
+                if (prepend!=="") {
+                    settingName = prepend+'.'+settingName
+                }
+                let split = settingName.split('.')
+                let name = split[split.length-1]
+                let path = split.splice(0, split.length-1)
 
-            let obj = {path: path, name: name, type: settings[setting]}
+                let obj = {path: path, name: name, type: setting}
 
-            if (path.length===0) {
-                path=path.concat(['uncategorized', 'uncategorized'])
-            }
-            else if (path.length===1) {
-                path=path.concat(['uncategorized'])
-            }
-            let existing = result.getPath(path, null)
-            if (existing===null) {
-                result = result.setPath(path, [obj])
-            } else {
-                existing.push(obj)
-                result = result.setPath(path, existing)
+                if (path.length===0) {
+                    path=path.concat(['uncategorized', 'uncategorized'])
+                }
+                else if (path.length===1) {
+                    path=path.concat(['uncategorized'])
+                }
+                let existing = result.getPath(path, null)
+                if (existing===null) {
+                    result = result.setPath(path, [obj])
+                } else {
+                    existing.push(obj)
+                    result = result.setPath(path, existing)
+                }
             }
         }
         return result
@@ -69,7 +78,8 @@
         data() {
             return {
                 columnList: [],
-                openedGroups: []
+                openedGroups: [],
+                seriesLength:2
             }
         },
         computed: {
@@ -82,6 +92,10 @@
             activeNodeSettings() {
                 return this.projectObjects.getKeyOrDefault(this.activeNode, {})
             },
+            activeChartType() {
+                let dashboardID = this.activeNodeSettings.getPath("data_object_tags.chart_template")
+                return this.dataObjects.getPath(dashboardID+'.parameters.chart_type',null)
+            },
             chartCommonProperties() {
                 let result = {};
                 let path = "300000.__init__.0.dtype"
@@ -91,14 +105,19 @@
                 return parseSettings(settings)
             },
             chartTypeProperties() {
-                let path = "300000.__init__.0.dtype.chart_types.line"
+                let path = "300000.__init__.0.dtype.chart_types."+this.activeChartType
                 let settings = R.clone(this.dataObjectParameterMapping.getPath(path, {}))
-                return parseSettings(settings)
+                return parseSettings(settings, 'chart_types.'+this.activeChartType)
             },
             chartSeriesProperties() {
-                let path = "300000.__init__.0.dtype.series.variable.line"
+                let seriesLength = this.seriesLength
+                let path = "300000.__init__.0.dtype.series.variable."+this.activeChartType
                 let settings = R.clone(this.dataObjectParameterMapping.getPath(path, {}))
-                return parseSettings(settings)
+                let result = {}
+                for (let i = 0; i <= seriesLength; i++) {
+                    result = parseSettings(settings, 'series.'+i, result)
+                }
+                return result
             },
             propertyTypeTree() {
                 let tree = {}
@@ -113,7 +132,11 @@
                 return tree
             }
         },
+
         methods: {
+            ...mapActions('proj/object_manager', [
+                'setDataObjectParameter', 'dropDataObjectParameter'
+            ]),
         },
     }
 </script>

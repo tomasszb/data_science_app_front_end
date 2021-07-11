@@ -77,9 +77,8 @@ export default {
         },
         processNotifications: ({commit}, payload) => {
             let action = payload["action"];
-
+            console.log('processNotifications - project', payload);
             if (action.startsWith('project - ')) {
-                // console.log('processNotifications - project', payload);
                 commit(
                     "proj/UPDATE_PROJECT_EXECUTION_STATUS",
                     {

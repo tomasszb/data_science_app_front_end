@@ -129,9 +129,12 @@
             activeNodeSettings() {
                 return this.projectObjects.getKeyOrDefault(this.activeNode, {})
             },
+            chartTemplateSettings() {
+                let dashboardID = this.activeNodeSettings.getPath("data_object_tags.chart_template")
+                return this.dataObjects.getPath(dashboardID)
+            },
             activeChartType() {
-                // console.log(this.activeNodeSettings,this.activeNode,this.projectObjects);
-                return this.activeNodeSettings.getPath('display_settings.active_chart_type', null)
+                return this.chartTemplateSettings.getPath('parameters.chart_type', null)
             },
             activeProcessSettings() {
                 return this.projectObjects.getKeyOrDefault(this.activeProcess, {})
