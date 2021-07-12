@@ -1,5 +1,5 @@
 <template>
-    <div class="nav-sidebar">
+    <div class="nav-sidebar r--100">
         <vue-resizable
                 :width="width"
                 :min-width="minWidth"

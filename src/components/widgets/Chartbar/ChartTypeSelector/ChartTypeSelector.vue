@@ -1,7 +1,7 @@
 <template>
     <div class="chart-type-selector border-bottom border-light pt-3" >
 <!--        {{chartTemplateSettings}}-->
-        {{chartConstantProperties}}
+<!--        {{chartConstantProperties}}-->
         <h5 class="px-4 mb-3">
             <strong>
                 Chart type

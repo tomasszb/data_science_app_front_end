@@ -73,6 +73,7 @@ import isScreen from '@/core/screenHelper';
 import NavLink from '../../ui/NavLink/NavLink';
 import dsw_config from "../../../dsw_config";
 import {newDataVisualizationProcess} from "@/core/newObjects/visualize";
+import {newDataPreparationProcess} from "@/core/newObjects/prepare";
 
 export default {
   name: 'Sidebar',
@@ -92,6 +93,9 @@ export default {
     newProcess() {
         if (this.newProcessType === 103) {
             newDataVisualizationProcess({name: this.newProcessName})
+        }
+        if (this.newProcessType === 101) {
+            newDataPreparationProcess({name: this.newProcessName})
         }
         this.newProcessType = 101;
         this.newProcessName = ""

@@ -61,12 +61,16 @@
             },
             value: {
                 get() {
+                    console.log('getting numeric form')
                     return this.parentParameters.getPath(this.route.join('.')+'.'+this.parameterIndex, null)
                 },
                 set(newValue) {
                     this.$emit('value-changed', newValue);
                 }
             }
+        },
+        mounted() {
+            console.log('mounted numeric form')
         }
     };
 </script>

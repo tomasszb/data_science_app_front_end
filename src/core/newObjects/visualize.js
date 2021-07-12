@@ -64,7 +64,7 @@ export function newDataVisualizationNode({pageID, sourceNodeID, name=''}) {
 }
 
 
-export function newDataVisalizationPage({processID, connectorType, name=''}) {
+export function newDataVisalizationPage({processID, name=''}) {
 
   let dashboardObject = newDashboardObject()
   store.dispatch("proj/object_manager/updateDataObject", { Object: dashboardObject, ObjectID: dashboardObject.id }, { root: true });

@@ -165,3 +165,14 @@ export function newVisTemplateObject() {
     }
   }
 }
+
+export function newPrepObject(preType) {
+  return {
+    'id': genDataObjectID(),
+    "category": 2,
+    "group": parseInt(preType.toString().slice(0,4)),
+    "type": preType,
+    "tag": "action",
+    "parameters": {}
+  }
+}

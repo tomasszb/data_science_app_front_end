@@ -46,11 +46,18 @@
                     <nav-sidebar :defaultWidth="450" :minWidth="250" :maxWidth="700"  settingPrefix="prep">
                         <prepbar></prepbar>
                     </nav-sidebar>
-                    <main-content>
-                        <div>
-
-                        <br><br>
+                    <main-content class="px-2 ">
+                        <template v-slot:node-view-selector>
+                            <node-view-selector/>
+                        </template>
+                        <div v-if="processDisplayTag===2"/>
+                        <div v-if="processDisplayTag===1" class="flex-horizontal-no-scroll">
+                            <nav-sidebar :defaultWidth="450" :minWidth="250" :maxWidth="700"  settingPrefix="prep-explorer" class="bg-light border ml-4">
+                                <prep-explorer/>
+                            </nav-sidebar>
+                            <div class="c-100 border mx-2"></div>
                         </div>
+                    <br><br>
                     </main-content>
                 </div>
                 <tool-footer>
@@ -119,6 +126,7 @@ import ToolHeader from "../../components/widgets/ToolHeader/ToolHeader";
 import QueryEditor from "@/components/widgets/QueryEditor/QueryEditor";
 import Dashboard from "@/components/widgets/Dashboard/Dashboard";
 import ChartTypeSelector from "@/components/widgets/Chartbar/ChartTypeSelector/ChartTypeSelector";
+import PrepExplorer from "@/components/widgets/PrepExplorer/PrepExplorer";
 
 import { mapState, mapGetters, mapActions} from "vuex";
 import { initProjectBranches, initProcessBranches, createDataFlowRequest, getUpstreamElements } from '@/core/projectManager';
@@ -130,7 +138,7 @@ import {getObjectSetting} from "@/core/projectObjectParser";
 export default {
     name: 'Process',
     components: {
-        ConnectorExplorer,
+        ConnectorExplorer, PrepExplorer,
         // Connectorbar, Prepbar,
         // NavSidebar, ToolHeader, ToolFooter,
         // DataTable, DataColumnExplorer_old, MainContent,

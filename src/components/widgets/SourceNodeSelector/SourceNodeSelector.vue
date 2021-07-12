@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="c-100">
         <div class="text-gray-light small font-weight-bold mt-2 mb-2">
             Data Source
         </div>
@@ -95,12 +95,14 @@
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activePage, Object: obj})
 
                     let obj2 = R.clone(this.projectObjects[this.activeNode]);
-                    let pivotID = obj2.getPath('data_object_tags.visualization_pivot')
-                    let pivot = R.clone(this.dataObjects[pivotID])
-                    pivot = pivot.setPath('parameters', {})
+                    if (obj2.group===303) {
+                        let pivotID = obj2.getPath('data_object_tags.visualization_pivot')
+                        let pivot = R.clone(this.dataObjects[pivotID])
+                        pivot = pivot.setPath('parameters', {})
+                        this.UPDATE_DATA_OBJECT({ObjectID: pivot.id, Object: pivot})
+                    }
                     obj2 = obj2.setPath('parameters.source_data_node', newValue);
                     this.UPDATE_PROJECT_OBJECT({ObjectID: this.activeNode, Object: obj2})
-                    this.UPDATE_DATA_OBJECT({ObjectID: pivot.id, Object: pivot})
                 }
             },
             inputNodes() {

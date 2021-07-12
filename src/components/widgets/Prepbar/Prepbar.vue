@@ -8,7 +8,7 @@
                 <a>Add</a>
             </span>
         </div>
-        <div class="flex-vertical">
+        <div class="d-flex c-100">
             <source-node-selector></source-node-selector>
             <draggable v-model="nodeList" handle=".handle">
                 <div v-for="(nodeID, position) in nodeList">
