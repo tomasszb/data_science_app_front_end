@@ -1,5 +1,5 @@
 <template>
-        <div class="flex-vertical">
+        <div class="flex-vertical-no-scroll">
             <div class="col-explorer flex-vertical" v-if="status === 'ready'">
                 <h4><strong>table</strong> details</h4><br>
                 <table-info :tableStats="columnStatsData['table']"></table-info><br><br>
@@ -50,7 +50,7 @@
                 <!--                :columnStats="column"-->
                 <!--            />-->
             </div>
-            <div v-if="status === 'not_requested'" class="load-data-area align-items-center">
+            <div v-if="status === 'not_requested'" class="flex-vertical-no-scroll justify-content-center vb  align-items-center">
                 <b-button
                     squared
                     type="button"

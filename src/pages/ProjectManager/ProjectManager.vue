@@ -41,7 +41,7 @@ export default {
     ...mapState('proj', ['projectList', 'dataLoaded']),
   },
   methods: {
-    ...mapActions('proj/api', ['loadProjectData', 'loadObjectDefinitions', 'loadProjectList']),
+    ...mapActions('proj/api', ['loadProjectData', 'loadObjectDefinitions', 'loadObjectDefinitions2', 'loadProjectList']),
     openProject(project) {
         let projectID = project.id;
         let projectVersion = project.version;
@@ -51,6 +51,7 @@ export default {
 
       this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
       this.loadObjectDefinitions();
+      this.loadObjectDefinitions2();
 
     }
   },

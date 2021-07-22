@@ -29,6 +29,7 @@ export default {
         dataLoaded: false,
 
         dataObjectDefinitions: {},
+        dataObjectDefinitions2: {},
 
         dataFrames: {},
 
@@ -221,6 +222,9 @@ export default {
         },
         LOAD_OBJECT_DEFINITIONS(state, data) {
             state.dataObjectDefinitions = data;
+        },
+        LOAD_OBJECT_DEFINITIONS2(state, data) {
+            state.dataObjectDefinitions2 = data;
         },
         SET_SELECTED_PROCESS(state, selectedProcess) {
             state.selectedProcess = selectedProcess;

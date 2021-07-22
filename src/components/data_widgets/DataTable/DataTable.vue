@@ -1,6 +1,6 @@
 <template>
     <div class="flex-vertical-no-scroll">
-        <div v-if="status === 'not_requested'" class="load-data-area align-items-center">
+        <div v-if="status === 'not_requested'" class="flex-vertical-no-scroll align-items-center justify-content-center">
             <b-button
                 squared
                 type="button"
@@ -15,7 +15,7 @@
                 click to load data
             </p>
         </div>
-        <div class="data-table" >
+        <div class="data-table" v-show="status !== 'not_requested'">
 <!--            <Loader v-if="status==='loading'" :class="'widget-loader'" :size="40"></Loader>-->
 
             <table>

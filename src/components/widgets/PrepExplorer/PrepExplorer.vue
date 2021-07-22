@@ -19,6 +19,13 @@
                 </b-input-group>
 
                 <div class="flex-vertical">
+                    <ColumnButton
+                        v-if="checkColumnFilter(column)"
+                        v-for="column in columnList"
+                        :key="'po-column-'+column.name"
+                        :name="column.name"
+                        :type="column.type"
+                    />
                 </div>
         </div>
     </div>
@@ -31,13 +38,14 @@
     import SourceNodeSelector from "@/components/widgets/SourceNodeSelector/SourceNodeSelector";
     import { getResultObjectID } from '@/core/projectManager';
     import NavSidebar from "@/components/layout/NavSidebar/NavSidebar";
+    import ColumnButton from "@/components/widgets/PageColumnbar/ColumnButton/ColumnButton"
     import draggable from 'vuedraggable';
     import Vue from "vue";
 
     export default {
         name: 'PrepExplorer',
         components: {
-            SourceNodeSelector, NavSidebar, draggable
+            ColumnButton, SourceNodeSelector, NavSidebar, draggable
         },
         data() {
             return {

@@ -77,7 +77,7 @@ export default {
           }
     },
     methods: {
-        ...mapActions('proj/api', ['createNewProject','loadProjectData','loadObjectDefinitions']),
+        ...mapActions('proj/api', ['createNewProject','loadProjectData','loadObjectDefinitions', 'loadObjectDefinitions2']),
         ...mapMutations('proj', ['SET_PROJECT_VARIABLE']),
         newProject(project) {
             localStorage.removeItem('project_id');
@@ -102,6 +102,7 @@ export default {
             }
             if (value.status === 'ready') {
                 this.loadObjectDefinitions();
+                this.loadObjectDefinitions2();
                 this.loadProjectData({projectID: this.project.id, projectVersion: 1});
             }
         },

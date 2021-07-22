@@ -31,7 +31,7 @@ export default {
     name: 'Layout',
     components: { Sidebar },
     methods: {
-        ...mapActions('proj/api', ['loadObjectDefinitions', 'loadProjectData', 'loadProjectList']),
+        ...mapActions('proj/api', ['loadObjectDefinitions', 'loadObjectDefinitions2', 'loadProjectData', 'loadProjectList']),
         ...mapActions('websocket', ['websocketConnect']),
         ...mapActions('layout', ['switchSidebar', 'handleSwipe', 'changeSidebarActive', 'toggleSidebar']),
         handleWindowResize() {
@@ -61,6 +61,7 @@ export default {
         let projectVersion= 1;
         if (this.dataLoaded===false) {
             this.loadObjectDefinitions();
+            this.loadObjectDefinitions2();
             if (Object.keys(this.project).length>0) {
                 this.loadProjectData({projectID: projectID, projectVersion: projectVersion});
             }

@@ -12,7 +12,7 @@
                             <node-view-selector/>
                         </template>
                         <connector-explorer v-if="processDisplayTag===2"/>
-                        <div v-if="processDisplayTag===1">
+                        <div v-if="processDisplayTag===1" class="flex-vertical-no-scroll">
                             <DataTable
                                 v-if="pageDisplayTag===1"
                                 :key="processKey + activeNode +  '-data-table'"

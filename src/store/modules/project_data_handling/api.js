@@ -117,6 +117,22 @@ export default {
                 dispatch("callError", err.response.data);
             })
         },
+        loadObjectDefinitions2({commit, dispatch}) {
+            const promise = new Promise((resolve, reject) => {
+                if (config.mock) {
+                    let res = {'data': mock.data_object_definitions_1};
+                    resolve(res);
+                } else {
+                    resolve(axios.get('/data_objects/definitions2/'));
+                }
+            });
+            promise.then(res => {
+                let data = res.data['Response'];
+                commit("proj/LOAD_OBJECT_DEFINITIONS2", data, { root: true });
+            }).catch(err => {
+                dispatch("callError", err.response.data);
+            })
+        },
         callError({commit}, payload) {
             commit("API_CALL_FAILURE", payload);
         },
